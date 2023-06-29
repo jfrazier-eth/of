@@ -1,13 +1,16 @@
-import { LoggedInContext } from "@/api/context";
-import { RequestError } from "@/api/errors/request-errors";
+import { RequestError } from "@/common/errors/request-errors";
+import { LoggedInContext } from "@/sites/of";
+
 import phin from "phin";
 
-const path = "/api2/v2/users/me";
+const path = "/api2/v2/init";
 
 const headers = {
   Host: "onlyfans.com",
-  Accept: "application/json, text/plain, */*",
+  Pragma: "no-cache",
+  "Cache-Control": "no-cache",
   Referer: "https://onlyfans.com/",
+  Accept: "application/json, text/plain, */*",
 };
 
 export const get = async (context: LoggedInContext) => {
@@ -20,14 +23,14 @@ export const get = async (context: LoggedInContext) => {
       ...contextHeaders,
     };
 
-    console.log(JSON.stringify(reqHeaders, null, 2));
-
+    console.log(reqHeaders);
     const response = await phin({
       method: "GET",
       url,
       headers: reqHeaders,
     });
-    console.log(`Me Status Code ${response.statusCode}`);
+
+    console.log(`Init Status Code ${response.statusCode}`);
     console.log(response.body.toString());
     console.log(response.headers);
     return response.statusCode;

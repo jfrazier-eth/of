@@ -1,7 +1,7 @@
-import { Context } from "../context";
-import { RequestError } from "../errors/request-errors";
+import { Context } from "@/common/context";
 import * as V2 from "./v2";
 import phin from "phin";
+import { RequestError } from "@/common/errors/request-errors";
 
 const path = "/";
 
