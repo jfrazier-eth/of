@@ -1,4 +1,7 @@
 "use strict";
+/**
+ * This file contains code for encoding the sign header
+ */
 
 (self["webpackChunkof_vue"] = self["webpackChunkof_vue"] || []).push([
   [33415],

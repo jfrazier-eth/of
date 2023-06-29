@@ -1,6 +1,14 @@
 import { OFDynamicParams } from "./of-dynamic-params";
 import { createHash } from "crypto";
 
+/**
+ * Encodes the OF `sign` header for a request.
+ *
+ * Based on:
+ * https://github.com/deviint/onlyfans-dynamic-rules
+ * https://github.com/datawhores/OF-Scraper/blob/main/ofscraper/utils/auth.py
+ */
+
 export const signReq = (
   url: URL,
   time: number,
@@ -11,6 +19,10 @@ export const signReq = (
     "\n"
   );
 
+  /**
+   * The hex hash is currently different from the browser
+   * It could be due to incorrect dynamic params
+   */
   const hexHash = createHash("sha1").update(msg).digest("hex");
   const asciiHash = Buffer.from(hexHash, "ascii");
 
