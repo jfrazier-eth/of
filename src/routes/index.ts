@@ -1,0 +1,39 @@
+import { Context } from "../context";
+import { RequestError } from "../errors/request-error";
+import * as V2 from "./v2";
+import phin from "phin";
+
+const path = "/";
+
+const headers = {
+  Host: "onlyfans.com",
+  Pragma: "no-cache",
+  "Cache-Control": "no-cache",
+  Accept:
+    "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+};
+
+export const get = async (context: Context) => {
+  const url = context.getUrl(path);
+
+  try {
+    const response = await phin({
+      method: "GET",
+      url,
+      headers: {
+        ...context.browser.headers,
+        ...headers,
+      },
+    });
+
+    return response.statusCode;
+  } catch (err) {
+    throw RequestError.create(err, url, context);
+  }
+};
+
+const Home = {
+  get,
+};
+
+export { V2, Home };
