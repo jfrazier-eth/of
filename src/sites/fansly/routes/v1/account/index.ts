@@ -12,6 +12,11 @@ const headers = {
   Referer: "https://fansly.com/",
 };
 
+/**
+ * The me endpoint can be use to get the current user's user id
+ * https://apiv3.fansly.com/api/v1/account/me?ngsw-bypass=true
+ */
+
 export const get = async (context: LoggedInContext) => {
   const url = context.getUrl(path);
   url.searchParams.set("ids", context.userId);
