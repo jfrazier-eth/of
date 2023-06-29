@@ -17,7 +17,8 @@
     "baseUrl": "src",
     "lib": ["DOM", "ES2020"],
     "paths": {
-      "@/api/*": ["api/*"],
+      "@/sites/*": ["sites/*"],
+      "@/common/*": ["common/*"],
       "@/utils/*": ["utils/*"]
     }
   },

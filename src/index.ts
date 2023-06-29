@@ -1,4 +1,5 @@
-import { Routes, Browsers, Context } from "@/api/index";
+import { Browsers } from "./common";
+import { Fansly, OF } from "./sites";
 
 async function main() {
   const baseUrl = "https://onlyfans.com";
@@ -19,16 +20,34 @@ async function main() {
 
   const authUid = process.env.AUTH_UID || null;
 
-  const loggedInContext = new Context.LoggedInContext(baseUrl, Browsers.brave, {
+  const OFContext = new OF.LoggedInContext(baseUrl, Browsers.brave, {
     xbc,
     sess,
     authId,
     authUid,
   });
 
-  // await Routes.Home.get(loggedInContext);
-  await Routes.V2.Users.me.get(loggedInContext);
-  await Routes.V2.Init.get(loggedInContext);
+  const fanslyUserId = process.env.FANSLY_USER_ID;
+  const fanslyAuth = process.env.FANSLY_AUTH;
+
+  if (!fanslyAuth) {
+    throw new Error("FANSLY_AUTH env variable was not set");
+  }
+
+  if (!fanslyUserId) {
+    throw new Error("FANSLY_USER_ID env variable was not set");
+  }
+
+  const fanslyUrl = "https://apiv3.fansly.com";
+  const fanslyContext = new Fansly.LoggedInContext(fanslyUrl, Browsers.brave, {
+    userId: fanslyUserId,
+    auth: fanslyAuth,
+  });
+
+  const res = await Fansly.Routes.V1.Account.get(fanslyContext);
+
+  // await OF.Routes.V2.Users.me.get(loggedInContext);
+  // await OF.Routes.V2.Init.get(loggedInContext);
 }
 
 void main();
