@@ -10,10 +10,9 @@ export const headers = {
   "Sec-Gpc": "1",
   "Accept-Language": "en-US,en;q=0.9",
   "Sec-Fetch-Site": "same-origin",
-  "Sec-Fetch-Mode": "navigate",
-  "Sec-Fetch-User": "?1",
-  "Sec-Fetch-Dest": "document",
-  "Accept-Encoding": "gzip, deflate, br",
+  "Sec-Fetch-Mode": "cors",
+  "Sec-Fetch-Dest": "empty",
+  "Accept-Encoding": "gzip, deflate",
 };
 
 export const brave: Browser = {

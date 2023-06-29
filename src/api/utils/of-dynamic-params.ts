@@ -2,7 +2,7 @@ import { Context } from "../context";
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "../errors/request-error";
+} from "../errors/request-errors";
 import phin from "phin";
 
 export const OF_RULES_EP =

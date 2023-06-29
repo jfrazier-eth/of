@@ -1,5 +1,5 @@
 import { Context } from "../context";
-import { RequestError } from "../errors/request-error";
+import { RequestError } from "../errors/request-errors";
 import * as V2 from "./v2";
 import phin from "phin";
 

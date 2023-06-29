@@ -1,7 +1,6 @@
-import { Browser } from "./browser";
-import { clone } from "./utils/clone";
-import * as crypto from "crypto";
-import { getOFDynamicParams } from "./utils/of-dynamic-params";
+import { Browsers } from "..";
+import { clone } from "@/utils/clone";
+import { getOFDynamicParams, signReq } from "../utils";
 
 export class Context {
   protected _baseUrl: URL;
@@ -14,9 +13,9 @@ export class Context {
     return clone(this._browser);
   }
 
-  protected _browser: Browser;
+  protected _browser: Browsers.Browser;
 
-  constructor(baseUrl: string | URL, browser: Browser) {
+  constructor(baseUrl: string | URL, browser: Browsers.Browser) {
     this._baseUrl = new URL(baseUrl.toString());
     this._browser = browser;
   }
@@ -34,6 +33,9 @@ export class Context {
 
 export interface UserOFParams {
   xbc: string;
+  sess: string;
+  authId: string;
+  authUid: string | null;
 }
 
 export class LoggedInContext extends Context {
@@ -41,7 +43,7 @@ export class LoggedInContext extends Context {
 
   constructor(
     baseUrl: string | URL,
-    browser: Browser,
+    browser: Browsers.Browser,
     userParams: UserOFParams
   ) {
     super(baseUrl, browser);
@@ -56,39 +58,21 @@ export class LoggedInContext extends Context {
       Time: `${time}`,
       "X-Bc": this._userParams.xbc,
       "App-Token": appToken,
+      Cookie: `auth_id=${this._userParams.authId}; sess=${this._userParams.sess}`,
     };
   }
 
   protected async getDynamicHeaders(url: URL) {
     const time = new Date().getTime();
 
-    const {
-      start,
-      end,
-      appToken,
-      checksumIndexes,
-      checksumConstant,
-      staticParam,
-    } = await getOFDynamicParams(this);
+    const dynamicParams = await getOFDynamicParams(this);
 
-    // TODO get user id using the `me` endpoint
-    const userId = "";
-    const msg = [staticParam, time, url.pathname, userId].join("\n");
-
-    const hexHash = crypto.createHash("sha1").update(msg).digest("hex");
-    const asciiHash = Buffer.from(hexHash, "ascii");
-
-    const checksum =
-      checksumIndexes.reduce((sum, index) => sum + asciiHash[index], 0) +
-      checksumConstant;
-    const sign = [start, hexHash, Math.abs(checksum).toString(16), end].join(
-      ":"
-    );
+    const { sign } = signReq(url, time, dynamicParams, this._userParams.authId);
 
     return {
       sign,
       time,
-      appToken,
+      appToken: dynamicParams.appToken,
     };
   }
 }

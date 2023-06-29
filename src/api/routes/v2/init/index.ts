@@ -1,5 +1,6 @@
+import { RequestError } from "@/api/errors/request-errors";
 import { LoggedInContext } from "../../../context";
-import { RequestError } from "../../../errors/request-error";
+
 import phin from "phin";
 
 const path = "/api2/v2/init";
@@ -21,6 +22,8 @@ export const get = async (context: LoggedInContext) => {
       ...headers,
       ...contextHeaders,
     };
+
+    console.log(reqHeaders);
     const response = await phin({
       method: "GET",
       url,

@@ -15,7 +15,14 @@
     "strict": true,
     "target": "es2020",
     "baseUrl": "src",
-    "lib": ["DOM", "ES2020"]
+    "lib": ["DOM", "ES2020"],
+    "paths": {
+      "@/api/*": ["api/*"],
+      "@/utils/*": ["utils/*"]
+    }
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }
