@@ -1,8 +1,14 @@
-import { clone } from "@/utils/clone";
-import { getOFDynamicParams, signReq } from "./utils";
-import { Browsers, Context } from "@/common/index";
+import { Context } from "@/common/context.js";
+import { Browsers } from "@/common/index.js";
+import { clone } from "@/utils/clone.js";
+import { getOFDynamicParams } from "./utils/of-dynamic-params.js";
+import { signReq } from "./utils/sign-req.js";
 
-export interface UserOFParams {
+export interface UserParams {
+  xbc: string;
+}
+
+export interface UserSessionParams {
   xbc: string;
   sess: string;
   authId: string;
@@ -10,12 +16,12 @@ export interface UserOFParams {
 }
 
 export class LoggedInContext extends Context {
-  protected _userParams: UserOFParams;
+  protected _userParams: UserParams;
 
   constructor(
     baseUrl: string | URL,
     browser: Browsers.Browser,
-    userParams: UserOFParams
+    userParams: UserParams
   ) {
     super(baseUrl, browser);
     this._userParams = clone(userParams);
@@ -23,21 +29,61 @@ export class LoggedInContext extends Context {
 
   public async getHeaders(url: URL): Promise<Record<string, string>> {
     const { sign, time, appToken } = await this.getDynamicHeaders(url);
+
     return {
       ...this.browser.headers,
       Sign: sign,
       Time: `${time}`,
       "X-Bc": this._userParams.xbc,
       "App-Token": appToken,
-      Cookie: `auth_id=${this._userParams.authId}; sess=${this._userParams.sess}`,
     };
   }
 
   protected async getDynamicHeaders(url: URL) {
     const time = new Date().getTime();
-
     const dynamicParams = await getOFDynamicParams(this);
+    const { sign } = signReq(url, time, dynamicParams);
 
+    return {
+      sign,
+      time,
+      appToken: dynamicParams.appToken,
+    };
+  }
+}
+
+export class SessionContext extends LoggedInContext {
+  protected _userParams: UserSessionParams;
+  constructor(
+    baseUrl: string | URL,
+    browser: Browsers.Browser,
+    sessionParams: UserSessionParams
+  ) {
+    super(baseUrl, browser, sessionParams);
+    this._userParams = clone(sessionParams);
+  }
+
+  public async getHeaders(url: URL): Promise<Record<string, string>> {
+    const { sign, time, appToken } = await this.getDynamicHeaders(url);
+
+    const cookies = [
+      `sess=${this._userParams.sess}`,
+      `auth_id=${this._userParams.authId}`,
+    ].join("; ");
+
+    return {
+      ...this.browser.headers,
+      Sign: sign,
+      Time: `${time}`,
+      "X-Bc": this._userParams.xbc,
+      "App-Token": appToken,
+      Cookie: cookies,
+    };
+  }
+
+  protected async getDynamicHeaders(url: URL) {
+    const time = new Date().getTime();
+    const dynamicParams = await getOFDynamicParams(this);
     const { sign } = signReq(url, time, dynamicParams, this._userParams.authId);
 
     return {

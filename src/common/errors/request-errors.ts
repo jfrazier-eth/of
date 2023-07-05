@@ -1,4 +1,4 @@
-import { Context } from "../context";
+import { Context } from "../context.js";
 
 export class RequestError extends Error {
   constructor(url: URL, context: Context, msg: string) {

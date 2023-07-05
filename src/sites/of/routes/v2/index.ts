@@ -1,3 +1,2 @@
-import * as Init from "./init";
-import * as Users from "./users";
-export { Init, Users };
+export * as Init from "./init/index.js";
+export * as Users from "./users/index.js";

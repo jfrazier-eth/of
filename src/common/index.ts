@@ -1,3 +1,3 @@
-export * as Browsers from "./browsers";
-export { Context } from "./context";
-export * as Errors from "./errors";
+export * as Browsers from "./browsers/index.js";
+export { Context } from "./context.js";
+export * as Errors from "./errors/index.js";

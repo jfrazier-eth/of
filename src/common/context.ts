@@ -1,5 +1,5 @@
-import { clone } from "@/utils/clone";
-import { Browsers } from ".";
+import { clone } from "@/utils/clone.js";
+import { Browsers } from "./index.js";
 
 export class Context {
   protected _baseUrl: URL;

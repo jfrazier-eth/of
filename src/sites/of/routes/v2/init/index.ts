@@ -1,7 +1,10 @@
-import { RequestError } from "@/common/errors/request-errors";
-import { LoggedInContext } from "@/sites/of";
-
-import phin from "phin";
+import {
+  RequestError,
+  UnexpectedStatusCodeError,
+} from "@/common/errors/request-errors.js";
+import { getClient } from "@/common/http/index.js";
+import { LoggedInContext } from "@/sites/of/index.js";
+import { GetInitResponseBody, InitResponse } from "./types.js";
 
 const path = "/api2/v2/init";
 
@@ -13,27 +16,29 @@ const headers = {
   Accept: "application/json, text/plain, */*",
 };
 
-export const get = async (context: LoggedInContext) => {
+export const get = async (context: LoggedInContext): Promise<InitResponse> => {
   const url = context.getUrl(path);
 
   try {
+    const client = getClient();
     const contextHeaders = await context.getHeaders(url);
     const reqHeaders = {
       ...headers,
       ...contextHeaders,
     };
 
-    console.log(reqHeaders);
-    const response = await phin({
-      method: "GET",
-      url,
+    const response = await client.get(url, {
       headers: reqHeaders,
     });
 
-    console.log(`Init Status Code ${response.statusCode}`);
-    console.log(response.body.toString());
-    console.log(response.headers);
-    return response.statusCode;
+    if (response.status === 200) {
+      const body = await response.json<GetInitResponseBody>();
+      return {
+        sess: "", // TODO get session cookie
+        csrf: body.csrf,
+      };
+    }
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

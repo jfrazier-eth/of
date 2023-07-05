@@ -1,4 +1,4 @@
-import { OFDynamicParams } from "./of-dynamic-params";
+import { OFDynamicParams } from "./of-dynamic-params.js";
 import { createHash } from "crypto";
 
 /**
@@ -13,7 +13,7 @@ export const signReq = (
   url: URL,
   time: number,
   dynamicParams: OFDynamicParams,
-  authId: string
+  authId = "0"
 ) => {
   const msg = [dynamicParams.staticParam, time, url.pathname, authId].join(
     "\n"
@@ -27,7 +27,7 @@ export const signReq = (
   const asciiHash = Buffer.from(hexHash, "ascii");
 
   const checksum = dynamicParams.checksumIndexes.reduce(
-    (sum, checksumIndex) => {
+    (sum: number, checksumIndex: number) => {
       return sum + asciiHash[checksumIndex];
     },
     dynamicParams.checksumConstant

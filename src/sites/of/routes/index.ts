@@ -1,7 +1,6 @@
-import { Context } from "@/common/context";
-import * as V2 from "./v2";
-import phin from "phin";
-import { RequestError } from "@/common/errors/request-errors";
+import { RequestError } from "@/common/errors/request-errors.js";
+import { getClient } from "@/common/http/index.js";
+import { Context } from "@/common/index.js";
 
 const path = "/";
 
@@ -17,16 +16,15 @@ export const get = async (context: Context) => {
   const url = context.getUrl(path);
 
   try {
-    const response = await phin({
-      method: "GET",
-      url,
+    const client = getClient();
+    const response = await client.get(url, {
       headers: {
         ...context.browser.headers,
         ...headers,
       },
     });
 
-    return response.statusCode;
+    return response.status;
   } catch (err) {
     throw RequestError.create(err, url, context);
   }
@@ -36,4 +34,5 @@ const Home = {
   get,
 };
 
-export { V2, Home };
+export { Home };
+export * as V2 from "./v2/index.js";

@@ -1,9 +1,9 @@
-import { Context } from "@/common/context";
+import { Context } from "@/common/context.js";
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "../../../common/errors/request-errors";
-import phin from "phin";
+} from "@/common/errors/request-errors.js";
+import { getClient } from "@/common/http/index.js";
 
 export const OF_RULES_EP =
   "https://raw.githubusercontent.com/deviint/onlyfans-dynamic-rules/main/dynamicRules.json";
@@ -37,15 +37,11 @@ export async function getOFDynamicParams(
 ): Promise<OFDynamicParams> {
   const url = new URL(OF_RULES_EP);
   try {
-    const response = await phin({
-      url,
-      method: "GET",
-    });
+    const client = getClient();
+    const response = await client.get(url);
 
-    if (response.statusCode === 200) {
-      const body = JSON.parse(
-        response.body.toString()
-      ) as OFDynamicParamsResponse;
+    if (response.status === 200) {
+      const body = await response.json<OFDynamicParamsResponse>();
       return {
         staticParam: body.static_param,
         start: body.start,
@@ -58,7 +54,7 @@ export async function getOFDynamicParams(
         isCurrent: body.is_current,
       };
     }
-    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }
