@@ -1,5 +1,5 @@
-import { Browsers, Context } from "@/common/index";
-import { clone } from "@/utils/clone";
+import { Browsers, Context } from "@/common/index.js";
+import { clone } from "@/utils/clone.js";
 
 export interface UserFanslyParams {
   userId: string;

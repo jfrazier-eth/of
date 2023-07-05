@@ -5,10 +5,11 @@
   "repository": "https://github.com/jfrazier-eth/of.git",
   "author": "Joe Frazier <54604023+jfrazier-eth@users.noreply.github.com>",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "build": "npm run clean && tsc",
     "clean": "rimraf ./dist",
-    "start": "npm run build && node -r dotenv/config -r module-alias/register ./dist/index.js",
+    "start": "npm run build && node -r dotenv/config --loader esm-module-alias/loader ./dist/index.js",
     "test": "jest"
   },
   "devDependencies": {
@@ -26,9 +27,13 @@
   "dependencies": {
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",
+    "esm-module-alias": "^2.0.3",
+    "got": "^13.0.0",
+    "https-proxy-agent": "^7.0.0",
+    "ky": "^0.33.3",
     "phin": "^3.7.0"
   },
-  "_moduleAliases": {
+  "aliases": {
     "@/common": "dist/common",
     "@/sites": "dist/sites",
     "@/utils": "dist/utils"

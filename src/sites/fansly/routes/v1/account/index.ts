@@ -1,6 +1,5 @@
-import { LoggedInContext } from "@/sites/fansly";
-import { RequestError } from "@/common/errors/request-errors";
-import phin from "phin";
+import { RequestError } from "@/common/errors/request-errors.js";
+import { LoggedInContext } from "@/sites/fansly/context.js";
 import axios from "axios";
 
 const path = "/api/v1/account";

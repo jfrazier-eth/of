@@ -1,3 +1,1 @@
-import * as me from "./me";
-
-export { me };
+export * as me from "./me.js";

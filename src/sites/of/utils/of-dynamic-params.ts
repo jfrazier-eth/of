@@ -1,8 +1,9 @@
-import { Context } from "@/common/context";
+import { Context } from "@/common/context.js";
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "../../../common/errors/request-errors";
+} from "@/common/errors/request-errors.js";
+
 import phin from "phin";
 
 export const OF_RULES_EP =

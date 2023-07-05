@@ -1,7 +1,6 @@
-import { Context } from "@/common/context";
-import * as V2 from "./v2";
+import { RequestError } from "@/common/errors/request-errors.js";
+import { Context } from "@/common/index.js";
 import phin from "phin";
-import { RequestError } from "@/common/errors/request-errors";
 
 const path = "/";
 
@@ -36,4 +35,5 @@ const Home = {
   get,
 };
 
-export { V2, Home };
+export { Home };
+export * as V2 from "./v2/index.js";

@@ -1,7 +1,9 @@
-import { RequestError } from "@/common/errors/request-errors";
-import { LoggedInContext } from "@/sites/of";
-
-import phin from "phin";
+import {
+  RequestError,
+  UnexpectedStatusCodeError,
+} from "@/common/errors/request-errors.js";
+import { getClient } from "@/common/http/index.js";
+import { LoggedInContext } from "@/sites/of/index.js";
 
 const path = "/api2/v2/init";
 
@@ -17,23 +19,25 @@ export const get = async (context: LoggedInContext) => {
   const url = context.getUrl(path);
 
   try {
+    const client = getClient();
     const contextHeaders = await context.getHeaders(url);
     const reqHeaders = {
       ...headers,
       ...contextHeaders,
     };
 
-    console.log(reqHeaders);
-    const response = await phin({
-      method: "GET",
-      url,
+    const response = await client.get(url, {
       headers: reqHeaders,
+      parseJson: JSON.parse,
+      throwHttpErrors: false,
     });
 
-    console.log(`Init Status Code ${response.statusCode}`);
-    console.log(response.body.toString());
-    console.log(response.headers);
-    return response.statusCode;
+    if (response.status === 200) {
+      const body = await response.json();
+      console.log(body);
+      console.log(response.headers);
+    }
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }
