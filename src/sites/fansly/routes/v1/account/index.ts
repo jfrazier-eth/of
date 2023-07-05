@@ -1,6 +1,6 @@
 import { RequestError } from "@/common/errors/request-errors.js";
+import { getClient } from "@/common/http/index.js";
 import { LoggedInContext } from "@/sites/fansly/context.js";
-import axios from "axios";
 
 const path = "/api/v1/account";
 
@@ -28,13 +28,10 @@ export const get = async (context: LoggedInContext) => {
       ...contextHeaders,
     };
 
-    /**
-     * phin seems to be unable to parse this response
-     */
-    const response = await axios.get(url.toString(), {
+    const client = getClient();
+    const response = await client.get(url.toString(), {
       headers: reqHeaders,
     });
-    console.log(response.data);
 
     return response.status;
   } catch (err) {

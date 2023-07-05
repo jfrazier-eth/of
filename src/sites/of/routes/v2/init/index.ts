@@ -4,6 +4,7 @@ import {
 } from "@/common/errors/request-errors.js";
 import { getClient } from "@/common/http/index.js";
 import { LoggedInContext } from "@/sites/of/index.js";
+import { GetInitResponseBody, InitResponse } from "./types.js";
 
 const path = "/api2/v2/init";
 
@@ -15,7 +16,7 @@ const headers = {
   Accept: "application/json, text/plain, */*",
 };
 
-export const get = async (context: LoggedInContext) => {
+export const get = async (context: LoggedInContext): Promise<InitResponse> => {
   const url = context.getUrl(path);
 
   try {
@@ -28,14 +29,14 @@ export const get = async (context: LoggedInContext) => {
 
     const response = await client.get(url, {
       headers: reqHeaders,
-      parseJson: JSON.parse,
-      throwHttpErrors: false,
     });
 
     if (response.status === 200) {
-      const body = await response.json();
-      console.log(body);
-      console.log(response.headers);
+      const body = await response.json<GetInitResponseBody>();
+      return {
+        sess: "", // TODO get session cookie
+        csrf: body.csrf,
+      };
     }
     throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {

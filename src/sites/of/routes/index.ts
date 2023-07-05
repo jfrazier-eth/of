@@ -1,6 +1,6 @@
 import { RequestError } from "@/common/errors/request-errors.js";
+import { getClient } from "@/common/http/index.js";
 import { Context } from "@/common/index.js";
-import phin from "phin";
 
 const path = "/";
 
@@ -16,16 +16,15 @@ export const get = async (context: Context) => {
   const url = context.getUrl(path);
 
   try {
-    const response = await phin({
-      method: "GET",
-      url,
+    const client = getClient();
+    const response = await client.get(url, {
       headers: {
         ...context.browser.headers,
         ...headers,
       },
     });
 
-    return response.statusCode;
+    return response.status;
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

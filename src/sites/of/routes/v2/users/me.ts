@@ -1,7 +1,10 @@
 import { LoggedInContext } from "@/sites/of/context.js";
-import { HttpsProxyAgent } from "https-proxy-agent";
-import got from "got";
-import { RequestError } from "@/common/errors/request-errors.js";
+import {
+  RequestError,
+  UnexpectedStatusCodeError,
+} from "@/common/errors/request-errors.js";
+import { getClient } from "@/common/http/index.js";
+import { GetMeResponseBody } from "./types.js";
 
 const path = "/api2/v2/users/me";
 
@@ -20,23 +23,24 @@ export const get = async (context: LoggedInContext) => {
       ...headers,
       ...contextHeaders,
     };
+    const client = getClient();
 
-    const agent = new HttpsProxyAgent(new URL("http://127.0.0.1:4444"));
-    console.log(JSON.stringify(reqHeaders, null, 2));
-    const response = await got(url.toString(), {
+    const response = await client.get(url.toString(), {
       headers: reqHeaders,
-      https: {
-        rejectUnauthorized: false,
-      },
-      agent: {
-        https: agent,
-      },
     });
 
-    console.log(`Me Status Code ${response.statusCode}`);
-    console.log(response.body.toString());
-    console.log(response.headers);
-    return response.statusCode;
+    if (response.status === 200) {
+      const body = await response.json<GetMeResponseBody>();
+
+      return {
+        id: body.id,
+        name: body.name,
+        username: body.username,
+        email: body.email,
+        wsAuthToken: body.wsAuthToken,
+      };
+    }
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }
