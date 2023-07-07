@@ -1,4 +1,4 @@
-import { LoggedInContext } from "@/sites/of/context.js";
+import { UserContext } from "@/sites/of/context.js";
 import {
   RequestError,
   UnexpectedStatusCodeError,
@@ -14,7 +14,7 @@ const headers = {
   Referer: "https://onlyfans.com/",
 };
 
-export const get = async (context: LoggedInContext) => {
+export const get = async (context: UserContext, sess: string) => {
   const url = context.getUrl(path);
 
   try {
@@ -22,6 +22,7 @@ export const get = async (context: LoggedInContext) => {
     const reqHeaders = {
       ...headers,
       ...contextHeaders,
+      Cookie: `sess=${sess}`,
     };
     const client = getClient();
 

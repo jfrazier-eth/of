@@ -1,5 +1,5 @@
-import { OFDynamicParams } from "./of-dynamic-params.js";
 import { createHash } from "crypto";
+import { OFDynamicParams } from "./of-dynamic-params.js";
 
 /**
  * Encodes the OF `sign` header for a request.
@@ -8,7 +8,6 @@ import { createHash } from "crypto";
  * https://github.com/deviint/onlyfans-dynamic-rules
  * https://github.com/datawhores/OF-Scraper/blob/main/ofscraper/utils/auth.py
  */
-
 export const signReq = (
   url: URL,
   time: number,

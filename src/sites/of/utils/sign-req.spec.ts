@@ -1,7 +1,7 @@
 import { OFDynamicParams } from "./of-dynamic-params.js";
 import { signReq } from "./sign-req.js";
 
-it("should be correct", () => {
+it("can generate the expected sign header", () => {
   const url = new URL("https://onlyfans.com/api2/v2/init");
 
   const time = 1688047708049;
@@ -19,7 +19,7 @@ it("should be correct", () => {
     revision: "202306290620-5cd0b104b9",
     isCurrent: true,
   };
-  const authId = "342900132";
+  const authId = "0";
 
   const { sign } = signReq(url, time, dynamicParams, authId);
 
@@ -30,8 +30,6 @@ it("should be correct", () => {
     expectedSign.split(":");
 
   const [start, hash, sum, end] = sign.split(":");
-
-  console.log(sign, expectedSign);
 
   expect(start).toEqual(expectedStart);
   expect(hash).toEqual(expectedHash);

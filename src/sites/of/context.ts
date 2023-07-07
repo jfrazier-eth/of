@@ -15,8 +15,12 @@ export interface UserSessionParams {
   authUid: string | null;
 }
 
-export class LoggedInContext extends Context {
+export class UserContext extends Context {
   protected _userParams: UserParams;
+
+  public get userParams() {
+    return clone(this._userParams);
+  }
 
   constructor(
     baseUrl: string | URL,
@@ -52,7 +56,7 @@ export class LoggedInContext extends Context {
   }
 }
 
-export class SessionContext extends LoggedInContext {
+export class SessionContext extends UserContext {
   protected _userParams: UserSessionParams;
   constructor(
     baseUrl: string | URL,

@@ -3,8 +3,9 @@ import {
   UnexpectedStatusCodeError,
 } from "@/common/errors/request-errors.js";
 import { getClient } from "@/common/http/index.js";
-import { LoggedInContext } from "@/sites/of/index.js";
 import { GetInitResponseBody, InitResponse } from "./types.js";
+import { UserContext } from "@/sites/of/context.js";
+import { extractCookie } from "@/sites/of/utils/extract-cookie.js";
 
 const path = "/api2/v2/init";
 
@@ -16,7 +17,7 @@ const headers = {
   Accept: "application/json, text/plain, */*",
 };
 
-export const get = async (context: LoggedInContext): Promise<InitResponse> => {
+export const get = async (context: UserContext): Promise<InitResponse> => {
   const url = context.getUrl(path);
 
   try {
@@ -33,8 +34,13 @@ export const get = async (context: LoggedInContext): Promise<InitResponse> => {
 
     if (response.status === 200) {
       const body = await response.json<GetInitResponseBody>();
+      const cookies = response.headers.get("set-cookie") ?? "";
+      const sess = extractCookie("sess", cookies);
+      if (!sess) {
+        throw new Error("Failed to get sess cookie");
+      }
       return {
-        sess: "", // TODO get session cookie
+        sess: sess,
         csrf: body.csrf,
       };
     }

@@ -1,6 +1,5 @@
 import { Browsers } from "./common/index.js";
 import { Fansly, OF } from "./sites/index.js";
-import { sleep } from "./utils/sleep.js";
 
 async function main() {
   const baseUrl = "https://onlyfans.com";
@@ -10,7 +9,7 @@ async function main() {
     throw new Error("XBC env variable was not set");
   }
 
-  const OFContext = new OF.LoggedInContext(baseUrl, Browsers.brave, {
+  const ofContext = new OF.UserContext(baseUrl, Browsers.brave, {
     xbc,
   });
 
@@ -31,19 +30,7 @@ async function main() {
     auth: fanslyAuth,
   });
 
-  let attempt = 0;
-  while (true) {
-    attempt += 1;
-    try {
-      const status = await OF.Routes.V2.Init.get(OFContext);
-      return;
-    } catch (err) {
-      console.log(`Attempt ${attempt} failed!`);
-      console.error(err);
-    }
-    await sleep(3000);
-  }
-  // await OF.Routes.V2.Init.get(OFContext);
+  const session = await OF.Sdk.getSession(ofContext);
 }
 
 void main();
