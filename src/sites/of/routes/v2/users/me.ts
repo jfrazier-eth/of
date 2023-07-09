@@ -3,7 +3,6 @@ import {
   RequestError,
   UnexpectedStatusCodeError,
 } from "@/common/errors/request-errors.js";
-import { getClient } from "@/common/http/index.js";
 import { GetMeResponseBody } from "./types.js";
 
 const path = "/api2/v2/users/me";
@@ -23,10 +22,8 @@ export const get = async (context: UserContext) => {
       ...headers,
       ...contextHeaders,
     };
-    const client = getClient();
-    const response = await client.get<GetMeResponseBody>(url, {
+    const response = await context.client.get<GetMeResponseBody>(url, {
       headers: reqHeaders,
-      cookieJar: context.cookieJar,
     });
 
     if (response.statusCode === 200) {

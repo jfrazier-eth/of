@@ -1,5 +1,4 @@
 import { RequestError } from "@/common/errors/request-errors.js";
-import { getClient } from "@/common/http/index.js";
 import { LoggedInContext } from "@/sites/fansly/context.js";
 
 const path = "/api/v1/account";
@@ -28,8 +27,7 @@ export const get = async (context: LoggedInContext) => {
       ...contextHeaders,
     };
 
-    const client = getClient();
-    const response = await client.get(url.toString(), {
+    const response = await context.client.get(url.toString(), {
       headers: reqHeaders,
     });
 
