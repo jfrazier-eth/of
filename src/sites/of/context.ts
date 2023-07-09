@@ -1,11 +1,11 @@
-import { Context } from "@/common/context.js";
-import { Browsers } from "@/common/index.js";
+import { Context, ContextOptions } from "@/common/context.js";
 import { clone } from "@/utils/clone.js";
 import { getOFDynamicParams } from "./utils/of-dynamic-params.js";
 import { signReq } from "./utils/sign-req.js";
 
 export interface UserParams {
   xbc: string;
+  sess: string;
 }
 
 export interface UserSessionParams {
@@ -22,13 +22,13 @@ export class UserContext extends Context {
     return clone(this._userParams);
   }
 
-  constructor(
-    baseUrl: string | URL,
-    browser: Browsers.Browser,
-    userParams: UserParams
-  ) {
-    super(baseUrl, browser);
+  constructor(userParams: UserParams, options: ContextOptions) {
+    super(options);
     this._userParams = clone(userParams);
+    this._cookieJar.setCookie(
+      `sess=${userParams.sess}; path=/; domain=.onlyfans.com; secure; HttpOnly`,
+      this.options.baseUrl.toString()
+    );
   }
 
   public async getHeaders(url: URL): Promise<Record<string, string>> {
@@ -58,22 +58,13 @@ export class UserContext extends Context {
 
 export class SessionContext extends UserContext {
   protected _userParams: UserSessionParams;
-  constructor(
-    baseUrl: string | URL,
-    browser: Browsers.Browser,
-    sessionParams: UserSessionParams
-  ) {
-    super(baseUrl, browser, sessionParams);
+  constructor(sessionParams: UserSessionParams, options: ContextOptions) {
+    super(sessionParams, options);
     this._userParams = clone(sessionParams);
   }
 
   public async getHeaders(url: URL): Promise<Record<string, string>> {
     const { sign, time, appToken } = await this.getDynamicHeaders(url);
-
-    const cookies = [
-      `sess=${this._userParams.sess}`,
-      `auth_id=${this._userParams.authId}`,
-    ].join("; ");
 
     return {
       ...this.browser.headers,
@@ -81,7 +72,6 @@ export class SessionContext extends UserContext {
       Time: `${time}`,
       "X-Bc": this._userParams.xbc,
       "App-Token": appToken,
-      Cookie: cookies,
     };
   }
 

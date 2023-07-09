@@ -3,7 +3,6 @@ import {
   RequestError,
   UnexpectedStatusCodeError,
 } from "@/common/errors/request-errors.js";
-import { getClient } from "@/common/http/index.js";
 import { GetMeResponseBody } from "./types.js";
 
 const path = "/api2/v2/users/me";
@@ -14,7 +13,7 @@ const headers = {
   Referer: "https://onlyfans.com/",
 };
 
-export const get = async (context: UserContext, sess: string) => {
+export const get = async (context: UserContext) => {
   const url = context.getUrl(path);
 
   try {
@@ -22,26 +21,22 @@ export const get = async (context: UserContext, sess: string) => {
     const reqHeaders = {
       ...headers,
       ...contextHeaders,
-      Cookie: `sess=${sess}`,
     };
-    const client = getClient();
-
-    const response = await client.get(url.toString(), {
+    const response = await context.client.get<GetMeResponseBody>(url, {
       headers: reqHeaders,
     });
 
-    if (response.status === 200) {
-      const body = await response.json<GetMeResponseBody>();
-
+    if (response.statusCode === 200) {
       return {
-        id: body.id,
-        name: body.name,
-        username: body.username,
-        email: body.email,
-        wsAuthToken: body.wsAuthToken,
+        id: response.body.id,
+        name: response.body.name,
+        username: response.body.username,
+        email: response.body.email,
+        wsAuthToken: response.body.wsAuthToken,
       };
     }
-    throw new UnexpectedStatusCodeError(url, context, response.status);
+    console.log(response.request);
+    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

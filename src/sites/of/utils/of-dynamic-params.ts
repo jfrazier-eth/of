@@ -3,7 +3,6 @@ import {
   RequestError,
   UnexpectedStatusCodeError,
 } from "@/common/errors/request-errors.js";
-import { getClient } from "@/common/http/index.js";
 
 export const OF_RULES_EP =
   "https://raw.githubusercontent.com/deviint/onlyfans-dynamic-rules/main/dynamicRules.json";
@@ -37,11 +36,10 @@ export async function getOFDynamicParams(
 ): Promise<OFDynamicParams> {
   const url = new URL(OF_RULES_EP);
   try {
-    const client = getClient();
-    const response = await client.get(url);
+    const response = await context.client.get<OFDynamicParamsResponse>(url);
 
-    if (response.status === 200) {
-      const body = await response.json<OFDynamicParamsResponse>();
+    if (response.statusCode === 200) {
+      const body = response.body;
       return {
         staticParam: body.static_param,
         start: body.start,
@@ -54,7 +52,7 @@ export async function getOFDynamicParams(
         isCurrent: body.is_current,
       };
     }
-    throw new UnexpectedStatusCodeError(url, context, response.status);
+    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }
