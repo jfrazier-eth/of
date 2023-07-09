@@ -6,7 +6,6 @@ export const headers = {
   "Sec-Ch-Ua": '"Not.A/Brand";v="8", "Chromium";v="114", "Brave";v="114"',
   "Sec-Ch-Ua-Mobile": "?0",
   "Sec-Ch-Ua-Platform": '"macOS"',
-  "Upgrade-Insecure-Requests": "1",
   "Sec-Gpc": "1",
   "Accept-Language": "en-US,en;q=0.9",
   "Sec-Fetch-Site": "same-origin",

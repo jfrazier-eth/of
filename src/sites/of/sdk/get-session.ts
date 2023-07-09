@@ -1,5 +1,5 @@
 import { sleep } from "@/utils/sleep.js";
-import { SessionContext, UserContext, UserParams } from "../context.js";
+import { SessionContext, UserContext } from "../context.js";
 import { Routes } from "../index.js";
 
 export async function getSession(context: UserContext) {
@@ -10,6 +10,7 @@ export async function getSession(context: UserContext) {
       const session = new SessionContext(
         {
           xbc: context.userParams.xbc,
+          sess: context.userParams.sess,
           authId: meResponse.id.toString(),
           authUid: null,
         },

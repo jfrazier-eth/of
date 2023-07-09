@@ -7,13 +7,19 @@ async function main() {
   const proxy = process.env.HTTPS_PROXY;
 
   const xbc = process.env.XBC;
+  const sess = process.env.OF_SESS;
   if (!xbc) {
     throw new Error("XBC env variable was not set");
+  }
+
+  if (!sess) {
+    throw new Error("OF_SESS env variable was not set");
   }
 
   const ofContext = new OF.UserContext(
     {
       xbc,
+      sess: sess,
     },
     {
       baseUrl,

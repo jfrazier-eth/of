@@ -1,7 +1,7 @@
 import { clone } from "@/utils/clone.js";
 import { Browsers } from "./index.js";
 import { CookieJar } from "tough-cookie";
-import got, { ExtendOptions, Got, Options } from "got";
+import got, { ExtendOptions, Got } from "got";
 import { HttpsProxyAgent } from "https-proxy-agent";
 export interface ContextOptions {
   baseUrl: string | URL;
@@ -55,7 +55,9 @@ export class Context {
     this._proxy = options.proxy ? new URL(options.proxy) : null;
     if (this._proxy) {
       clientOptions.agent = {
-        https: new HttpsProxyAgent(this._proxy),
+        https: new HttpsProxyAgent(this._proxy, {
+          keepAlive: true,
+        }),
       };
 
       clientOptions.https = {
