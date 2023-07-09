@@ -1,5 +1,4 @@
 import { RequestError } from "@/common/errors/request-errors.js";
-import { getClient } from "@/common/http/index.js";
 import { Context } from "@/common/index.js";
 
 const path = "/";
@@ -16,8 +15,7 @@ export const get = async (context: Context) => {
   const url = context.getUrl(path);
 
   try {
-    const client = getClient();
-    const response = await client.get(url, {
+    const response = await context.client.get(url, {
       headers: {
         ...context.browser.headers,
         ...headers,

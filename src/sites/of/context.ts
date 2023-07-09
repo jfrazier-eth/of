@@ -1,4 +1,4 @@
-import { Context } from "@/common/context.js";
+import { Context, ContextOptions } from "@/common/context.js";
 import { Browsers } from "@/common/index.js";
 import { clone } from "@/utils/clone.js";
 import { getOFDynamicParams } from "./utils/of-dynamic-params.js";
@@ -21,12 +21,8 @@ export class UserContext extends Context {
     return clone(this._userParams);
   }
 
-  constructor(
-    baseUrl: string | URL,
-    browser: Browsers.Browser,
-    userParams: UserParams
-  ) {
-    super(baseUrl, browser);
+  constructor(userParams: UserParams, options: ContextOptions) {
+    super(options);
     this._userParams = clone(userParams);
   }
 
@@ -57,12 +53,8 @@ export class UserContext extends Context {
 
 export class SessionContext extends UserContext {
   protected _userParams: UserSessionParams;
-  constructor(
-    baseUrl: string | URL,
-    browser: Browsers.Browser,
-    sessionParams: UserSessionParams
-  ) {
-    super(baseUrl, browser, sessionParams);
+  constructor(sessionParams: UserSessionParams, options: ContextOptions) {
+    super(sessionParams, options);
     this._userParams = clone(sessionParams);
   }
 

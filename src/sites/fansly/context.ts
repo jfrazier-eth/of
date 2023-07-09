@@ -1,3 +1,4 @@
+import { ContextOptions } from "@/common/context.js";
 import { Browsers, Context } from "@/common/index.js";
 import { clone } from "@/utils/clone.js";
 
@@ -9,12 +10,8 @@ export interface UserFanslyParams {
 export class LoggedInContext extends Context {
   protected _userParams: UserFanslyParams;
 
-  constructor(
-    baseUrl: string | URL,
-    browser: Browsers.Browser,
-    userParams: UserFanslyParams
-  ) {
-    super(baseUrl, browser);
+  constructor(userParams: UserFanslyParams, options: ContextOptions) {
+    super(options);
     this._userParams = clone(userParams);
   }
 

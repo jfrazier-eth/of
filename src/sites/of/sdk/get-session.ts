@@ -7,11 +7,14 @@ export async function getSession(context: UserContext) {
     try {
       await Routes.V2.Init.get(context);
       const meResponse = await Routes.V2.Users.me.get(context);
-      const session = new SessionContext(context.baseUrl, context.browser, {
-        xbc: context.userParams.xbc,
-        authId: meResponse.id.toString(),
-        authUid: null,
-      });
+      const session = new SessionContext(
+        {
+          xbc: context.userParams.xbc,
+          authId: meResponse.id.toString(),
+          authUid: null,
+        },
+        context.options
+      );
       console.log(`Retrieved session for user ${meResponse.name}`);
 
       return session;

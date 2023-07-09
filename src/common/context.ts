@@ -1,7 +1,13 @@
 import { clone } from "@/utils/clone.js";
 import { Browsers } from "./index.js";
 import { CookieJar } from "tough-cookie";
-import got, { Got } from "got";
+import got, { ExtendOptions, Got, Options } from "got";
+import { HttpsProxyAgent } from "https-proxy-agent";
+export interface ContextOptions {
+  baseUrl: string | URL;
+  browser: Browsers.Browser;
+  proxy?: string | URL | null;
+}
 
 export class Context {
   protected _baseUrl: URL;
@@ -14,6 +20,14 @@ export class Context {
     return clone(this._browser);
   }
 
+  public get options() {
+    return {
+      baseUrl: this.baseUrl,
+      browser: this.browser,
+      proxy: this._proxy,
+    };
+  }
+
   public get cookieJar() {
     return this._cookieJar;
   }
@@ -23,18 +37,33 @@ export class Context {
   }
 
   protected _browser: Browsers.Browser;
+  protected _proxy: URL | null;
   protected _cookieJar: CookieJar;
   protected _client: Got;
 
-  constructor(baseUrl: string | URL, browser: Browsers.Browser) {
-    this._baseUrl = new URL(baseUrl.toString());
-    this._browser = browser;
+  constructor(options: ContextOptions) {
+    this._baseUrl = new URL(options.baseUrl.toString());
+    this._browser = options.browser;
     this._cookieJar = new CookieJar();
-    this._client = got.extend({
+
+    const clientOptions: Got | ExtendOptions = {
       throwHttpErrors: false,
       responseType: "json",
       cookieJar: this._cookieJar,
-    });
+    };
+
+    this._proxy = options.proxy ? new URL(options.proxy) : null;
+    if (this._proxy) {
+      clientOptions.agent = {
+        https: new HttpsProxyAgent(this._proxy),
+      };
+
+      clientOptions.https = {
+        rejectUnauthorized: this._proxy.hostname !== "127.0.0.1",
+      };
+    }
+
+    this._client = got.extend(clientOptions);
   }
 
   public getUrl(path: string) {
