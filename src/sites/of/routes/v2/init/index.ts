@@ -3,9 +3,8 @@ import {
   UnexpectedStatusCodeError,
 } from "@/common/errors/request-errors.js";
 import { getClient } from "@/common/http/index.js";
-import { GetInitResponseBody, InitResponse } from "./types.js";
+import { GetInitResponseBody } from "./types.js";
 import { UserContext } from "@/sites/of/context.js";
-import { extractCookie } from "@/sites/of/utils/extract-cookie.js";
 
 const path = "/api2/v2/init";
 
@@ -17,7 +16,7 @@ const headers = {
   Accept: "application/json, text/plain, */*",
 };
 
-export const get = async (context: UserContext): Promise<InitResponse> => {
+export const get = async (context: UserContext): Promise<void> => {
   const url = context.getUrl(path);
 
   try {
@@ -28,24 +27,17 @@ export const get = async (context: UserContext): Promise<InitResponse> => {
       ...contextHeaders,
     };
 
-    const response = await client.get(url, {
+    const response = await client.get<GetInitResponseBody>(url, {
       headers: reqHeaders,
+      cookieJar: context.cookieJar,
     });
 
-    if (response.status === 200) {
-      const body = await response.json<GetInitResponseBody>();
-      const cookies = response.headers.get("set-cookie") ?? "";
-      const sess = extractCookie("sess", cookies);
-      if (!sess) {
-        throw new Error("Failed to get sess cookie");
-      }
-      return {
-        sess: sess,
-        csrf: body.csrf,
-      };
+    if (response.statusCode === 200) {
+      return;
     }
-    throw new UnexpectedStatusCodeError(url, context, response.status);
+    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
   } catch (err) {
+    console.error(err);
     throw RequestError.create(err, url, context);
   }
 };

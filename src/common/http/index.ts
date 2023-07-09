@@ -1,10 +1,8 @@
-import ky from "ky-universal";
+import got from "got";
 
-export type KyInstance = typeof ky;
-
-export function getClient(): typeof ky {
-  return ky.create({
+export function getClient() {
+  return got.extend({
     throwHttpErrors: false,
-    parseJson: JSON.parse,
+    responseType: "json",
   });
 }

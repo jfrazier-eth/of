@@ -33,7 +33,7 @@ export const get = async (context: LoggedInContext) => {
       headers: reqHeaders,
     });
 
-    return response.status;
+    return response.statusCode;
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

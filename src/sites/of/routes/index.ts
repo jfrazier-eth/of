@@ -24,7 +24,7 @@ export const get = async (context: Context) => {
       },
     });
 
-    return response.status;
+    return response.statusCode;
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

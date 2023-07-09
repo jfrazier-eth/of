@@ -14,7 +14,7 @@ const headers = {
   Referer: "https://onlyfans.com/",
 };
 
-export const get = async (context: UserContext, sess: string) => {
+export const get = async (context: UserContext) => {
   const url = context.getUrl(path);
 
   try {
@@ -22,26 +22,24 @@ export const get = async (context: UserContext, sess: string) => {
     const reqHeaders = {
       ...headers,
       ...contextHeaders,
-      Cookie: `sess=${sess}`,
     };
     const client = getClient();
-
-    const response = await client.get(url.toString(), {
+    const response = await client.get<GetMeResponseBody>(url, {
       headers: reqHeaders,
+      cookieJar: context.cookieJar,
     });
 
-    if (response.status === 200) {
-      const body = await response.json<GetMeResponseBody>();
-
+    if (response.statusCode === 200) {
       return {
-        id: body.id,
-        name: body.name,
-        username: body.username,
-        email: body.email,
-        wsAuthToken: body.wsAuthToken,
+        id: response.body.id,
+        name: response.body.name,
+        username: response.body.username,
+        email: response.body.email,
+        wsAuthToken: response.body.wsAuthToken,
       };
     }
-    throw new UnexpectedStatusCodeError(url, context, response.status);
+    console.log(response.request);
+    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }
