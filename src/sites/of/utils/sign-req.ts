@@ -3,7 +3,7 @@ import { OFDynamicParams } from "./of-dynamic-params.js";
 
 /**
  * Encodes the OF `sign` header for a request.
- *
+ *n
  * Based on:
  * https://github.com/deviint/onlyfans-dynamic-rules
  * https://github.com/datawhores/OF-Scraper/blob/main/ofscraper/utils/auth.py
@@ -14,14 +14,11 @@ export const signReq = (
   dynamicParams: OFDynamicParams,
   authId = "0"
 ) => {
-  const msg = [dynamicParams.staticParam, time, url.pathname, authId].join(
-    "\n"
-  );
+  let urlPart =
+    url.searchParams.size === 0 ? url.pathname : `${url.pathname}${url.search}`;
 
-  /**
-   * The hex hash is currently different from the browser
-   * It could be due to incorrect dynamic params
-   */
+  const msg = [dynamicParams.staticParam, time, urlPart, authId].join("\n");
+
   const hexHash = createHash("sha1").update(msg).digest("hex");
   const asciiHash = Buffer.from(hexHash, "ascii");
 

@@ -58,6 +58,11 @@ export class UserContext extends Context {
 
 export class SessionContext extends UserContext {
   protected _userParams: UserSessionParams;
+
+  public get userParams() {
+    return clone(this._userParams);
+  }
+
   constructor(sessionParams: UserSessionParams, options: ContextOptions) {
     super(sessionParams, options);
     this._userParams = clone(sessionParams);

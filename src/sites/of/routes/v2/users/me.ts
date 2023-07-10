@@ -35,7 +35,6 @@ export const get = async (context: UserContext) => {
         wsAuthToken: response.body.wsAuthToken,
       };
     }
-    console.log(response.request);
     throw new UnexpectedStatusCodeError(url, context, response.statusCode);
   } catch (err) {
     throw RequestError.create(err, url, context);

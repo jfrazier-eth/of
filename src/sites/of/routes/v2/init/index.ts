@@ -21,8 +21,8 @@ export const get = async (context: UserContext): Promise<void> => {
   try {
     const contextHeaders = await context.getHeaders(url);
     const reqHeaders = {
-      ...headers,
       ...contextHeaders,
+      ...headers,
     };
 
     const response = await context.client.get<GetInitResponseBody>(url, {

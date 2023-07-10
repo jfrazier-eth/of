@@ -53,6 +53,10 @@ async function main() {
   );
 
   const session = await OF.Sdk.getSession(ofContext);
+
+  const chats = await OF.Routes.V2.Chats.User.get(session, {
+    otherUserId: "48426405",
+  });
 }
 
 void main();
