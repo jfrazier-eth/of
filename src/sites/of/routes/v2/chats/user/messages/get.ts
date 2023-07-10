@@ -1,8 +1,6 @@
 import { RequestError } from "@/common/errors/request-errors.js";
 import { SessionContext } from "@/sites/of/context.js";
 
-const path = "?limit=10&order=desc&skip_users=all";
-
 const getPath = (userIdOfChat: string) => {
   return `/api2/v2/chats/${userIdOfChat}/messages`;
 };

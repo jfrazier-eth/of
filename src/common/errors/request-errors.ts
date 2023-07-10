@@ -18,7 +18,7 @@ export class RequestError extends Error {
 }
 
 export class UnexpectedStatusCodeError extends Error {
-  constructor(url: URL, context: Context, statusCode?: number) {
+  constructor(url: URL, context: Context, statusCode: number) {
     const message = `Unexpected Status Code: ${statusCode} URL: ${url.toString()} Browser: ${
       context.browser.kind
     }`;

@@ -1,5 +1,6 @@
 import { Browsers } from "./common/index.js";
 import { Fansly, OF } from "./sites/index.js";
+import { sleep } from "./utils/sleep.js";
 
 async function main() {
   const baseUrl = "https://onlyfans.com";
@@ -54,9 +55,22 @@ async function main() {
 
   const session = await OF.Sdk.getSession(ofContext);
 
-  const chats = await OF.Routes.V2.Chats.User.get(session, {
-    otherUserId: "48426405",
+  const otherUserId = "247353612";
+  const messages = await OF.Routes.V2.Chats.User.Messages.Get.get(session, {
+    otherUserId,
   });
+
+  console.log(`Got messages successfully`);
+  await sleep(2000);
+
+  console.log(`Sending message`);
+
+  const response = await OF.Routes.V2.Chats.User.Messages.Post.post(session, {
+    toUserId: otherUserId,
+    text: "gm",
+  });
+
+  console.log(`Sent message successfully`);
 }
 
 void main();

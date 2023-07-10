@@ -1,1 +1,1 @@
-export * as User from "./user.js";
+export * as User from "./user/index.js";
