@@ -1,5 +1,9 @@
-import { RequestError } from "@/common/errors/request-errors.js";
+import {
+  RequestError,
+  UnexpectedStatusCodeError,
+} from "@/common/errors/request-errors.js";
 import { SessionContext } from "@/sites/of/context.js";
+import { ReceivedMessage } from "./types.js";
 
 const getPath = (userIdOfChat: string) => {
   return `/api2/v2/chats/${userIdOfChat}/messages`;
@@ -15,15 +19,23 @@ const getHeaders = (userId: string, userIdOfChat: string) => {
   return headers;
 };
 
-export interface GetChatOptions {
+export interface GetMessagesOptions {
   otherUserId: string;
+  // message id to start after
+  id?: string;
   limit?: number;
   order?: "asc" | "desc";
 }
 
-export interface GetChatResponseBody {}
+export interface GetMessagesResponseBody {
+  list: ReceivedMessage[];
+  hasMore: boolean;
+}
 
-export const get = async (context: SessionContext, options: GetChatOptions) => {
+export const get = async (
+  context: SessionContext,
+  options: GetMessagesOptions
+) => {
   const path = getPath(options.otherUserId);
   const searchParams = new URLSearchParams({
     limit: `${options.limit ?? 10}`,
@@ -39,12 +51,15 @@ export const get = async (context: SessionContext, options: GetChatOptions) => {
       ...contextHeaders,
     };
 
-    const response = await context.client.get<GetChatResponseBody>(url, {
+    const response = await context.client.get<GetMessagesResponseBody>(url, {
       headers: reqHeaders,
     });
 
-    console.log(response.statusCode);
-    console.log(response.body);
+    if (response.statusCode === 200) {
+      return response.body;
+    }
+
+    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }
