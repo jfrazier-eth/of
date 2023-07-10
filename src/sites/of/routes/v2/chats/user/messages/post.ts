@@ -29,7 +29,37 @@ export interface PostMessagesOptions extends PostMessageBody {
   toUserId: string;
 }
 
-export interface PostMessageResponseBody {}
+export interface PostMessageResponseBody {
+  responseType: "message" | string;
+  text: string;
+  giphyId: null | unknown;
+  lockedText: boolean;
+  isFree: boolean;
+  price: number;
+  isMediaReady: boolean;
+  mediaCount: number;
+  media: unknown[];
+  previews: unknown[];
+  isTip: boolean;
+  isReportedByMe: boolean;
+  isCouplePeopleMedia: boolean;
+  queueId: number;
+  releaseForms: unknown[];
+  fromUser: { id: number; _view: "s" | string };
+  isFromQueue: boolean;
+  id: number;
+  isOpened: boolean;
+  isNew: boolean;
+  createdAt: string;
+  changedAt: string;
+  cancelSeconds: number;
+  isLiked: boolean;
+  canPurchase: boolean;
+  canPurchaseReason: "free" | string;
+  canReport: boolean;
+  canBePinned: boolean;
+  isPinned: boolean;
+}
 
 export const post = async (
   context: SessionContext,
@@ -70,5 +100,3 @@ export const post = async (
     throw RequestError.create(err, url, context);
   }
 };
-
-// {"text":"Hi","lockedText":false,"mediaFiles":[],"price":0,"previews":[],"isCouplePeopleMedia":false,"isForward":false}
