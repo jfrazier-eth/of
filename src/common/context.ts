@@ -68,9 +68,12 @@ export class Context {
     this._client = got.extend(clientOptions);
   }
 
-  public getUrl(path: string) {
+  public getUrl(path: string, searchParams?: URLSearchParams) {
     const url = this.baseUrl;
     url.pathname = path;
+    searchParams?.forEach((value, key) => {
+      url.searchParams.set(key, value);
+    });
     return url;
   }
 
