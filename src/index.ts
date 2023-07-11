@@ -20,7 +20,7 @@ async function main() {
     throw new Error("AUTH_ID env variable was not set");
   }
   if (!apiKey) {
-    throw new Error("API env variable was not set");
+    throw new Error("API_KEY env variable was not set");
   }
 
   // const fanslyUserId = process.env.FANSLY_USER_ID;

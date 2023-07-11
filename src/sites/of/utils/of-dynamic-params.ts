@@ -7,6 +7,8 @@ import {
 export const OF_RULES_EP =
   "https://raw.githubusercontent.com/deviint/onlyfans-dynamic-rules/main/dynamicRules.json";
 
+export const OF_RULES_TTS = 5 * 60_000;
+
 export interface OFDynamicParamsResponse {
   static_param: string;
   start: string;
@@ -31,7 +33,27 @@ export interface OFDynamicParams {
   isCurrent: boolean;
 }
 
+let ofDynamicParams: { value: OFDynamicParams; updatedAt: number } | null =
+  null;
+
 export async function getOFDynamicParams(
+  context: Context
+): Promise<OFDynamicParams> {
+  if (
+    !ofDynamicParams ||
+    ofDynamicParams.updatedAt < Date.now() - OF_RULES_TTS
+  ) {
+    const params = await fetchOFDynamicParams(context);
+    ofDynamicParams = {
+      value: params,
+      updatedAt: Date.now(),
+    };
+  }
+
+  return ofDynamicParams.value;
+}
+
+export async function fetchOFDynamicParams(
   context: Context
 ): Promise<OFDynamicParams> {
   const url = new URL(OF_RULES_EP);
