@@ -3,7 +3,7 @@ import {
   UnexpectedStatusCodeError,
 } from "@/common/errors/request-errors.js";
 import { GetInitResponseBody } from "./types.js";
-import { UserContext } from "@/sites/of/context.js";
+import { SessionContext } from "@/sites/of/context.js";
 
 const path = "/api2/v2/init";
 
@@ -15,7 +15,7 @@ const headers = {
   Accept: "application/json, text/plain, */*",
 };
 
-export const get = async (context: UserContext): Promise<void> => {
+export const get = async (context: SessionContext): Promise<void> => {
   const url = context.getUrl(path);
 
   try {

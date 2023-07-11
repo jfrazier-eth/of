@@ -22,8 +22,7 @@ const getHeaders = (userId: string, userIdOfChat: string) => {
 export interface GetMessagesOptions {
   otherUserId: string;
   // message id to start after
-  id?: string;
-  limit?: number;
+  startAfterMessageId?: string | null;
   order?: "asc" | "desc";
 }
 
@@ -38,14 +37,14 @@ export const get = async (
 ) => {
   const path = getPath(options.otherUserId);
   const searchParams = new URLSearchParams({
-    limit: `${options.limit ?? 10}`,
+    limit: `10`, // has to be 10
     order: options.order ?? "desc",
     skip_users: "all",
   });
-  if(options.id) {
-    searchParams.append('id', options.id);
+  if (options.startAfterMessageId) {
+    searchParams.append("id", options.startAfterMessageId);
   }
-  
+
   const url = context.getUrl(path, searchParams);
   try {
     const contextHeaders = await context.getHeaders(url);

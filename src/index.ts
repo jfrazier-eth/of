@@ -1,8 +1,9 @@
-import { Fansly, OF } from "./sites/index.js";
+import { Browsers } from "./common/index.js";
+import { OF } from "./sites/index.js";
+import { SessionContext } from "./sites/of/context.js";
 
 async function main() {
-  //Why do we need this?
-  // const proxy = process.env.HTTPS_PROXY;
+  const proxy = process.env.HTTPS_PROXY;
 
   const xbc = process.env.XBC;
   const sess = process.env.OF_SESS;
@@ -16,12 +17,11 @@ async function main() {
     throw new Error("OF_SESS env variable was not set");
   }
   if (!authId) {
-    throw new Error("Auth id env variable was not set");
+    throw new Error("AUTH_ID env variable was not set");
   }
   if (!apiKey) {
     throw new Error("API env variable was not set");
   }
-
 
   // const fanslyUserId = process.env.FANSLY_USER_ID;
   // const fanslyAuth = process.env.FANSLY_AUTH;
@@ -46,29 +46,50 @@ async function main() {
   //     proxy,
   //   }
   // );
-  //341475026
-  //247353612
 
-  const messageHistory = await OF.Sdk.getFanMessages(authId, "341475026")
-  //,make an API call to https://of-2890.onrender.com/api/of/generateResponse and send the messageHistory as the request body
-  // keep the Authorization header as: uIs7j!saPqlpK@tam$2s62jfbs!dN
+  // baseUrl: string | URL;
+  // browser: Browsers.Browser;
+  // proxy?: string | URL | null;
+
+  const context = new SessionContext(
+    {
+      authId,
+      xbc,
+      sess,
+      authUid: null,
+    },
+    {
+      baseUrl: "https://onlyfans.com",
+      browser: Browsers.brave,
+      proxy: proxy ?? null,
+    }
+  );
+
+  const fanId = "341475026";
+
+  const messageHistory = await OF.Sdk.getMessages(context, fanId, {
+    maxNumMessages: 10,
+  });
+
   const payload = {
     messages: messageHistory,
     creator_id: authId,
-    fan_id: "341475026"
-  }  
+    fan_id: fanId,
+  };
 
-  const response = await fetch("https://of-2890.onrender.com/api/of/generateResponse", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": apiKey
-    },
-    body: JSON.stringify(payload)
-  });
+  const response = await fetch(
+    "https://of-2890.onrender.com/api/of/generateResponse",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: apiKey,
+      },
+      body: JSON.stringify(payload),
+    }
+  );
   const responseText = await response.text();
   console.log(responseText);
-
 }
 
 void main();
