@@ -36,7 +36,7 @@ async function createSession(context: UserContext) {
 }
 
 
-export async function getSession(xbc: string, sess: string, authId: string) {
+export async function getSession(xbc: string, authId: string, sess: string ) {
   const context = new UserContext(
     {
       xbc,

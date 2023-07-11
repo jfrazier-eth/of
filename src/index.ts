@@ -43,7 +43,7 @@ async function main() {
   //   }
   // );
 
-  const session = await OF.Sdk.getSession(xbc, sess, authId);
+  // const session = await OF.Sdk.getSession(xbc, authId, sess );
 
   // const otherUserId = "247353612";
   // const messages = await OF.Routes.V2.Chats.User.Messages.Get.get(session, {
@@ -60,12 +60,8 @@ async function main() {
   //   toUserId: otherUserId,
   //   text: "gm",
   // });
-  const listOfChats = await OF.Routes.V2.Chats.List.Get.get(session, {})
-  console.log(listOfChats)
-
+  await OF.Sdk.getUnreadMessages(authId);
   console.log(`retrieved message successfully`);
-  //const userDetails = await OF.Sdk.getUserDetails(ofContext);
-
 
 }
 
