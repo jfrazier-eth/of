@@ -29,6 +29,6 @@ export async function getFansToMessage(authId: string, options: GetUnreadMessage
     const fansIds = await fetchFans(authId, session, options);
     return fansIds;
   } catch (err) {
-    console.error("Failed to get user details", err);
+    console.error("Failed to fetch Fans to message", err);
   }
 }

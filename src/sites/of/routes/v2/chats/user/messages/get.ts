@@ -42,7 +42,10 @@ export const get = async (
     order: options.order ?? "desc",
     skip_users: "all",
   });
-
+  if(options.id) {
+    searchParams.append('id', options.id);
+  }
+  
   const url = context.getUrl(path, searchParams);
   try {
     const contextHeaders = await context.getHeaders(url);

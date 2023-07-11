@@ -60,9 +60,11 @@ async function main() {
   //   toUserId: otherUserId,
   //   text: "gm",
   // });
-  const fansIds = await OF.Sdk.getFansToMessage(authId, {filter: "unread"});
-  console.log(`retrieved fansIds successfully`);
-  console.log(fansIds);
+  const msgHistory = await OF.Sdk.getFanMessages(authId, "247353612");
+  console.log(msgHistory);
+  // console.log(`retrieved fansIds successfully`);
+  // console.log(fansIds);
+  // await getFanMessages(authId, "247353612");
 
 }
 
