@@ -60,8 +60,9 @@ async function main() {
   //   toUserId: otherUserId,
   //   text: "gm",
   // });
-  await OF.Sdk.getMessages(authId, {filter: "unread"});
-  console.log(`retrieved message successfully`);
+  const fansIds = await OF.Sdk.getFansToMessage(authId, {filter: "unread"});
+  console.log(`retrieved fansIds successfully`);
+  console.log(fansIds);
 
 }
 
