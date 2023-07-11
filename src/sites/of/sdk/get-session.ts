@@ -1,7 +1,15 @@
+import { Browsers } from "../../../common/index.js";
 import { sleep } from "@/utils/sleep.js";
 import { SessionContext, UserContext } from "../context.js";
 
-export async function getSession(context: UserContext) {
+const baseUrl = "https://onlyfans.com";
+
+//Why do we need this?
+// const proxy = process.env.HTTPS_PROXY;
+
+
+
+async function createSession(context: UserContext) {
   while (true) {
     try {
       //Why do we ever have to run this?
@@ -25,4 +33,20 @@ export async function getSession(context: UserContext) {
       await sleep(3456);
     }
   }
+}
+
+
+export async function getSession(xbc: string, sess: string, authId: string) {
+  const context = new UserContext(
+    {
+      xbc,
+      sess,
+      authId,
+    },
+    {
+      baseUrl,
+      browser: Browsers.brave,
+    }
+  );
+  return await createSession(context);
 }

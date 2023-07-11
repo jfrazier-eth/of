@@ -1,11 +1,8 @@
-import { Browsers } from "./common/index.js";
 import { Fansly, OF } from "./sites/index.js";
-import { sleep } from "./utils/sleep.js";
 
 async function main() {
-  const baseUrl = "https://onlyfans.com";
-
-  const proxy = process.env.HTTPS_PROXY;
+  //Why do we need this?
+  // const proxy = process.env.HTTPS_PROXY;
 
   const xbc = process.env.XBC;
   const sess = process.env.OF_SESS;
@@ -21,18 +18,6 @@ async function main() {
     throw new Error("Auth id env variable was not set");
   }
 
-  const ofContext = new OF.UserContext(
-    {
-      xbc,
-      authId,
-      sess: sess,
-    },
-    {
-      baseUrl,
-      browser: Browsers.brave,
-      proxy,
-    }
-  );
 
   // const fanslyUserId = process.env.FANSLY_USER_ID;
   // const fanslyAuth = process.env.FANSLY_AUTH;
@@ -58,7 +43,7 @@ async function main() {
   //   }
   // );
 
-  const session = await OF.Sdk.getSession(ofContext);
+  const session = await OF.Sdk.getSession(xbc, sess, authId);
 
   // const otherUserId = "247353612";
   // const messages = await OF.Routes.V2.Chats.User.Messages.Get.get(session, {
