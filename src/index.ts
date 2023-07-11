@@ -75,7 +75,8 @@ async function main() {
   //   toUserId: otherUserId,
   //   text: "gm",
   // });
-
+  const listOfChats = await OF.Routes.V2.Chats.List.Get.get(session, {})
+  console.log(listOfChats)
 
   console.log(`retrieved message successfully`);
   //const userDetails = await OF.Sdk.getUserDetails(ofContext);

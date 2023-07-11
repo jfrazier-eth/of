@@ -1,6 +1,5 @@
 import { sleep } from "@/utils/sleep.js";
 import { SessionContext, UserContext } from "../context.js";
-import { Routes } from "../index.js";
 
 export async function getSession(context: UserContext) {
   while (true) {

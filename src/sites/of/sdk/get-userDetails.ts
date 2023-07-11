@@ -10,6 +10,5 @@ export async function getUserDetails(context: UserContext) {
 
     } catch (err) {
       console.error("Failed to get a user details", err);
-      await sleep(3456);
     }
 }
