@@ -5,6 +5,7 @@ import { signReq } from "./utils/sign-req.js";
 
 export interface UserParams {
   xbc: string;
+  authId: string;
   sess: string;
 }
 

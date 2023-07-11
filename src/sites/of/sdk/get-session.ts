@@ -5,18 +5,20 @@ import { Routes } from "../index.js";
 export async function getSession(context: UserContext) {
   while (true) {
     try {
-      await Routes.V2.Init.get(context);
-      const meResponse = await Routes.V2.Users.me.get(context);
+      //Why do we ever have to run this?
+      //await Routes.V2.Init.get(context);
+      //No need to call me too, because authId is nothing but user_id and doesn't change at all.
+      //const meResponse = await Routes.V2.Users.me.get(context);
       const session = new SessionContext(
         {
           xbc: context.userParams.xbc,
           sess: context.userParams.sess,
-          authId: meResponse.id.toString(),
+          authId: context.userParams.authId,
           authUid: null,
         },
         context.options
       );
-      console.log(`Retrieved session for user ${meResponse.name}`);
+      console.log(`Retrieved session for user`);
 
       return session;
     } catch (err) {
