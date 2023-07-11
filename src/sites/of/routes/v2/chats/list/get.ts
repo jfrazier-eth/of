@@ -28,8 +28,10 @@ export const get = async (
       offset: `${options.offset ?? 0}`,
       skip_users: "all",
       order: options.order ?? "recent",
-      filter: options.filter ?? "unread",
     });
+    if (options.filter) {
+      searchParams.append('filter', options.filter);
+    }
   
     const url = context.getUrl("/api2/v2/chats", searchParams);
     try {

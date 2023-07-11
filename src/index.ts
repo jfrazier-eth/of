@@ -60,7 +60,7 @@ async function main() {
   //   toUserId: otherUserId,
   //   text: "gm",
   // });
-  await OF.Sdk.getUnreadMessages(authId);
+  await OF.Sdk.getMessages(authId, {filter: "unread"});
   console.log(`retrieved message successfully`);
 
 }
