@@ -7,6 +7,7 @@ async function main() {
   const xbc = process.env.XBC;
   const sess = process.env.OF_SESS;
   const authId = process.env.AUTH_ID;
+  const apiKey = process.env.API_KEY;
 
   if (!xbc) {
     throw new Error("XBC env variable was not set");
@@ -16,6 +17,9 @@ async function main() {
   }
   if (!authId) {
     throw new Error("Auth id env variable was not set");
+  }
+  if (!apiKey) {
+    throw new Error("API env variable was not set");
   }
 
 
@@ -42,29 +46,28 @@ async function main() {
   //     proxy,
   //   }
   // );
+  //341475026
+  //247353612
 
-  // const session = await OF.Sdk.getSession(xbc, authId, sess );
+  const messageHistory = await OF.Sdk.getFanMessages(authId, "341475026")
+  //,make an API call to https://of-2890.onrender.com/api/of/generateResponse and send the messageHistory as the request body
+  // keep the Authorization header as: uIs7j!saPqlpK@tam$2s62jfbs!dN
+  const payload = {
+    messages: messageHistory,
+    creator_id: authId,
+    fan_id: "341475026"
+  }  
 
-  // const otherUserId = "247353612";
-  // const messages = await OF.Routes.V2.Chats.User.Messages.Get.get(session, {
-  //   otherUserId,
-  // });
-
-
-  // console.log(`Got messages successfully`);
-  // await sleep(2000);
-
-  // console.log(`Sending message`);
-
-  // const message = await OF.Routes.V2.Chats.User.Messages.Post.post(session, {
-  //   toUserId: otherUserId,
-  //   text: "gm",
-  // });
-  const response = await OF.Sdk.sendMessage(authId, "247353612", "gm")
-  console.log(response);
-  // console.log(`retrieved fansIds successfully`);
-  // console.log(fansIds);
-  // await getFanMessages(authId, "247353612");
+  const response = await fetch("https://of-2890.onrender.com/api/of/generateResponse", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": apiKey
+    },
+    body: JSON.stringify(payload)
+  });
+  const responseText = await response.text();
+  console.log(responseText);
 
 }
 
