@@ -1,4 +1,4 @@
-import { UserContext } from "@/sites/of/context.js";
+import { SessionContext } from "@/sites/of/context.js";
 import {
   RequestError,
   UnexpectedStatusCodeError,
@@ -13,7 +13,7 @@ const headers = {
   Referer: "https://onlyfans.com/",
 };
 
-export const get = async (context: UserContext) => {
+export const get = async (context: SessionContext) => {
   const url = context.getUrl(path);
 
   try {

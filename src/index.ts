@@ -1,76 +1,95 @@
 import { Browsers } from "./common/index.js";
-import { Fansly, OF } from "./sites/index.js";
-import { sleep } from "./utils/sleep.js";
+import { OF } from "./sites/index.js";
+import { SessionContext } from "./sites/of/context.js";
 
 async function main() {
-  const baseUrl = "https://onlyfans.com";
-
   const proxy = process.env.HTTPS_PROXY;
 
   const xbc = process.env.XBC;
   const sess = process.env.OF_SESS;
+  const authId = process.env.AUTH_ID;
+  const apiKey = process.env.API_KEY;
+
   if (!xbc) {
     throw new Error("XBC env variable was not set");
   }
-
   if (!sess) {
     throw new Error("OF_SESS env variable was not set");
   }
+  if (!authId) {
+    throw new Error("AUTH_ID env variable was not set");
+  }
+  if (!apiKey) {
+    throw new Error("API env variable was not set");
+  }
 
-  const ofContext = new OF.UserContext(
+  // const fanslyUserId = process.env.FANSLY_USER_ID;
+  // const fanslyAuth = process.env.FANSLY_AUTH;
+
+  // if (!fanslyAuth) {
+  //   throw new Error("FANSLY_AUTH env variable was not set");
+  // }
+
+  // if (!fanslyUserId) {
+  //   throw new Error("FANSLY_USER_ID env variable was not set");
+  // }
+
+  // const fanslyUrl = "https://apiv3.fansly.com";
+  // const fanslyContext = new Fansly.LoggedInContext(
+  //   {
+  //     userId: fanslyUserId,
+  //     auth: fanslyAuth,
+  //   },
+  //   {
+  //     baseUrl: fanslyUrl,
+  //     browser: Browsers.brave,
+  //     proxy,
+  //   }
+  // );
+
+  // baseUrl: string | URL;
+  // browser: Browsers.Browser;
+  // proxy?: string | URL | null;
+
+  const context = new SessionContext(
     {
+      authId,
       xbc,
-      sess: sess,
+      sess,
+      authUid: null,
     },
     {
-      baseUrl,
+      baseUrl: "https://onlyfans.com",
       browser: Browsers.brave,
-      proxy,
+      proxy: proxy ?? null,
     }
   );
 
-  const fanslyUserId = process.env.FANSLY_USER_ID;
-  const fanslyAuth = process.env.FANSLY_AUTH;
+  const fanId = "341475026";
 
-  if (!fanslyAuth) {
-    throw new Error("FANSLY_AUTH env variable was not set");
-  }
+  const messageHistory = await OF.Sdk.getMessages(context, fanId, {
+    maxNumMessages: 10,
+  });
 
-  if (!fanslyUserId) {
-    throw new Error("FANSLY_USER_ID env variable was not set");
-  }
+  const payload = {
+    messages: messageHistory,
+    creator_id: authId,
+    fan_id: fanId,
+  };
 
-  const fanslyUrl = "https://apiv3.fansly.com";
-  const fanslyContext = new Fansly.LoggedInContext(
+  const response = await fetch(
+    "https://of-2890.onrender.com/api/of/generateResponse",
     {
-      userId: fanslyUserId,
-      auth: fanslyAuth,
-    },
-    {
-      baseUrl: fanslyUrl,
-      browser: Browsers.brave,
-      proxy,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: apiKey,
+      },
+      body: JSON.stringify(payload),
     }
   );
-
-  const session = await OF.Sdk.getSession(ofContext);
-
-  const otherUserId = "247353612";
-  const messages = await OF.Routes.V2.Chats.User.Messages.Get.get(session, {
-    otherUserId,
-  });
-
-  console.log(`Got messages successfully`);
-  await sleep(2000);
-
-  console.log(`Sending message`);
-
-  const response = await OF.Routes.V2.Chats.User.Messages.Post.post(session, {
-    toUserId: otherUserId,
-    text: "gm",
-  });
-
-  console.log(`Sent message successfully`);
+  const responseText = await response.text();
+  console.log(responseText);
 }
 
 void main();
