@@ -56,12 +56,12 @@ async function main() {
 
   // console.log(`Sending message`);
 
-  // const response = await OF.Routes.V2.Chats.User.Messages.Post.post(session, {
+  // const message = await OF.Routes.V2.Chats.User.Messages.Post.post(session, {
   //   toUserId: otherUserId,
   //   text: "gm",
   // });
-  const msgHistory = await OF.Sdk.getFanMessages(authId, "247353612");
-  console.log(msgHistory);
+  const response = await OF.Sdk.sendMessage(authId, "247353612", "gm")
+  console.log(response);
   // console.log(`retrieved fansIds successfully`);
   // console.log(fansIds);
   // await getFanMessages(authId, "247353612");
