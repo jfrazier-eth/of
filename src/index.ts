@@ -1,4 +1,4 @@
-import { Browsers } from "./common/index.js";
+import { Browsers } from "./sites/common/index.js";
 import { OF } from "./sites/index.js";
 import { SessionContext } from "./sites/of/context.js";
 

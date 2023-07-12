@@ -1,7 +1,7 @@
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "@/common/errors/request-errors.js";
+} from "@/sites/common/errors/request-errors.js";
 import { SessionContext } from "@/sites/of/context.js";
 
 import {
