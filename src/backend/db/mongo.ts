@@ -1,10 +1,5 @@
+import { config } from "../config.js";
 import mongoose from "mongoose";
-
-const uri = process.env.db_url;
-
-if (!uri) {
-  throw new Error("db_url not found");
-}
 
 const options = {
   useNewUrlParser: true,
@@ -12,16 +7,15 @@ const options = {
 };
 
 const connection = mongoose.createConnection(
-  uri,
+  config.mongo.connectionUrl,
   options as unknown as mongoose.ConnectOptions // TODO it looks like useNewUrlParser and useUnifiedTopology are not in the mongoose.ConnectOptions type
 );
 
 connection.once("open", () => {
-  console.log("Connected to OF Database Successfully");
+  console.log("Connected to Mongo!");
 });
 connection.on("error", (err) => {
-  console.log("error connecting to of");
-  console.log(err);
+  console.error(`MongoDB Error`, err);
 });
 
 export { connection };

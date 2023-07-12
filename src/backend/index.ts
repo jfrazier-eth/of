@@ -1,11 +1,14 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
+import "./db/mongo.js";
+import "./db/redis.js";
 
 //models
 import { FansModel } from "./models/only-fans/fans.js";
 
 //routes
 import { ofRoute } from "./routes/of-route.js";
+import { config } from "./config.js";
 
 const app = express();
 
@@ -34,6 +37,6 @@ app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({ error: "Updating the server. Will be up soon!" });
 });
 
-app.listen(7777, () => {
-  console.log("Server listening on port 7777");
+app.listen(config.server.port, () => {
+  console.log(`Server listening on port ${config.server.port}`);
 });

@@ -1,5 +1,6 @@
 //These are universal and application independent functions
 import axios from "axios";
+import { config } from "../config.js";
 
 const chatGptEndPoint = "https://api.openai.com/v1/chat/completions";
 
@@ -7,7 +8,7 @@ const chatGptCompletion = async (payload: unknown) => {
   console.log("Came to OF Completion");
   const openAIHeaders = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${process.env.of_openaiApiKey}`,
+    Authorization: `Bearer ${config.openAI.apiKey}`,
   };
 
   try {

@@ -14,11 +14,11 @@
     "resolveJsonModule": true,
     "strict": true,
     "target": "ES2020",
-    "baseUrl": "src",
     "lib": ["DOM", "ES2020"],
+    "baseUrl": "src",
     "paths": {
+      "@/backend": ["backend/*"],
       "@/sites/*": ["sites/*"],
-      "@/common/*": ["common/*"],
       "@/utils/*": ["utils/*"]
     }
   },
