@@ -66,30 +66,8 @@ async function main() {
   );
 
   const fanId = "341475026";
-
-  const messageHistory = await OF.Sdk.getMessages(context, fanId, {
-    maxNumMessages: 10,
-  });
-
-  const payload = {
-    messages: messageHistory,
-    creator_id: authId,
-    fan_id: fanId,
-  };
-
-  const response = await fetch(
-    "https://of-2890.onrender.com/api/of/generateResponse",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: apiKey,
-      },
-      body: JSON.stringify(payload),
-    }
-  );
-  const responseText = await response.text();
-  console.log(responseText);
+  const fanDetails = await OF.Sdk.getFanDetails(context, fanId);
+  console.log(fanDetails);
 }
 
 void main();

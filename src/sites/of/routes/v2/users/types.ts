@@ -17,3 +17,9 @@ export interface GetMeResponse {
   email: string;
   wsAuthToken: string;
 }
+
+export interface FanResponseBody {
+  id: number;
+  name: string;
+  username: string;
+}
