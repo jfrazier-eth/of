@@ -20,11 +20,13 @@ export async function getMessages(
       otherUserId,
       startAfterMessageId: startAfterMessageId,
     });
+    console.log(response.list.length)
 
     hasNextPage = response.hasMore;
-    startAfterMessageId =
-      response.list[response.list.length]?.id?.toString() ||
-      startAfterMessageId;
+    if(hasNextPage){
+      startAfterMessageId = response.list[response.list.length - 1].id.toString();
+    }
+
 
     messages = [...messages, ...response.list];
   }

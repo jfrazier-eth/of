@@ -1,6 +1,7 @@
 import { Browsers } from "./sites/common/index.js";
 import { OF } from "./sites/index.js";
 import { SessionContext } from "./sites/of/context.js";
+import {transformMessages} from "./sites/of/sdk/get-messages.js";
 
 async function main() {
   const proxy = process.env.HTTPS_PROXY;
@@ -66,8 +67,8 @@ async function main() {
   );
 
   const fanId = "341475026";
-  const fanDetails = await OF.Sdk.getFanDetails(context, fanId);
-  console.log(fanDetails);
+  const messagesRaw = await OF.Sdk.getMessages(context, fanId, {maxNumMessages: 10});
+  console.log(transformMessages(authId, messagesRaw));
 }
 
 void main();
