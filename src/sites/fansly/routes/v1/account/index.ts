@@ -1,4 +1,4 @@
-import { RequestError } from "@/common/errors/request-errors.js";
+import { RequestError } from "@/sites/common/errors/request-errors.js";
 import { LoggedInContext } from "@/sites/fansly/context.js";
 
 const path = "/api/v1/account";

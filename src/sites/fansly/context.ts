@@ -1,5 +1,5 @@
-import { ContextOptions } from "@/common/context.js";
-import { Browsers, Context } from "@/common/index.js";
+import { ContextOptions } from "@/sites/common/context.js";
+import { Browsers, Context } from "@/sites/common/index.js";
 import { clone } from "@/utils/clone.js";
 
 export interface UserFanslyParams {

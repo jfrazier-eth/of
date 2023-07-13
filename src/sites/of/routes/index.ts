@@ -1,5 +1,5 @@
-import { RequestError } from "@/common/errors/request-errors.js";
-import { Context } from "@/common/index.js";
+import { RequestError } from "@/sites/common/errors/request-errors.js";
+import { Context } from "@/sites/common/index.js";
 
 const path = "/";
 

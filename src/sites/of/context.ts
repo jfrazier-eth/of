@@ -1,4 +1,4 @@
-import { Context, ContextOptions } from "@/common/context.js";
+import { Context, ContextOptions } from "@/sites/common/context.js";
 import { clone } from "@/utils/clone.js";
 import { getOFDynamicParams } from "./utils/of-dynamic-params.js";
 import { signReq } from "./utils/sign-req.js";

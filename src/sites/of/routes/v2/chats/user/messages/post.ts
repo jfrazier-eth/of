@@ -3,7 +3,7 @@ import { getPath } from "./path.js";
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "@/common/errors/request-errors.js";
+} from "@/sites/common/errors/request-errors.js";
 import { SentMessage } from "./types.js";
 
 const getHeaders = (userId: string, toUserId: string) => {
