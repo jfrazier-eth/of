@@ -67,8 +67,9 @@ async function main() {
   );
 
   const fanId = "341475026";
-  const messagesRaw = await OF.Sdk.getMessages(context, fanId, {maxNumMessages: 10});
-  console.log(transformMessages(authId, messagesRaw));
+  const fanHandle = "blkmichcutie";
+  const stats = await OF.Sdk.getFanStats(context, fanHandle);
+  console.log(stats);
 }
 
 void main();

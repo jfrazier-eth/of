@@ -23,3 +23,23 @@ export interface FanResponseBody {
   name: string;
   username: string;
 }
+
+export interface FanStatsResponseBody {
+  id: number;
+  name: string;
+  joinDate: Date;
+  lastSeen: Date;
+  subscribedOnData: {
+    subscribePrice: number;
+    subscribesSum: number;
+    tipsSum: number;
+    messagesSum: number;
+    postsSum: number;
+    streamsSum: number;
+    totalSum: number;
+    duration: string;
+    hasActivePaidSubscriptions: boolean;
+    subscribedAt: Date;
+    renewedAt: Date;
+  };
+}
