@@ -68,8 +68,9 @@ async function main() {
 
   const fanId = "341475026";
   const fanHandle = "blkmichcutie";
-  const stats = await OF.Sdk.getFanStats(context, fanHandle);
-  console.log(stats);
+ const stats = await OF.Sdk.getFanStats(context, fanHandle);
+ console.log(stats)
+
 }
 
 void main();

@@ -18,28 +18,42 @@ export interface GetMeResponse {
   wsAuthToken: string;
 }
 
-export interface FanResponseBody {
+export interface SubscribedOnData {
+  subscribePrice: number;
+  subscribesSum: number;
+  tipsSum: number;
+  messagesSum: number;
+  postsSum: number;
+  streamsSum: number;
+  totalSum: number;
+  duration: string;
+  hasActivePaidSubscriptions: boolean;
+  subscribedAt: Date;
+  renewedAt: Date;
+}
+
+export interface FanBase {
   id: number;
   name: string;
+  subscribedOnData: SubscribedOnData;
+}
+
+export interface FanResponseBody extends FanBase {
   username: string;
 }
 
-export interface FanStatsResponseBody {
-  id: number;
-  name: string;
+export interface FanStatsResponseBody extends FanBase {
   joinDate: Date;
   lastSeen: Date;
-  subscribedOnData: {
-    subscribePrice: number;
-    subscribesSum: number;
-    tipsSum: number;
-    messagesSum: number;
-    postsSum: number;
-    streamsSum: number;
-    totalSum: number;
-    duration: string;
-    hasActivePaidSubscriptions: boolean;
-    subscribedAt: Date;
-    renewedAt: Date;
-  };
+}
+
+export interface NewFan extends FanBase {
+  username: string;
+  lastSeen: Date;
+}
+
+export interface NewFansResponseBody {
+  hasMore: boolean;
+  offset: number;
+  users: NewFan[];
 }

@@ -3,7 +3,7 @@ import {
   RequestError,
   UnexpectedStatusCodeError,
 } from "@/sites/common/errors/request-errors.js";
-import { FanResponseBody, FanStatsResponseBody } from "./types.js";
+import { FanResponseBody, FanStatsResponseBody, NewFansResponseBody } from "./types.js";
 
 export const getFanHandle = async (context: SessionContext, fanId: string) => {
     const otherHeaders = {
@@ -50,13 +50,10 @@ export const getFanStats = async (context: SessionContext, fanHandle: string) =>
       ...otherHeaders,
       ...contextHeaders,
     };
-    console.log(reqHeaders)
     const response = await context.client.get<FanStatsResponseBody>(url, {
       headers: reqHeaders,
     });
-    console.log('Response is!')
-    console.log(response.body)
-    console.log(response.statusCode)
+  
     if (response.statusCode === 200) {
       return {
         fan_id: response.body.id,
@@ -84,4 +81,44 @@ export const getFanStats = async (context: SessionContext, fanHandle: string) =>
   } catch (err) {
     throw RequestError.create(err, url, context);
   }
+};
+
+
+export const getNewFans = async (context: SessionContext, dates: { startDate: string, endDate: string}) => {
+  const path = "/api2/v2/subscriptions/subscribers/latest";
+  const searchParams = new URLSearchParams({
+    startDate: dates.startDate,
+    endDate: dates.endDate,
+    by: "new",
+    offset: "0",
+  });
+  const url = context.getUrl(path, searchParams);
+  const otherHeaders = {
+      Host: "onlyfans.com",
+      Accept: "application/json, text/plain, */*",
+      Referer:"https://onlyfans.com/my/statistics/fans/subscriptions",
+  };
+try {
+  const contextHeaders = await context.getHeaders(url);
+  const reqHeaders = {
+    ...otherHeaders,
+    ...contextHeaders,
+  };
+  const response = await context.client.get<NewFansResponseBody>(url, {
+    headers: reqHeaders,
+  });
+
+  if (response.statusCode === 200) {
+    const newFans = response.body.users.map((fan) => ({
+      id: fan.id,
+      name: fan.name,
+      subscribedAt: fan.subscribedOnData.subscribedAt,
+      totalSpent: fan.subscribedOnData.totalSum,
+    }));
+    return newFans;
+  }
+  throw new UnexpectedStatusCodeError(url, context, response.statusCode);
+} catch (err) {
+  throw RequestError.create(err, url, context);
+}
 };

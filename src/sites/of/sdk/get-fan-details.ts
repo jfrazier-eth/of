@@ -18,3 +18,13 @@ export async function getFanStats(context: SessionContext, fanId: string) {
     console.error("Failed to get a fan details", err);
   }
 }
+
+
+export async function getNewFans(context: SessionContext, dates: {startDate: string, endDate: string}) {
+    try {
+      const newFans = await Routes.V2.Users.fan.getNewFans(context, dates);
+      return newFans;
+    } catch (err) {
+      console.error("Failed to get a new fans", err);
+    }
+  }
