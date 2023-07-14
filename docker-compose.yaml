@@ -7,6 +7,16 @@ services:
     volumes:
       - redis_data:/data
 
+  postgres:
+    image: postgres:13.2
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    networks:
+      - local
+    ports:
+      - 5432:5432
+    
   mongo:
     image: mongo:latest
     ports:
@@ -17,3 +27,7 @@ services:
 volumes:
   redis_data:
   mongo_data:
+
+networks:
+  local:
+    driver: bridge
