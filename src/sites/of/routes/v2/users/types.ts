@@ -20,26 +20,23 @@ export interface GetMeResponse {
 
 export interface SubscribedOnData {
   subscribePrice: number;
-  subscribesSum: number;
-  tipsSum: number;
-  messagesSum: number;
-  postsSum: number;
-  streamsSum: number;
-  totalSum: number;
+  subscribesSumm: number;
+  tipsSumm: number;
+  messagesSumm: number;
+  postsSumm: number;
+  streamsSumm: number;
+  totalSumm: number;
   duration: string;
   hasActivePaidSubscriptions: boolean;
-  subscribedAt: Date;
+  subscribeAt: Date;
   renewedAt: Date;
+  subscribes: any[];
 }
 
 export interface FanBase {
   id: number;
   name: string;
   subscribedOnData: SubscribedOnData;
-}
-
-export interface FanResponseBody extends FanBase {
-  username: string;
 }
 
 export interface FanStatsResponseBody extends FanBase {
@@ -50,6 +47,7 @@ export interface FanStatsResponseBody extends FanBase {
 export interface NewFan extends FanBase {
   username: string;
   lastSeen: Date;
+  subscribedOnExpiredNow: boolean;
 }
 
 export interface NewFansResponseBody {

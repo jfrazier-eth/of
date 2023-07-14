@@ -52,7 +52,7 @@ export const get = async (
       ...getHeaders(context.userParams.authId, options.otherUserId),
       ...contextHeaders,
     };
-
+    console.log(reqHeaders);
     const response = await context.client.get<GetMessagesResponseBody>(url, {
       headers: reqHeaders,
     });
