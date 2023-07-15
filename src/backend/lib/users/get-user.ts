@@ -1,6 +1,6 @@
 import { pg } from "@/backend/db/postgres.js";
 import { PGUser } from "./types.js";
-import { transformPgUser } from "./pg-transformer.js";
+import { transformPGUser } from "./pg-transformer.js";
 
 export const getUser = async (id: string) => {
   const query = "SELECT * from users WHERE id = $1";
@@ -14,7 +14,7 @@ export const getUser = async (id: string) => {
   );
 
   if (result.length === 1) {
-    return transformPgUser(result[0]);
+    return transformPGUser(result[0]);
   }
   return null;
 };
