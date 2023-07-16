@@ -19,10 +19,12 @@ export const config = {
     connectionUrl: getEnvVariable("MONGO_URL"),
   },
   server: {
+    apiBaseUrl: getEnvVariable("API_BASE_URL"),
     port: Number(getOptionalEnvVariable("PORT", "7777")),
     apiKey: getEnvVariable("API_KEY"),
   },
   openAI: {
     apiKey: getEnvVariable("OPEN_AI_API_KEY"),
   },
+
 };

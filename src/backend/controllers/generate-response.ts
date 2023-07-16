@@ -1,72 +1,80 @@
 import { Response, Request } from "express";
 import { chatGptCompletion } from "./helper.js";
+import { userSettingsModel } from "../models/only-fans/user-settings.js"
 
-interface CreatorData {
-  background: string;
-  goal: string;
-  wishList: string;
-  wishListItems: string;
+interface ChatMessage {
+  role: string;
+  content: string;
 }
 
+type ChatArray = ChatMessage[];
+
+function formatChat(chatArray: ChatArray): string {
+  let chatStr = '';
+  chatArray.forEach((chat: ChatMessage) => {
+    chatStr += `${chat.role}: ${chat.content}\n`;
+  });
+  return chatStr;
+}
+
+
 const constructPayload = (
-  fan_name: string,
-  creatorData: CreatorData,
-  msgObjs: unknown
+  fanName: string,
+  scripts: string,
+  msgHistory: string,
 ) => {
   const messages = [];
-  let { background, goal, wishList, wishListItems } = creatorData;
-  //have fallbacks if background, goal, wishList, wishListItems are empty
+
+  const emojis = "💦🥵💋"
 
   const systemObj = {
     role: "system",
-    content: `I am an only fans creator and this is my background in 3 backticks - \`\`\`${background}\`\`\`\n\nYou are my AI assistant designed to manage the DMs sent by my fans. Your goal is to ${goal} \nWhenever a user sends a message, here are possible ways of making the user tip the creator:\n1. Send Private Pics: Guide the conversation in such a way that the user asks you to send private pics. When this happens, you will prompt the user to pay $5 in tips for each picture. \n2.Have a video call: Guide the conversation in such a way that the user would want to get on a private video call with you. When this happens, you will just respond saying that you will get back with a time slot. You will do whatever the user asks in this video call.\n3.Make users buy stuff for you from your amazon Wishlist. Here is your current Wishlist: ${wishList}. This Wishlist has: ${wishListItems}\n\nRules of the conversation:\n1. Behave like the creator and not like an AI. \n2. Keep the conversations natural and interactive. \n3. Keep the messages short. \n4. Do not directly deny any of the user requests, rather, guide them gently into paying tips with the above methods. \n\nThe name of the user is ${fan_name}. Address him with the name and use stuff like 'dear', 'babe', 'love' etc.. to keep the conversation intimate. `,
+    content: `I am an only fans creator and you are my AI assistant designed to make conversations with my fans. I will send you a maximum of last 20 conversation exchanges between me and my fan, your goal is to understand the context from these exchanges and respond back imitating my style following the same flow. Remember, you are here to continue the conversation I started, so make sure it is natural. The fan must not know that it's an AI who is responding to the messages. In general these are the kind of conversations that happen between me and my fan:\n1. The fan might have tipped me to do sexting and you must continue doing that.\n2. It's a general conversation and the fan just subscribed to me. So your goal is to maintain erotic & initimate conversations and slowly guide the user towards giving me tips. The way we can get the tips from the user is by sending private pictures, videos, voice texts moaning the fan's name or having a private video call.  \n\nIn general, you must follow these rules:\n1. Behave like me (onlyfans creator) and not like an AI.\n2. Understand the context from message history and respond in the same style & tone. Also keep the messages short and use erotic emojis such as ${emojis}. \n3. Do not directly deny any of the user's requests, rather, guide them gently into giving us tips.\n4. I will give you the name of the user. Address with the name and use stuff like 'dear', 'babe', 'love' etc. In case the name is unavailable or improper (sometimes we get fake names like u172328), you can just call him 'dear'.\nHere is a part of old script with a different fan to help you understand my style of conversation: \n\`\`\`\n${scripts}\n\`\`\` \n.`,
   };
-
-  console.log(systemObj.content);
   messages.push(systemObj);
   //construct user obj
   const userObj = {
     role: "user",
-    content: `Here is the conversation history (max of last 10 message exchanges) in the form of an array:\n${JSON.stringify(
-      msgObjs
-    )}\n\nNow, respond to the user by following the given rules. Respond in Json in the following format: {role: creator, content: 'your message'}`,
+    content: `Confirm that you understand the task and I will give you the current conversation history and the format of response i expect.`,
   };
 
   messages.push(userObj);
-  console.log(userObj.content);
 
+  const assistantObj = {
+    role: "assistant",
+    content: `I understand the task. I will follow all the 4 rules you mentioned without fail. I looked at the old script you gave and will use that along with the message history to imitate your style while responding. Give me the conversation history, using which I will understand the context of conversation and will continue it. And give me the format of response, I will stick to that while responding.`,
+  };
+
+  messages.push(assistantObj);
+
+  const userObj2 = {
+    role: "user",
+    content: `Excellent! Remember, the script I gave earlier is not related to this fan. I gave it so that you understand my style of conversation. Here is my conversation with the current fan:\n\`\`\`\n${msgHistory}\n\`\`\`\nNow continue this conversation naturally, DO NOT START IT AGAIN WITH A SALUTATION like 'Hey there!'. We are already in the middle of the conversation. Respond in json like this - { role: \"creator\", content: \"the actual response\"}. The name of the fan is ${fanName}. Go ahead with a response now.\n`,
+  };
+
+  messages.push(userObj2);
   const payload = {
     model: "gpt-3.5-turbo",
     messages: messages,
-    temperature: 1,
+    temperature: 0.5,
     max_tokens: 200,
     stream: false,
   };
   return payload;
 };
 
-//takes in the creator_id and sends the response. For now return dummy data
-const getCreatorData = async (creator_id: string) => {
-  return {
-    background: "I would love to give my fans a girl friend experience.",
-    goal: "maintain intimate and erotic conversations with the users and to make sure the creator earns more money through these DMs.",
-    wishList:
-      "https://www.amazon.com/hz/wishlist/ls/2MAZWDPOR3OYV?ref_=wl_share",
-    wishListItems: "lingerie sets and cosmetics",
-  };
-};
-
 const generateResponse = async (req: Request, res: Response) => {
   try {
-    //First get the creator data from the db
-    const creatorData = await getCreatorData(req.body.creator_id);
+    const userSettings = await userSettingsModel.findOne({ userId: Number(req.body.userId) });
+    const scripts = userSettings?.scripts || "";
+    const conversationHistory = formatChat(req.body.messages)
 
-    //construct the payload by taking the fan name, creator data and the messages
     const payload = constructPayload(
-      req.body.fan_name,
-      creatorData,
-      req.body.messages
+      req.body.fanName,
+      scripts,
+      conversationHistory
     );
+
     let response = await chatGptCompletion(payload);
 
     //error check the response. 2 errors may occur: 1. Response isn't well formatted. 2. GPT refused to answer this question
