@@ -1,6 +1,7 @@
 import { Response, Request } from "express";
 import { chatGptCompletion } from "./helper.js";
 import { userSettingsModel } from "../models/only-fans/user-settings.js"
+import { msgHistoryModel } from "../models/only-fans/message-history.js"
 
 interface ChatMessage {
   role: string;
@@ -80,6 +81,15 @@ const generateResponse = async (req: Request, res: Response) => {
     //error check the response. 2 errors may occur: 1. Response isn't well formatted. 2. GPT refused to answer this question
     response = await JSON.parse(response);
     res.status(200).send(response.content);
+    //save the response to the database
+    const msgHistory = new msgHistoryModel({
+      userId: req.body.userId,
+      fanId: req.body.fanId,
+      fanName: req.body.fanName,
+      messages: req.body.messages,
+      AIResponse: response.content //make sure this is the correct path for your response
+    });
+    await msgHistory.save();
   } catch (error) {
     console.log("Came to error");
     console.log(error);

@@ -4,7 +4,7 @@ import { getSettings, postSettings } from "../controllers/settings.js";
 import { isAuthorised } from "../controllers/auth.js";
 
 const router = Router();
-router.post("/generateResponse", isAuthorised, generateResponse);
+router.post("/generateResponse", generateResponse);
 
 //user settings
 router.get("/settings", getSettings);
