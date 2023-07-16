@@ -7,9 +7,9 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
   pgm.createTable("of_ppvs", {
     id: {
       type: "char(16)",
-      primaryKey: true,
       unique: true,
       notNull: true,
+      primaryKey: true,
     },
     user_id: {
       type: "char(16)",
@@ -26,6 +26,10 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     },
     updated_at: {
       type: "timestamp",
+      notNull: true,
+    },
+    enabled: {
+      type: "boolean",
       notNull: true,
     },
     image: {
