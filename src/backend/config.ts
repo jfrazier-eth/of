@@ -26,5 +26,7 @@ export const config = {
   openAI: {
     apiKey: getEnvVariable("OPEN_AI_API_KEY"),
   },
-
+  pg: {
+    connectionUrl: getEnvVariable("DATABASE_URL"),
+  },
 };
