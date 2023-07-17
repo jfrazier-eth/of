@@ -34,6 +34,7 @@ export async function getMessages(
   return messages.slice(0, maxNumMessages);
 }
 
+
 export const transformMessages = (
   creatorId: string,
   messages: ReceivedMessage[]
