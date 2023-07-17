@@ -23,7 +23,7 @@ export async function getMessages(
     console.log(response.list.length)
 
     hasNextPage = response.hasMore;
-    if(hasNextPage){
+    if (hasNextPage) {
       startAfterMessageId = response.list[response.list.length - 1].id.toString();
     }
 
@@ -38,12 +38,17 @@ export const transformMessages = (
   creatorId: string,
   messages: ReceivedMessage[]
 ) => {
-  return messages.map((message) => {
-    return {
-      role: message.fromUser.id.toString() === creatorId ? "creator" : "fan",
-      content: message.text,
-      timeOfMsg: message.createdAt,
-      mediaSent: message.media.length > 0,
-    };
-  });
+  return messages
+    .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+    .map((message) => {
+      return {
+        role: message.fromUser.id.toString() === creatorId ? "creator" : "fan",
+        content: message.text,
+        timeOfMsg: message.createdAt,
+        mediaSent: message.media.length > 0,
+        isTip: message.isTip,
+        tipAmount: message.tipAmount || null,
+      };
+    });
 };
+
