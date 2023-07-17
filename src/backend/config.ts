@@ -12,13 +12,14 @@ const getOptionalEnvVariable = (key: string, defaultValue: string) => {
 };
 
 export const config = {
-  redis: {
-    connectionUrl: getEnvVariable("REDIS_URL"),
-  },
+  // redis: {
+  //   connectionUrl: getEnvVariable("REDIS_URL"),
+  // },
   mongo: {
     connectionUrl: getEnvVariable("MONGO_URL"),
   },
   server: {
+    apiBaseUrl: getEnvVariable("API_BASE_URL"),
     port: Number(getOptionalEnvVariable("PORT", "7777")),
     apiKey: getEnvVariable("API_KEY"),
   },
