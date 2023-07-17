@@ -13,7 +13,7 @@
     "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "strict": true,
-    "target": "ES2020",
+    "target": "ESNext",
     "lib": ["DOM", "ES2020"],
     "baseUrl": "src",
     "paths": {
@@ -22,7 +22,7 @@
       "@/utils/*": ["utils/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/creds/firebase-prod.json"],
   "ts-node": {
     "require": ["tsconfig-paths/register"]
   }

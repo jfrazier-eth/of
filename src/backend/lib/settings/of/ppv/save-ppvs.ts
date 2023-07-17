@@ -1,4 +1,4 @@
-import { uid } from "@/utils/uuid.js";
+import { uid } from "@/utils/uid.js";
 import { OFPPV } from "./types.js";
 import { transformOFPPV } from "./pg-transformer.js";
 import { pg, pgp } from "@/backend/db/postgres.js";

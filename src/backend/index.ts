@@ -10,6 +10,7 @@ import { FansModel } from "./models/only-fans/fans.js";
 import { ofRoute } from "./routes/of-route.js";
 import { config } from "./config.js";
 import { isAuthorised } from "./controllers/auth.js";
+import { router as login } from "./routes/api/login.js";
 
 const app = express();
 
@@ -20,11 +21,7 @@ app.get("/api", (req, res) => {
   res.send("Hello world!");
 });
 app.use("/api/of", isAuthorised, ofRoute);
-
-app.post("/api/auth", (req, res) => {
-  console.log(req.body);
-  res.status(200);
-});
+app.use("/api/login", login);
 
 app.use((_req, res, _next) => {
   res.status(404).json({ error: "Not found" });

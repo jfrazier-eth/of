@@ -1,3 +1,6 @@
+import { ServiceAccount } from "firebase-admin";
+import prodServiceAccount from "../creds/firebase-prod.json" assert { type: "json" };
+
 const getEnvVariable = (key: string) => {
   const value = process.env[key];
 
@@ -27,5 +30,8 @@ export const config = {
   },
   pg: {
     connectionUrl: getEnvVariable("DATABASE_URL"),
+  },
+  firebase: {
+    serviceAccount: prodServiceAccount as ServiceAccount,
   },
 };

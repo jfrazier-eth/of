@@ -130,3 +130,6 @@ dist
 .pnp.*
 
 package-lock.json
+
+
+creds/

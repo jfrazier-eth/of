@@ -1,4 +1,4 @@
-import { uid } from "@/utils/uuid.js";
+import { uid } from "@/utils/uid.js";
 import { OFWelcomeMessage, PGOFWelcomeMessage } from "./types.js";
 import { transformOFWelcomeMessage } from "./pg-transform.js";
 import { pg, pgp } from "@/backend/db/postgres.js";

@@ -1,0 +1,20 @@
+{
+  // Extend the original tsconfig.json
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Use commonjs instead of esm when compiling the migration files
+    "module": "CommonJS",
+    "moduleResolution": "Node"
+  },
+  // Tell ts-node to treat any file under the migrations directory as cjs instead of esm
+  // this basically overrides the "type": "module" in your package.json file
+  "ts-node": {
+    "moduleTypes": {
+      // Change the "migrations" key here to match the path of your migrations folder
+      "migrations": "cjs"
+    }
+  },
+  // Add the path of your migrations folder and exclude everything else
+  "include": ["migrations"],
+  "exclude": ["src"]
+}

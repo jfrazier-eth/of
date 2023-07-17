@@ -9,10 +9,10 @@
   "scripts": {
     "build": "yarn clean && tsc",
     "clean": "rimraf ./dist",
-    "start": "yarn build && node -r dotenv/config --loader esm-module-alias/loader ./dist/backend/index.js",
+    "start": "yarn build && yarn migrate up && node -r dotenv/config --loader esm-module-alias/loader ./dist/backend/index.js",
     "start:script": "yarn build && node -r dotenv/config --loader esm-module-alias/loader ./dist/index.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "migrate": "ts-node node_modules/.bin/node-pg-migrate -j ts"
+    "migrate": "ts-node --project tsconfig.migrations.json node_modules/node-pg-migrate/bin/node-pg-migrate"
   },
   "devDependencies": {
     "@types/jest": "^29.5.2",
@@ -34,6 +34,7 @@
     "cors": "^2.8.5",
     "esm-module-alias": "^2.0.3",
     "express": "^4.18.2",
+    "firebase-admin": "^10.3.0",
     "got": "^13.0.0",
     "https-proxy-agent": "^7.0.0",
     "ioredis": "^5.3.2",
