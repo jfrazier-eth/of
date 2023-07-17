@@ -9,5 +9,6 @@ router.post("/generateResponse", generateResponse);
 //user settings
 router.get("/settings", getSettings);
 router.post("/settings", postSettings);
+router.post("/generateResponse", generateResponse);
 
 export { router as ofRoute };
