@@ -9,25 +9,23 @@ import { FansModel } from "./models/only-fans/fans.js";
 //routes
 import { ofRoute } from "./routes/of-route.js";
 import { config } from "./config.js";
+import { isAuthorised } from "./controllers/auth.js";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.get("/api", (req, res) => res.send("Hello World!"));
-app.use("/api/of", ofRoute);
-
-app.options("/api/v1/of/auth", (req, res) => {
-  console.log(`Save auth!`, req.body);
-  res.status(200);
+app.get("/api", (req, res) => {
+  res.send("Hello world!");
 });
-app.post("/api/v1/of/auth", (req, res) => {
+app.use("/api/of", isAuthorised, ofRoute);
+
+app.post("/api/auth", (req, res) => {
   console.log(req.body);
   res.status(200);
 });
 
-//error handling
 app.use((_req, res, _next) => {
   res.status(404).json({ error: "Not found" });
 });
