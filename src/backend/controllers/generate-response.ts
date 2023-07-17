@@ -97,7 +97,7 @@ const generateResponse = async (req: Request, res: Response) => {
       let response = await chatGptCompletion(payload);
       response = await JSON.parse(response);
       console.log(response);
-      res.status(200).send({ type: "respondToFan", response: response.content });
+      res.status(200).send({ tipAmount: null, response: response.content });
       //save the response to the database
       const msgHistory = new msgHistoryModel({
         userId: req.body.userId,
@@ -108,7 +108,7 @@ const generateResponse = async (req: Request, res: Response) => {
       });
       await msgHistory.save();
     } else {
-      res.status(200).send({ type: "sendNotification", response: null });
+      res.status(200).send({ tipAmount: tipStatus.tipAmount, response: null, });
       sendNotification(req.body.userId, tipStatus.tipAmount);
 
     }
