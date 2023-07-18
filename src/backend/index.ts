@@ -10,6 +10,7 @@ import { FansModel } from "./models/only-fans/fans.js";
 import { ofRoute } from "./routes/of-route.js";
 import { config } from "./config.js";
 import { checkUserAuth } from "./controllers/user-auth.js";
+import { router as siteLoginRouter } from "./routes/api/auth.js";
 
 const app = express();
 
@@ -26,6 +27,8 @@ app.post("/api/of/login", (req, res) => {
   console.log(req.body);
   res.status(200);
 });
+
+app.use(siteLoginRouter);
 
 app.use((_req, res, _next) => {
   res.status(404).json({ error: "Not found" });

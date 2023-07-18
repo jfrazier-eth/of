@@ -97,3 +97,5 @@ router.post(
     }
   }
 );
+
+export { router };

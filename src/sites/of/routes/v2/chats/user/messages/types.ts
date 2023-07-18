@@ -33,6 +33,7 @@ export interface Message {
   media: Media[];
   previews: number[];
   isTip: boolean;
+  tipAmount: number;
   isReportedByMe: boolean;
   isCouplePeopleMedia: boolean;
   queueId: number;

@@ -70,10 +70,10 @@ async function main() {
   const fanId = "341475026";
   const fanHandle = "blkmichcutie";
   // const stats = await OF.Sdk.getFanStats(context, fanHandle);
-  //  const messages = await OF.Sdk.getMessages(context, fanId, {maxNumMessages: 10});
-  const newFans = await OF.Sdk.getNewFans(context, { startDate: "2023-06-14 00:00:00", endDate: "2023-07-14 16:29:27" });
+  const messages = await OF.Sdk.getMessages(context, fanId, { maxNumMessages: 10 });
+  //const newFans = await OF.Sdk.getNewFans(context, { startDate: "2023-06-14 00:00:00", endDate: "2023-07-14 16:29:27" });
   //const userName = await OF.Sdk.getFanHandle(context, fanId);
-  console.log(newFans);
+  console.log(transformMessages(authId, messages));
 
 }
 
