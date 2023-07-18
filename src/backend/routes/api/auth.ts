@@ -1,36 +1,9 @@
+import { checkUserAuth } from "@/backend/controllers/user-auth.js";
 import { Site } from "@/backend/lib/accounts/types.js";
 import { LoginParamsBySite, getLogin } from "@/backend/lib/logins/get-login.js";
-import { getUser } from "@/backend/lib/users/get-user.js";
-import { NextFunction, Request, Response, Router } from "express";
+import { Request, Response, Router } from "express";
 
 const router = Router();
-
-export const checkUserAuth = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const apiKey = req.headers["x-api-key"];
-  const userId = req.headers["x-user-id"];
-
-  if (typeof userId !== "string" || typeof apiKey !== "string") {
-    res.status(401).json({ message: "Unauthorized request - invalid headers" });
-    return;
-  }
-
-  const user = await getUser(userId);
-  if (!user) {
-    res.status(401).json({ message: "Unauthorized request" });
-    return;
-  }
-
-  if (user.apiKey !== apiKey) {
-    res.status(401).json({ messageL: "Unauthorized request" });
-    return;
-  }
-
-  next();
-};
 
 router.use(checkUserAuth);
 

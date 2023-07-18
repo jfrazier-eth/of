@@ -9,7 +9,7 @@ import { FansModel } from "./models/only-fans/fans.js";
 //routes
 import { ofRoute } from "./routes/of-route.js";
 import { config } from "./config.js";
-import { isAuthorised } from "./controllers/auth.js";
+import { checkUserAuth } from "./controllers/user-auth.js";
 
 const app = express();
 
@@ -19,9 +19,10 @@ app.use(express.json());
 app.get("/api", (req, res) => {
   res.send("Hello world!");
 });
-app.use("/api/of", isAuthorised, ofRoute);
 
-app.post("/api/auth", (req, res) => {
+app.use("/api/of", checkUserAuth, ofRoute);
+
+app.post("/api/of/login", (req, res) => {
   console.log(req.body);
   res.status(200);
 });
