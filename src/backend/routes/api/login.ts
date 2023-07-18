@@ -10,7 +10,7 @@ router.post(
   "/",
   async (
     req: Request<{}, {}, { token: string }>,
-    res: Response<{ apiKey: string }>
+    res: Response<{ apiKey: string; userId: string }>
   ) => {
     const app = getApp();
     const idToken = req.body.token;
@@ -38,11 +38,13 @@ router.post(
 
         res.status(200).json({
           apiKey: user.apiKey,
+          userId: user.id,
         });
         return;
       } else {
         res.status(200).json({
           apiKey: user.apiKey,
+          userId: user.id,
         });
         return;
       }
