@@ -1,6 +1,8 @@
+import { stat } from "fs";
 import { Browsers } from "./sites/common/index.js";
 import { OF } from "./sites/index.js";
 import { SessionContext } from "./sites/of/context.js";
+import { transformMessages } from "./sites/of/sdk/get-messages.js";
 
 async function main() {
   const proxy = process.env.HTTPS_PROXY;
@@ -66,30 +68,13 @@ async function main() {
   );
 
   const fanId = "341475026";
+  const fanHandle = "blkmichcutie";
+  // const stats = await OF.Sdk.getFanStats(context, fanHandle);
+  const messages = await OF.Sdk.getMessages(context, fanId, { maxNumMessages: 10 });
+  //const newFans = await OF.Sdk.getNewFans(context, { startDate: "2023-06-14 00:00:00", endDate: "2023-07-14 16:29:27" });
+  //const userName = await OF.Sdk.getFanHandle(context, fanId);
+  console.log(transformMessages(authId, messages));
 
-  const messageHistory = await OF.Sdk.getMessages(context, fanId, {
-    maxNumMessages: 10,
-  });
-
-  const payload = {
-    messages: messageHistory,
-    creator_id: authId,
-    fan_id: fanId,
-  };
-
-  const response = await fetch(
-    "https://of-2890.onrender.com/api/of/generateResponse",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: apiKey,
-      },
-      body: JSON.stringify(payload),
-    }
-  );
-  const responseText = await response.text();
-  console.log(responseText);
 }
 
 void main();

@@ -20,11 +20,13 @@ export async function getMessages(
       otherUserId,
       startAfterMessageId: startAfterMessageId,
     });
+    console.log(response.list.length)
 
     hasNextPage = response.hasMore;
-    startAfterMessageId =
-      response.list[response.list.length]?.id?.toString() ||
-      startAfterMessageId;
+    if (hasNextPage) {
+      startAfterMessageId = response.list[response.list.length - 1].id.toString();
+    }
+
 
     messages = [...messages, ...response.list];
   }
@@ -32,16 +34,22 @@ export async function getMessages(
   return messages.slice(0, maxNumMessages);
 }
 
+
 export const transformMessages = (
   creatorId: string,
   messages: ReceivedMessage[]
 ) => {
-  return messages.map((message) => {
-    return {
-      role: message.fromUser.id.toString() === creatorId ? "creator" : "fan",
-      content: message.text,
-      timeOfMsg: message.createdAt,
-      mediaSent: message.media.length > 0,
-    };
-  });
+  return messages
+    .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+    .map((message) => {
+      return {
+        role: message.fromUser.id.toString() === creatorId ? "creator" : "fan",
+        content: message.text,
+        timeOfMsg: message.createdAt,
+        mediaSent: message.media.length > 0,
+        isTip: message.isTip,
+        tipAmount: message.tipAmount || null,
+      };
+    });
 };
+
