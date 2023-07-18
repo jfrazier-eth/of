@@ -61,11 +61,11 @@ export const post = async (
       json: body,
     });
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return response.body;
     }
 
-    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

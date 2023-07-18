@@ -60,7 +60,7 @@ export async function fetchOFDynamicParams(
   try {
     const response = await context.client.get<OFDynamicParamsResponse>(url);
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       const body = response.body;
       return {
         staticParam: body.static_param,
@@ -74,7 +74,7 @@ export async function fetchOFDynamicParams(
         isCurrent: body.is_current,
       };
     }
-    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

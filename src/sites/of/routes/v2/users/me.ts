@@ -26,7 +26,7 @@ export const get = async (context: SessionContext) => {
       headers: reqHeaders,
     });
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return {
         id: response.body.id,
         name: response.body.name,
@@ -35,7 +35,7 @@ export const get = async (context: SessionContext) => {
         wsAuthToken: response.body.wsAuthToken,
       };
     }
-    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

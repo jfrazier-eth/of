@@ -1,8 +1,10 @@
 import { clone } from "@/utils/clone.js";
 import { Browsers } from "./index.js";
 import { CookieJar } from "tough-cookie";
-import got, { ExtendOptions, Got } from "got";
 import { HttpsProxyAgent } from "https-proxy-agent";
+import { Client, getClient } from "./client/index.js";
+import { ClientOptions } from "./client/types.js";
+
 export interface ContextOptions {
   baseUrl: string | URL;
   browser: Browsers.Browser;
@@ -39,14 +41,14 @@ export class Context {
   protected _browser: Browsers.Browser;
   protected _proxy: URL | null;
   protected _cookieJar: CookieJar;
-  protected _client: Got;
+  protected _client: Client;
 
   constructor(options: ContextOptions) {
     this._baseUrl = new URL(options.baseUrl.toString());
     this._browser = options.browser;
     this._cookieJar = new CookieJar();
 
-    const clientOptions: Got | ExtendOptions = {
+    const clientOptions: ClientOptions = {
       throwHttpErrors: false,
       responseType: "json",
       cookieJar: this._cookieJar,
@@ -54,18 +56,13 @@ export class Context {
 
     this._proxy = options.proxy ? new URL(options.proxy) : null;
     if (this._proxy) {
-      clientOptions.agent = {
-        https: new HttpsProxyAgent(this._proxy, {
-          keepAlive: true,
-        }),
-      };
-
-      clientOptions.https = {
-        rejectUnauthorized: this._proxy.hostname !== "127.0.0.1",
-      };
+      clientOptions.httpsAgent = new HttpsProxyAgent(this._proxy, {
+        keepAlive: true,
+      });
+      clientOptions.rejectUnauthorized = this._proxy.hostname !== "127.0.0.1";
     }
 
-    this._client = got.extend(clientOptions);
+    this._client = getClient(clientOptions);
   }
 
   public getUrl(path: string, searchParams?: URLSearchParams) {

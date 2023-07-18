@@ -22,7 +22,7 @@ export const get = async (context: Context) => {
       },
     });
 
-    return response.statusCode;
+    return response.status;
   } catch (err) {
     throw RequestError.create(err, url, context);
   }
