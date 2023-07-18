@@ -64,32 +64,55 @@ const constructPayload = (
   return payload;
 };
 
+const checkTipStatus = (messages: any) => {
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const message = messages[i];
+    if (message.role === 'creator') {
+      return { isTip: false, tipAmount: null };
+    } else if (message.role === 'fan' && message.isTip) {
+      return { isTip: true, tipAmount: message.tipAmount };
+    }
+  }
+  return { isTip: false, tipAmount: null };
+};
+
+const sendNotification = async (userId: number, tipAmount: number) => {
+  //console.log(`Sending Notification to ${userId}: Tip Amount ${tipAmount}`)
+}
 const generateResponse = async (req: Request, res: Response) => {
   try {
     const userSettings = await userSettingsModel.findOne({ userId: Number(req.body.userId) });
     const scripts = userSettings?.scripts || "";
     const conversationHistory = formatChat(req.body.messages)
+    const tipStatus = checkTipStatus(req.body.messages);
 
-    const payload = constructPayload(
-      req.body.fanName,
-      scripts,
-      conversationHistory
-    );
+    //generate response only if it isn't tipped msg
+    if (!tipStatus.isTip) {
+      const payload = constructPayload(
+        req.body.fanName,
+        scripts,
+        conversationHistory
+      );
 
-    let response = await chatGptCompletion(payload);
+      let response = await chatGptCompletion(payload);
+      response = await JSON.parse(response);
+      console.log(response);
+      res.status(200).send({ tipAmount: null, response: response.content });
+      //save the response to the database
+      const msgHistory = new msgHistoryModel({
+        userId: req.body.userId,
+        fanId: req.body.fanId,
+        fanName: req.body.fanName,
+        messages: req.body.messages,
+        AIResponse: response.content //make sure this is the correct path for your response
+      });
+      await msgHistory.save();
+    } else {
+      res.status(200).send({ tipAmount: tipStatus.tipAmount, response: null, });
+      sendNotification(req.body.userId, tipStatus.tipAmount);
 
-    //error check the response. 2 errors may occur: 1. Response isn't well formatted. 2. GPT refused to answer this question
-    response = await JSON.parse(response);
-    res.status(200).send(response.content);
-    //save the response to the database
-    const msgHistory = new msgHistoryModel({
-      userId: req.body.userId,
-      fanId: req.body.fanId,
-      fanName: req.body.fanName,
-      messages: req.body.messages,
-      AIResponse: response.content //make sure this is the correct path for your response
-    });
-    await msgHistory.save();
+    }
+
   } catch (error) {
     console.log("Came to error");
     console.log(error);
