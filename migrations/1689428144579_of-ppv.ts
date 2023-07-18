@@ -3,43 +3,46 @@ import { MigrationBuilder, ColumnDefinitions } from "node-pg-migrate";
 
 export const shorthands: ColumnDefinitions | undefined = undefined;
 
-export async function up(pgm: MigrationBuilder): Promise<void> {
-  pgm.createTable("users", {
+export async function up(pgm: MigrationBuilder) {
+  pgm.createTable("of_ppvs", {
     id: {
       type: "char(16)",
+      unique: true,
+      notNull: true,
       primaryKey: true,
-      unique: true,
-      notNull: true,
     },
-    api_key: {
+    user_id: {
       type: "char(16)",
-      unique: true,
       notNull: true,
     },
-    name: {
+    site_user_id: {
       type: "TEXT",
       collation: 'pg_catalog."default"',
-      notNull: true,
-    },
-    username: {
-      type: "TEXT",
-      collation: 'pg_catalog."default"',
-      unique: true,
-      notNull: true,
-    },
-    firebase_auth_id: {
-      type: "TEXT",
-      collation: 'pg_catalog."default"',
-      unique: true,
       notNull: true,
     },
     created_at: {
       type: "timestamp",
       notNull: true,
     },
+    updated_at: {
+      type: "timestamp",
+      notNull: true,
+    },
+    enabled: {
+      type: "boolean",
+      notNull: true,
+    },
+    image: {
+      type: "TEXT",
+      notNull: true,
+    },
+    price: {
+      type: "numeric",
+      notNull: true,
+    },
   });
 }
 
-export async function down(pgm: MigrationBuilder): Promise<void> {
-  pgm.dropTable("users");
+export async function down(pgm: MigrationBuilder) {
+  pgm.dropTable("of_ppvs");
 }

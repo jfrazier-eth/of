@@ -8,23 +8,29 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     xbc: {
       type: "TEXT",
       collation: 'pg_catalog."default"',
+      notNull: true,
     },
     sess: {
       type: "TEXT",
       collation: 'pg_catalog."default"',
+      notNull: true,
     },
     site_user_id: {
       type: "TEXT",
       collation: 'pg_catalog."default"',
+      notNull: true,
     },
     user_id: {
       type: "char(16)",
+      notNull: true,
     },
     created_at: {
       type: "timestamp",
+      notNull: true,
     },
     updated_at: {
       type: "timestamp",
+      notNull: true,
     },
   });
 

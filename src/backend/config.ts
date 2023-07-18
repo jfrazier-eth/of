@@ -1,3 +1,6 @@
+import { ServiceAccount } from "firebase-admin";
+import prodServiceAccount from "../creds/firebase-prod.json" assert { type: "json" };
+
 const getEnvVariable = (key: string) => {
   const value = process.env[key];
 
@@ -12,14 +15,13 @@ const getOptionalEnvVariable = (key: string, defaultValue: string) => {
 };
 
 export const config = {
-  // redis: {
-  //   connectionUrl: getEnvVariable("REDIS_URL"),
-  // },
+  redis: {
+    connectionUrl: getEnvVariable("REDIS_URL"),
+  },
   mongo: {
     connectionUrl: getEnvVariable("MONGO_URL"),
   },
   server: {
-    apiBaseUrl: getEnvVariable("API_BASE_URL"),
     port: Number(getOptionalEnvVariable("PORT", "7777")),
     apiKey: getEnvVariable("API_KEY"),
   },
@@ -28,5 +30,8 @@ export const config = {
   },
   pg: {
     connectionUrl: getEnvVariable("DATABASE_URL"),
+  },
+  firebase: {
+    serviceAccount: prodServiceAccount as ServiceAccount,
   },
 };

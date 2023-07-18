@@ -3,13 +3,12 @@ import cors from "cors";
 import "./db/mongo.js";
 import "./db/redis.js";
 
-//models
-import { FansModel } from "./models/only-fans/fans.js";
-
 //routes
 import { ofRoute } from "./routes/of-route.js";
 import { config } from "./config.js";
-import { isAuthorised } from "./controllers/auth.js";
+import { router as login } from "./routes/api/login.js";
+import { checkUserAuth } from "./controllers/user-auth.js";
+import { router as siteLoginRouter } from "./routes/api/auth.js";
 
 const app = express();
 
@@ -19,12 +18,9 @@ app.use(express.json());
 app.get("/api", (req, res) => {
   res.send("Hello world!");
 });
-app.use("/api/of", isAuthorised, ofRoute);
-
-app.post("/api/auth", (req, res) => {
-  console.log(req.body);
-  res.status(200);
-});
+app.use("/api/login", login);
+app.use("/api/of", checkUserAuth, ofRoute);
+app.use(siteLoginRouter);
 
 app.use((_req, res, _next) => {
   res.status(404).json({ error: "Not found" });

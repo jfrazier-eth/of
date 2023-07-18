@@ -1,7 +1,7 @@
 import { AccountParams, createAccount } from "../accounts/create-account.js";
 import { pg, pgp } from "@/backend/db/postgres.js";
 import { User } from "./types.js";
-import { uid } from "@/utils/uuid.js";
+import { uid } from "@/utils/uid.js";
 import { transformUser } from "./pg-transformer.js";
 
 export interface UserParams {

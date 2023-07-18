@@ -1,6 +1,6 @@
 import { PGUser, User } from "./types.js";
 
-export const transformPgUser = (pgUser: PGUser): User => {
+export const transformPGUser = (pgUser: PGUser): User => {
   return {
     id: pgUser.id,
     apiKey: pgUser.api_key,
