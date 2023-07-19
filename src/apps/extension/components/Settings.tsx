@@ -1,35 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import { UserOFSettingsContext } from "../context/user-of-settings";
-import { LoggedInUser } from "../lib/extension/background/message-handlers/user-info";
 import { UserOFSettings } from "../lib/extension/messages/responses";
-import { sendMessage } from "../lib/extension/messages/send-message";
 import { Loader } from "./Loader";
 import MediaInput from "./inputs/MediaInput";
 import PriceInput from "./inputs/PriceInput";
 import Toggle from "./inputs/Toggle";
 
-function countWords(script: string) {
-  script = script.trim();
-  const words = script.split(/\s+/);
-  const wordCount = words.length;
-  return wordCount;
-}
-
 const Settings: React.FC<{
-  user: LoggedInUser;
   settings: UserOFSettings;
   setSettings: (handler: (prevState: UserOFSettings) => UserOFSettings) => void;
   saveSettings: () => Promise<void>;
-}> = ({ user, settings, setSettings, saveSettings }) => {
-  //Need to figure out how to handle images. Is it better if we just take valut URLs, instead of letting ppl to upload?
-  // const [selectedImage, setSelectedImage] = useState("");
-  // const [ppvDefault1, setPpvDefault1] = useState("");
-  // const [ppvDefault2, setPpvDefault2] = useState("");
-  // const [welcomePrice, setWelcomePrice] = useState(10);
-  // const [ppvPrice1, setPpvPrice1] = useState(5);
-  // const [ppvPrice2, setPpvPrice2] = useState(5);
-
+}> = ({ settings, setSettings, saveSettings }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const toggleAutoMessages = () => {

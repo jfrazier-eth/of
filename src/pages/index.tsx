@@ -22,12 +22,7 @@ export default function Page() {
     if (userInfo.value.isLoggedIn && settings.isReady) {
       return (
         <Main>
-          <Settings
-            user={userInfo.value}
-            settings={settings.value}
-            setSettings={setSettings}
-            saveSettings={saveSettings}
-          />
+          <Settings settings={settings.value} setSettings={setSettings} saveSettings={saveSettings} />
         </Main>
       );
     } else {
