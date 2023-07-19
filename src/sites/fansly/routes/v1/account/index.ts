@@ -31,7 +31,7 @@ export const get = async (context: LoggedInContext) => {
       headers: reqHeaders,
     });
 
-    return response.statusCode;
+    return response.status;
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

@@ -29,10 +29,10 @@ export const get = async (context: SessionContext): Promise<void> => {
       headers: reqHeaders,
     });
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return;
     }
-    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     console.error(err);
     throw RequestError.create(err, url, context);
