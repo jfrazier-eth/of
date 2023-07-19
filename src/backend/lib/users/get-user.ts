@@ -1,6 +1,6 @@
-import { pg } from "@/backend/db/postgres.js";
-import { PGUser } from "./types.js";
-import { transformPGUser } from "./pg-transformer.js";
+import { pg } from "@/backend/db/postgres";
+import { PGUser } from "./types";
+import { transformPGUser } from "./pg-transformer";
 
 export const getUserByFirebaseId = async (firebaseId: string) => {
   const query = "SELECT * from users WHERE firebase_auth_id = $1";

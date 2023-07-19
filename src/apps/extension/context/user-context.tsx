@@ -5,20 +5,17 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Data } from "./data.js";
+import { Data } from "./data";
 
-import { FirebaseUserContext } from "./firebase-user-context.jsx";
-import {
-  UserInfoMessage,
-  sendMessage,
-} from "../lib/extension/messages/index.js";
-import { UserInfo } from "../lib/extension/background/message-handlers/user-info.js";
+import { FirebaseUserContext } from "./firebase-user-context";
+import { UserInfoMessage, sendMessage } from "../lib/extension/messages/index";
+import { UserInfo } from "../lib/extension/background/message-handlers/user-info";
 
 const UserInfoContext = createContext<Data<UserInfo>>({
   isReady: false,
 });
 
-const UserInfoProvider = ({ children }: { children: ReactNode }): ReactNode => {
+const UserInfoProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [value, setValue] = useState<Data<UserInfo>>({ isReady: false });
   const firebaseUser = useContext(FirebaseUserContext);
 

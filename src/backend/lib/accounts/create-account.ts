@@ -1,6 +1,6 @@
-import { pg, pgp } from "@/backend/db/postgres.js";
-import { transformAccount } from "./pg-transformer.js";
-import { Account, PGAccount } from "./types.js";
+import { pg, pgp } from "@/backend/db/postgres";
+import { transformAccount } from "./pg-transformer";
+import { Account, PGAccount } from "./types";
 
 export type AccountParams = Pick<Account, "userId" | "site" | "siteUserId">;
 

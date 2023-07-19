@@ -1,5 +1,5 @@
-import { UserInfo } from "../background/message-handlers/user-info.js";
-import { UserSettings } from "../background/message-handlers/user-settings.js";
+import { UserInfo } from "../background/message-handlers/user-info";
+import { UserSettings } from "../background/message-handlers/user-settings";
 
 interface BaseResponse {
   kind: string;

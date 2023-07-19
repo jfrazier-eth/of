@@ -5,7 +5,7 @@ import {
   SaveOFSettingsMessage,
   UserInfoMessage,
   UserSettingsMessage,
-} from "./messages.js";
+} from "./messages";
 import {
   ActiveTabResponse,
   GenerateResponseResponse,
@@ -13,7 +13,7 @@ import {
   SaveOFSettingsResponse,
   UserInfoResponse,
   UserSettingsResponse,
-} from "./responses.js";
+} from "./responses";
 
 export type MessagesByKind = {
   USER_INFO: UserInfoMessage;

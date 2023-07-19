@@ -1,7 +1,7 @@
-import { uid } from "@/utils/uid.js";
-import { OFWelcomeMessage, PGOFWelcomeMessage } from "./types.js";
-import { transformOFWelcomeMessage } from "./pg-transform.js";
-import { pg, pgp } from "@/backend/db/postgres.js";
+import { uid } from "@/utils/uid";
+import { OFWelcomeMessage, PGOFWelcomeMessage } from "./types";
+import { transformOFWelcomeMessage } from "./pg-transform";
+import { pg, pgp } from "@/backend/db/postgres";
 
 export type SaveOFWelcomeMessageParams = Pick<
   OFWelcomeMessage,

@@ -1,7 +1,7 @@
 import * as React from "react";
-import Login from "../apps/extension/components/Login.jsx";
-import { UserInfoContext } from "../apps/extension/context/user-context.jsx";
-import Settings from "../apps/extension/components/Settings.jsx";
+import Login from "../apps/extension/components/Login";
+import { UserInfoContext } from "../apps/extension/context/user-context";
+import Settings from "../apps/extension/components/Settings";
 
 const Main = ({ children }: { children: React.ReactNode }) => {
   return (

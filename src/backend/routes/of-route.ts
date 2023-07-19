@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { generateResponse } from "../controllers/generate-response.js";
-import { getSettings, postSettings } from "../controllers/settings.js";
+import { generateResponse } from "../controllers/generate-response";
+import { getSettings, postSettings } from "../controllers/settings";
 
-const router = Router();
+const router: Router = Router();
 
 router.post("/generateResponse", generateResponse);
 

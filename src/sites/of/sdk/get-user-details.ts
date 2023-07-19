@@ -1,5 +1,5 @@
-import { SessionContext } from "../context.js";
-import { Routes } from "../index.js";
+import { SessionContext } from "../context";
+import { Routes } from "../index";
 
 export async function getUserDetails(context: SessionContext) {
   try {

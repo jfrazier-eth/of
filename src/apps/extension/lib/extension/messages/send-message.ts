@@ -1,5 +1,5 @@
-import { Message } from "./index.js";
-import { ResponsesByKind } from "./mappings.js";
+import { Message } from "./index";
+import { ResponsesByKind } from "./mappings";
 
 export const sendMessage = async <T extends Message>(msg: T) => {
   if (!chrome.runtime) {

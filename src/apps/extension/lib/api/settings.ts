@@ -1,4 +1,4 @@
-import { Context } from "./context.js";
+import { Context } from "./context";
 
 const path = "/api/of/settings";
 

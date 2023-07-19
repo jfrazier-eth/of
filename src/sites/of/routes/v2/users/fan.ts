@@ -1,9 +1,9 @@
-import { SessionContext } from "@/sites/of/context.js";
+import { SessionContext } from "@/sites/of/context";
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors.js";
-import { FanStatsResponseBody, NewFansResponseBody } from "./types.js";
+} from "@/sites/common/errors/request-errors";
+import { FanStatsResponseBody, NewFansResponseBody } from "./types";
 
 export const getFanHandle = async (context: SessionContext, fanId: string) => {
   const otherHeaders = {
@@ -22,14 +22,14 @@ export const getFanHandle = async (context: SessionContext, fanId: string) => {
     const response = await context.client.get<any>(url, {
       headers: reqHeaders,
     });
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return {
         id: fanId,
         name: response.body[fanId].name,
         username: response.body[fanId].username,
       };
     }
-    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }
@@ -56,7 +56,7 @@ export const getFanStats = async (
     const response = await context.client.get<FanStatsResponseBody>(url, {
       headers: reqHeaders,
     });
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return {
         fan_id: response.body.id,
         name: response.body.name,
@@ -80,7 +80,7 @@ export const getFanStats = async (
         },
       };
     }
-    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }
@@ -127,8 +127,8 @@ export const getNewFans = async (
         headers: reqHeaders,
       });
 
-      if (response.statusCode === 200) {
-        const currentFans = response.body.users.map((fan: any) => ({
+      if (response.status === 200) {
+        const currentFans = response.body.users.map((fan) => ({
           id: fan.id,
           name: fan.name,
           latestSubscriptionDate:
@@ -144,7 +144,7 @@ export const getNewFans = async (
           offset += 10;
         }
       } else {
-        throw new UnexpectedStatusCodeError(url, context, response.statusCode);
+        throw new UnexpectedStatusCodeError(url, context, response.status);
       }
     } catch (err) {
       throw RequestError.create(err, url, context);

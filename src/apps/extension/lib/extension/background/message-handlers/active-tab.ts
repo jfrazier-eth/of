@@ -1,5 +1,5 @@
-import { ActiveTabMessage } from "../../messages/index.js";
-import { Handler } from "./types.js";
+import { ActiveTabMessage } from "../../messages/index";
+import { Handler } from "./types";
 
 export const getActiveTab = async () => {
   const tabs = await new Promise<chrome.tabs.Tab[]>((resolve, reject) => {

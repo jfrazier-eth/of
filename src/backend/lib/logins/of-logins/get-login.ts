@@ -1,7 +1,7 @@
-import { pg } from "@/backend/db/postgres.js";
-import { OFLogin, PGOFLogin } from "./types.js";
-import { transformPGOFLogin } from "./pg-transformer.js";
-import { GetLoginParams } from "../get-login.js";
+import { pg } from "@/backend/db/postgres";
+import { OFLogin, PGOFLogin } from "./types";
+import { transformPGOFLogin } from "./pg-transformer";
+import { GetLoginParams } from "../get-login";
 
 export const getLogin = async (
   params: GetLoginParams

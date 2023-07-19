@@ -1,9 +1,9 @@
-import { checkUserAuth } from "@/backend/controllers/user-auth.js";
-import { Site } from "@/backend/lib/accounts/types.js";
-import { LoginParamsBySite, getLogin } from "@/backend/lib/logins/get-login.js";
+import { checkUserAuth } from "@/backend/controllers/user-auth";
+import { Site } from "@/backend/lib/accounts/types";
+import { LoginParamsBySite, getLogin } from "@/backend/lib/logins/get-login";
 import { Request, Response, Router } from "express";
 
-const router = Router();
+const router: Router = Router();
 
 router.use(checkUserAuth);
 

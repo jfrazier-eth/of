@@ -1,6 +1,6 @@
-import { pg, pgp } from "@/backend/db/postgres.js";
-import { transformOFSettings } from "./pg-transformer.js";
-import { OFSettings } from "./types.js";
+import { pg, pgp } from "@/backend/db/postgres";
+import { transformOFSettings } from "./pg-transformer";
+import { OFSettings } from "./types";
 
 export type SaveOFSettingsParams = Pick<
   OFSettings,

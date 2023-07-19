@@ -5,10 +5,10 @@ import {
   useState,
   useContext,
 } from "react";
-import { FirebaseAuthContext } from "./firebase-auth-context.jsx";
+import { FirebaseAuthContext } from "./firebase-auth-context";
 
-import { Data } from "./data.js";
-import { sendMessage } from "../lib/extension/messages/send-message.js";
+import { Data } from "./data";
+import { sendMessage } from "../lib/extension/messages/send-message";
 
 interface FirebaseUser {
   uid: string;

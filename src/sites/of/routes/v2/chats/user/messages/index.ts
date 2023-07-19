@@ -1,2 +1,2 @@
-export * as Get from "./get.js";
-export * as Post from "./post.js";
+export * as Get from "./get";
+export * as Post from "./post";

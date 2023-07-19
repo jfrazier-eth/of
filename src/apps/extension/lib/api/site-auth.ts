@@ -1,5 +1,5 @@
-import { Auth } from "../auth/types.js";
-import { Context } from "./context.js";
+import { Auth } from "../auth/types";
+import { Context } from "./context";
 
 const path = "/api/of/auth";
 

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Toggle from "./inputs/Toggle.jsx";
-import PriceInput from "./inputs/PriceInput.jsx";
-import MediaInput from "./inputs/MediaInput.jsx";
-import { Loader } from "./Loader.jsx";
-import { LoggedInUser } from "../lib/extension/background/message-handlers/user-info.js";
-import { sendMessage } from "../lib/extension/messages/send-message.js";
+import Toggle from "./inputs/Toggle";
+import PriceInput from "./inputs/PriceInput";
+import MediaInput from "./inputs/MediaInput";
+import { Loader } from "./Loader";
+import { LoggedInUser } from "../lib/extension/background/message-handlers/user-info";
+import { sendMessage } from "../lib/extension/messages/send-message";
 
 function countWords(script: string) {
   script = script.trim();

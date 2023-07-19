@@ -1,5 +1,5 @@
-import { UserSettingsMessage } from "../../messages/index.js";
-import { Handler } from "./types.js";
+import { UserSettingsMessage } from "../../messages/index";
+import { Handler } from "./types";
 
 export interface UserSettings {
   incognito: {

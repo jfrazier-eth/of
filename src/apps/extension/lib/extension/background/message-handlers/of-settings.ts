@@ -1,9 +1,9 @@
-import { getSettings, postSettings } from "@/extension/lib/api/settings.js";
+import { getSettings, postSettings } from "@/extension/lib/api/settings";
 import {
   GetOFSettingsMessage,
   SaveOFSettingsMessage,
-} from "../../messages/index.js";
-import { Handler } from "./types.js";
+} from "../../messages/index";
+import { Handler } from "./types";
 
 export interface OFSettings {
   [key: string]: any;

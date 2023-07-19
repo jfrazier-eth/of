@@ -1,4 +1,4 @@
-export * from "./messages.js";
+export * from "./messages";
 
-export { sendMessage } from "./send-message.js";
-export { onMessage } from "./on-message.js";
+export { sendMessage } from "./send-message";
+export { onMessage } from "./on-message";

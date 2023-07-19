@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { config } from "../config.js";
+import { config } from "../config";
 
 const isAuthorised = (req: Request, res: Response, next: NextFunction) => {
   const token = req.header("Authorization");

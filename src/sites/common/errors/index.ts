@@ -1,3 +1,3 @@
-import * as RequestErrors from "./request-errors.js";
+import * as RequestErrors from "./request-errors";
 
 export { RequestErrors };

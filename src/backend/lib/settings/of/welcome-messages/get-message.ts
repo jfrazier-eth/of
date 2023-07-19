@@ -1,6 +1,6 @@
-import { pg } from "@/backend/db/postgres.js";
-import { OFWelcomeMessage, PGOFWelcomeMessage } from "./types.js";
-import { transformPGOFWelcomeMessage } from "./pg-transform.js";
+import { pg } from "@/backend/db/postgres";
+import { OFWelcomeMessage, PGOFWelcomeMessage } from "./types";
+import { transformPGOFWelcomeMessage } from "./pg-transform";
 
 export const getMessage = async (
   messageId: string

@@ -1,6 +1,6 @@
-import { pg } from "@/backend/db/postgres.js";
-import { OFSettings, PGOFSettings } from "./types.js";
-import { transformPGOFSettings } from "./pg-transformer.js";
+import { pg } from "@/backend/db/postgres";
+import { OFSettings, PGOFSettings } from "./types";
+import { transformPGOFSettings } from "./pg-transformer";
 
 export const getSettings = async (
   siteUserId: string

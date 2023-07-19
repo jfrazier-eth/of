@@ -1,4 +1,4 @@
-import { config } from "../config.js";
+import { config } from "../config";
 import mongoose from "mongoose";
 
 const options = {

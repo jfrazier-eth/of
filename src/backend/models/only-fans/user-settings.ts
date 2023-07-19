@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
-import { connection } from "../../db/mongo.js";
+import { connection } from "../../db/mongo";
 
 const userSettings = new Schema(
   {

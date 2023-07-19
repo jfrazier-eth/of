@@ -1,5 +1,5 @@
-import { OFDynamicParams, getOFDynamicParams } from "./of-dynamic-params.js";
-import { signReq } from "./sign-req.js";
+import { OFDynamicParams, getOFDynamicParams } from "./of-dynamic-params";
+import { signReq } from "./sign-req";
 
 export { getOFDynamicParams, signReq };
 export type { OFDynamicParams };

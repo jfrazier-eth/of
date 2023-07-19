@@ -1,8 +1,8 @@
 import { stat } from "fs";
-import { Browsers } from "./sites/common/index.js";
-import { OF } from "./sites/index.js";
-import { SessionContext } from "./sites/of/context.js";
-import { transformMessages } from "./sites/of/sdk/get-messages.js";
+import { Browsers } from "./sites/common/index";
+import { OF } from "./sites/index";
+import { SessionContext } from "./sites/of/context";
+import { transformMessages } from "./sites/of/sdk/get-messages";
 
 async function main() {
   const proxy = process.env.HTTPS_PROXY;
@@ -70,11 +70,12 @@ async function main() {
   const fanId = "341475026";
   const fanHandle = "blkmichcutie";
   // const stats = await OF.Sdk.getFanStats(context, fanHandle);
-  const messages = await OF.Sdk.getMessages(context, fanId, { maxNumMessages: 10 });
+  const messages = await OF.Sdk.getMessages(context, fanId, {
+    maxNumMessages: 10,
+  });
   //const newFans = await OF.Sdk.getNewFans(context, { startDate: "2023-06-14 00:00:00", endDate: "2023-07-14 16:29:27" });
   //const userName = await OF.Sdk.getFanHandle(context, fanId);
   console.log(transformMessages(authId, messages));
-
 }
 
 void main();

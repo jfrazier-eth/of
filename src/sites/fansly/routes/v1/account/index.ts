@@ -1,5 +1,5 @@
-import { RequestError } from "@/sites/common/errors/request-errors.js";
-import { LoggedInContext } from "@/sites/fansly/context.js";
+import { RequestError } from "@/sites/common/errors/request-errors";
+import { LoggedInContext } from "@/sites/fansly/context";
 
 const path = "/api/v1/account";
 
@@ -31,7 +31,7 @@ export const get = async (context: LoggedInContext) => {
       headers: reqHeaders,
     });
 
-    return response.statusCode;
+    return response.status;
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

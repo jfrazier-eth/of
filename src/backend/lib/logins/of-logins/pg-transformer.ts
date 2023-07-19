@@ -1,4 +1,4 @@
-import { OFLogin, PGOFLogin } from "./types.js";
+import { OFLogin, PGOFLogin } from "./types";
 
 export const transformPGOFLogin = (login: PGOFLogin): OFLogin => {
   return {

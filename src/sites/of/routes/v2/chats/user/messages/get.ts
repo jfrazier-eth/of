@@ -1,9 +1,9 @@
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors.js";
-import { SessionContext } from "@/sites/of/context.js";
-import { ReceivedMessage } from "./types.js";
+} from "@/sites/common/errors/request-errors";
+import { SessionContext } from "@/sites/of/context";
+import { ReceivedMessage } from "./types";
 
 const getPath = (userIdOfChat: string) => {
   return `/api2/v2/chats/${userIdOfChat}/messages`;
@@ -52,16 +52,16 @@ export const get = async (
       ...getHeaders(context.userParams.authId, options.otherUserId),
       ...contextHeaders,
     };
-    console.log(reqHeaders);
+
     const response = await context.client.get<GetMessagesResponseBody>(url, {
       headers: reqHeaders,
     });
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return response.body;
     }
 
-    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

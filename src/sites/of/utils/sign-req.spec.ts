@@ -1,5 +1,5 @@
-import { OFDynamicParams } from "./of-dynamic-params.js";
-import { signReq } from "./sign-req.js";
+import { OFDynamicParams } from "./of-dynamic-params";
+import { signReq } from "./sign-req";
 
 it("can generate the expected sign header", () => {
   const url = new URL("https://onlyfans.com/api2/v2/init");

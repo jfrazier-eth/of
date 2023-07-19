@@ -1,8 +1,8 @@
-import { AccountParams, createAccount } from "../accounts/create-account.js";
-import { pg, pgp } from "@/backend/db/postgres.js";
-import { User } from "./types.js";
-import { uid } from "@/utils/uid.js";
-import { transformUser } from "./pg-transformer.js";
+import { AccountParams, createAccount } from "../accounts/create-account";
+import { pg, pgp } from "@/backend/db/postgres";
+import { User } from "./types";
+import { uid } from "@/utils/uid";
+import { transformUser } from "./pg-transformer";
 
 export interface UserParams {
   name: string;

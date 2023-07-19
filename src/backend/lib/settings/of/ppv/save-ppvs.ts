@@ -1,7 +1,7 @@
-import { uid } from "@/utils/uid.js";
-import { OFPPV } from "./types.js";
-import { transformOFPPV } from "./pg-transformer.js";
-import { pg, pgp } from "@/backend/db/postgres.js";
+import { uid } from "@/utils/uid";
+import { OFPPV } from "./types";
+import { transformOFPPV } from "./pg-transformer";
+import { pg, pgp } from "@/backend/db/postgres";
 
 export type SaveOFPPVParams = Pick<OFPPV, "userId" | "siteUserId" | "ppv"> & {
   id?: string;

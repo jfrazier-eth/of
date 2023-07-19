@@ -1,6 +1,6 @@
-import { postLogin } from "@/extension/lib/api/login.js";
-import { UserInfoMessage } from "../../messages/index.js";
-import { Handler } from "./types.js";
+import { postLogin } from "@/extension/lib/api/login";
+import { UserInfoMessage } from "../../messages/index";
+import { Handler } from "./types";
 
 export interface LoggedInUser {
   apiKey: string;

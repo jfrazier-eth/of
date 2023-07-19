@@ -1,10 +1,10 @@
-import { SessionContext } from "@/sites/of/context.js";
-import { getPath } from "./path.js";
+import { SessionContext } from "@/sites/of/context";
+import { getPath } from "./path";
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors.js";
-import { SentMessage } from "./types.js";
+} from "@/sites/common/errors/request-errors";
+import { SentMessage } from "./types";
 
 const getHeaders = (userId: string, toUserId: string) => {
   const headers = {
@@ -61,11 +61,11 @@ export const post = async (
       json: body,
     });
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return response.body;
     }
 
-    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

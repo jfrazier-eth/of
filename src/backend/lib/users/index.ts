@@ -1,2 +1,2 @@
-export { createUser } from "./create-user.js";
-export type { User } from "./types.js";
+export { createUser } from "./create-user";
+export type { User } from "./types";

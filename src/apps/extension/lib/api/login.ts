@@ -1,4 +1,4 @@
-import { Context } from "./context.js";
+import { Context } from "./context";
 
 export const postLogin = async (
   token: string,

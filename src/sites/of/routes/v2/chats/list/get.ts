@@ -1,13 +1,13 @@
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors.js";
-import { SessionContext } from "@/sites/of/context.js";
+} from "@/sites/common/errors/request-errors";
+import { SessionContext } from "@/sites/of/context";
 
 import {
   GetUnreadMessagesResponseBody,
   GetUnreadMessagesOptions,
-} from "./types.js";
+} from "./types";
 
 const getHeaders = (userId: string) => {
   const headers = {
@@ -47,11 +47,11 @@ export const get = async (
       }
     );
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       return response.body;
     }
 
-    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

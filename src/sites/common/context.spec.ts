@@ -1,5 +1,5 @@
-import { Context } from "./context.js";
-import { Browsers } from "./index.js";
+import { Context } from "./context";
+import { Browsers } from "./index";
 
 describe("context", () => {
   it("getUrl should use correct keys and values", () => {

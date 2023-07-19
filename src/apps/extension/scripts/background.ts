@@ -1,7 +1,7 @@
-import { saveAuth } from "../lib/auth/index.js";
-import { Auth } from "../lib/auth/types.js";
-import { context } from "../lib/extension/background/context.js";
-import { registerMessageHandler } from "../lib/extension/background/message-handlers/index.js";
+import { saveAuth } from "../lib/auth/index";
+import { Auth } from "../lib/auth/types";
+import { context } from "../lib/extension/background/context";
+import { registerMessageHandler } from "../lib/extension/background/message-handlers/index";
 
 registerMessageHandler(context);
 

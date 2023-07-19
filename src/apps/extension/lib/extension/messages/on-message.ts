@@ -1,5 +1,5 @@
-import { ResponsesByKind } from "./mappings.js";
-import { Message } from "./messages.js";
+import { ResponsesByKind } from "./mappings";
+import { Message } from "./messages";
 
 type SendResponse<T extends Message> = (
   response: ResponsesByKind[T["kind"]]

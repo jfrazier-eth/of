@@ -1,4 +1,4 @@
-import { OFSettings, PGOFSettings } from "./types.js";
+import { OFSettings, PGOFSettings } from "./types";
 
 export const transformPGOFSettings = (pgSettings: PGOFSettings): OFSettings => {
   const settings: OFSettings = {

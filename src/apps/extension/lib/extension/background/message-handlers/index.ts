@@ -1,15 +1,15 @@
-import { onMessage } from "../../messages/index.js";
+import { onMessage } from "../../messages/index";
 
-import { handleActiveTabMessage } from "./active-tab.js";
-import { handleGenerateResponseMessage } from "./generate-response.js";
-import { Handler } from "./types.js";
-import { handleUserInfoMessage } from "./user-info.js";
-import { handleUserSettingsMessage } from "./user-settings.js";
+import { handleActiveTabMessage } from "./active-tab";
+import { handleGenerateResponseMessage } from "./generate-response";
+import { Handler } from "./types";
+import { handleUserInfoMessage } from "./user-info";
+import { handleUserSettingsMessage } from "./user-settings";
 import {
   handleGetOFSettingsMessage,
   handleSaveOFSettingsMessage,
-} from "./of-settings.js";
-import { Context } from "@/extension/lib/api/context.js";
+} from "./of-settings";
+import { Context } from "@/extension/lib/api/context";
 
 export const MessageHandlers = {
   USER_INFO: handleUserInfoMessage,

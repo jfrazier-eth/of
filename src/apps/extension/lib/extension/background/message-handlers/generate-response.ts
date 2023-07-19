@@ -1,5 +1,5 @@
-import { GenerateResponseMessage } from "../../messages/index.js";
-import { Handler } from "./types.js";
+import { GenerateResponseMessage } from "../../messages/index";
+import { Handler } from "./types";
 
 export const handleGenerateResponseMessage: Handler<
   GenerateResponseMessage

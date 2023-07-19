@@ -1,1 +1,1 @@
-export * as OF from "./of/index.js";
+export * as OF from "./of/index";

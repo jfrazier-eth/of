@@ -1,7 +1,7 @@
 import { EmailAuthProvider } from "firebase/auth";
 import React, { useContext, useEffect } from "react";
-import { FirebaseAuthContext } from "../context/firebase-auth-context.jsx";
-import { SITE_NAME, TARGET_SITE_NAME } from "../lib/constants.js";
+import { FirebaseAuthContext } from "../context/firebase-auth-context";
+import { SITE_NAME, TARGET_SITE_NAME } from "../lib/constants";
 
 const Login: React.FC = () => {
   const { ui } = useContext(FirebaseAuthContext);

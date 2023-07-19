@@ -1,5 +1,5 @@
-import { RequestError } from "@/sites/common/errors/request-errors.js";
-import { Context } from "@/sites/common/index.js";
+import { RequestError } from "@/sites/common/errors/request-errors";
+import { Context } from "@/sites/common/index";
 
 const path = "/";
 
@@ -22,7 +22,7 @@ export const get = async (context: Context) => {
       },
     });
 
-    return response.statusCode;
+    return response.status;
   } catch (err) {
     throw RequestError.create(err, url, context);
   }
@@ -33,4 +33,4 @@ const Home = {
 };
 
 export { Home };
-export * as V2 from "./v2/index.js";
+export * as V2 from "./v2/index";

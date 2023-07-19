@@ -1,8 +1,8 @@
-import { Context } from "@/sites/common/context.js";
+import { Context } from "@/sites/common/context";
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors.js";
+} from "@/sites/common/errors/request-errors";
 
 export const OF_RULES_EP =
   "https://raw.githubusercontent.com/deviint/onlyfans-dynamic-rules/main/dynamicRules.json";
@@ -60,7 +60,7 @@ export async function fetchOFDynamicParams(
   try {
     const response = await context.client.get<OFDynamicParamsResponse>(url);
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       const body = response.body;
       return {
         staticParam: body.static_param,
@@ -74,7 +74,7 @@ export async function fetchOFDynamicParams(
         isCurrent: body.is_current,
       };
     }
-    throw new UnexpectedStatusCodeError(url, context, response.statusCode);
+    throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     throw RequestError.create(err, url, context);
   }

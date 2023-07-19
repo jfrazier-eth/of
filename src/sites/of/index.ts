@@ -1,4 +1,4 @@
-export * as Routes from "./routes/index.js";
-export * as Utils from "./utils/index.js";
-export * as Sdk from "./sdk/index.js";
-export { SessionContext } from "./context.js";
+export * as Routes from "./routes/index";
+export * as Utils from "./utils/index";
+export * as Sdk from "./sdk/index";
+export { SessionContext } from "./context";

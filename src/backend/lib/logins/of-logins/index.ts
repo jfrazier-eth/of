@@ -1,3 +1,3 @@
-export { saveLogin } from "./save-login.js";
-export { getLogin } from "./get-login.js";
-export type { OFLogin } from "./types.js";
+export { saveLogin } from "./save-login";
+export { getLogin } from "./get-login";
+export type { OFLogin } from "./types";
