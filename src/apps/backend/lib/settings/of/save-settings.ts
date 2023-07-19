@@ -21,7 +21,9 @@ export const saveSettings = async (params: SaveOFSettingsParams) => {
   });
 
   const insert = pgp.helpers.insert(pgSettings, columnSet);
-  const query = `${insert} ON CONFLICT (site_user_id) of DO UPDATE SET ${columns}`;
+
+  const excludedColumns = columns.map((col) => `${col} = EXCLUDED.${col}`).join(", ");
+  const query = `${insert} ON CONFLICT (site_user_id) of DO UPDATE SET ${excludedColumns}`;
   try {
     await pg.query(query);
   } catch (err) {

@@ -1,9 +1,8 @@
 import { Context } from "../api/context";
 import { postAuth } from "../api/site-auth";
-import { API_BASE_URL } from "../constants";
 import { Auth } from "./types";
 
-export async function saveAuth(auth: Auth) {
+export async function saveAuth(auth: Auth, context: Context) {
   const cachedAuth = await getCachedAuth(auth.xbc);
 
   if (
@@ -12,12 +11,11 @@ export async function saveAuth(auth: Auth) {
     auth.sess !== cachedAuth.sess ||
     auth.authId !== cachedAuth.authId
   ) {
-    await updateAuth(auth);
+    await updateAuth(auth, context);
   }
 }
 
-export async function updateAuth(auth: Auth) {
-  const context = new Context(API_BASE_URL);
+export async function updateAuth(auth: Auth, context: Context) {
   try {
     await postAuth(context, auth);
     await saveCachedAuth(auth);
@@ -46,7 +44,7 @@ export async function getCachedAuth(xbc: string): Promise<Auth | null> {
 }
 
 export async function saveCachedAuth(auth: Auth): Promise<void> {
-  const key = `${auth.authId}:${auth.sess}:${auth.xbc}`;
+  const key = auth.xbc;
   const value = JSON.stringify(auth);
   return new Promise<void>((resolve) => {
     chrome.storage.local.set(

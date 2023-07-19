@@ -20,7 +20,7 @@ app.get("/api", (req, res) => {
 });
 app.use("/api/login", login);
 app.use("/api/of", checkUserAuth, ofRoute);
-// app.use(siteLoginRouter);
+app.use(checkUserAuth, siteLoginRouter);
 
 app.use((_req, res, _next) => {
   res.status(404).json({ error: "Not found" });

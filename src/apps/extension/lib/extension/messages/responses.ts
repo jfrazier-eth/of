@@ -10,6 +10,11 @@ export interface UserInfoResponse extends BaseResponse {
   data: UserInfo;
 }
 
+export interface ActiveUserInfoResponse extends BaseResponse {
+  kind: "ACTIVE_USER_INFO";
+  data: UserInfo;
+}
+
 export interface UserSettingsResponse extends BaseResponse {
   kind: "USER_SETTINGS";
   data: UserSettings;
@@ -63,6 +68,7 @@ export interface SaveOFSettingsResponse extends BaseResponse {
 
 export type Response =
   | UserInfoResponse
+  | ActiveUserInfoResponse
   | UserSettingsResponse
   | ActiveTabResponse
   | GenerateResponseResponse

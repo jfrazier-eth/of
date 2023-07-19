@@ -1,6 +1,6 @@
 import { saveAuth } from "../lib/auth/index";
 import { Auth } from "../lib/auth/types";
-import { context } from "../lib/extension/background/context";
+import { context, contextLoaded } from "../lib/extension/background/context";
 import { registerMessageHandler } from "../lib/extension/background/message-handlers/index";
 
 registerMessageHandler(context);
@@ -38,16 +38,19 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
               authId,
               sess,
             };
-
-            saveAuth(auth)
+            contextLoaded
+              .then((context) => {
+                return saveAuth(auth, context);
+              })
               .then(() => {
-                console.log("Saved auth");
+                console.log(`Saved auth for ${xbc}`);
               })
               .catch((err) => {
-                console.log("Failed to save auth", err);
+                console.error(`Failed to save auth for ${xbc}`, err);
               });
           });
         }
+        return;
       }
     }
   },

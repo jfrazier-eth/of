@@ -1,12 +1,10 @@
 import { Request, Response, Router } from "express";
 
-import { checkUserAuth } from "@/backend/controllers/user-auth";
 import { Site } from "@/backend/lib/accounts";
 import { LoginParamsBySite, getLogin } from "@/backend/lib/logins/get-login";
+import { OFLogins } from "@/backend/lib/logins/index";
 
 const router: Router = Router();
-
-router.use(checkUserAuth);
 
 interface GetLoginQueryParams {
   siteUserId: string;
@@ -66,32 +64,39 @@ interface PostLoginRequestBody<S extends Site> {
 
 router.post(
   "/api/user/:userId/sites/:site/login",
-  async (
-    req: Request<{ userId: string; site: Site }, null>,
+  async <S extends Site>(
+    req: Request<{ userId: string; site: Site }, null, PostLoginRequestBody<S>>,
     res: Response<GetLoginResponseBody<Site> | { message: string }>
   ) => {
     const userIdHeader = req.headers["x-user-id"];
     const userId = req.params.userId;
     if (typeof userId !== "string" || !userId) {
-      res.status(500).json({ message: "Server error" });
-      console.error(`Expected user id to be present`);
-      return;
+      return res.status(500).json({ message: "Server error" });
     }
     if (userIdHeader !== userId) {
-      res.status(400).json({ message: "Bad request" });
-      return;
+      return res.status(400).json({ message: "Bad request" });
     }
 
     const site = req.params.site;
     switch (site) {
       case Site.OF: {
-        // TODO save login creds
-      }
-
-      default: {
-        res.status(400).json({ message: "Invalid site" });
+        const body = req.body as PostLoginRequestBody<Site.OF>;
+        if ("params" in body && body.params && body.params.xbc && body.params.sess && body.params.authId) {
+          // TODO connect account to user
+          await OFLogins.saveLogin({
+            xbc: body.params.xbc,
+            sess: body.params.sess,
+            authId: body.params.authId,
+            userId,
+          });
+          return res.sendStatus(200);
+        } else {
+          return res.status(400).json({ message: "Missing params" });
+        }
       }
     }
+
+    return res.status(400).json({ message: "Invalid site" });
   }
 );
 

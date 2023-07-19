@@ -31,7 +31,8 @@ export const saveLogin = async (params: SaveLoginParams) => {
   });
 
   const insert = pgp.helpers.insert(pgLogin, columnSet);
-  const query = `${insert} ON CONFLICT ON CONSTRAINT of_logins_pkey of DO UPDATE SET ${columns}`;
+  const excludedColumns = columns.map((col) => `${col} = EXCLUDED.${col}`).join(", ");
+  const query = `${insert} ON CONFLICT ON CONSTRAINT of_logins_pkey DO UPDATE SET ${excludedColumns}`;
   try {
     await pg.query(query);
   } catch (err) {
