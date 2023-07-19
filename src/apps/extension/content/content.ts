@@ -1,4 +1,4 @@
-import { UserSettings } from "@/lib/extension/background/message-handlers/user-settings";
+import { UserSettings } from "../lib/extension/background/message-handlers/user-settings.js";
 import { sendMessage } from "../lib/extension/messages/index.js";
 
 function blurImages(

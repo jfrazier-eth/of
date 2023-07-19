@@ -1,4 +1,4 @@
-import { postLogin } from "@/lib/api/login";
+import { postLogin } from "@/extension/lib/api/login.js";
 import { UserInfoMessage } from "../../messages/index.js";
 import { Handler } from "./types.js";
 

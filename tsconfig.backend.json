@@ -4,5 +4,9 @@
     "noEmit": false,
     "outDir": "./dist"
   },
-  "exclude": ["./src/apps/**/*"]
+  "exclude": [
+    "./src/apps/**/*",
+    "./src/pages/**/*",
+    "./tsconfig.extension.json"
+  ]
 }

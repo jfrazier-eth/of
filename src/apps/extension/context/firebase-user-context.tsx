@@ -6,8 +6,9 @@ import {
   useContext,
 } from "react";
 import { FirebaseAuthContext } from "./firebase-auth-context.jsx";
-import { sendMessage } from "@/lib/extension/messages";
+
 import { Data } from "./data.js";
+import { sendMessage } from "../lib/extension/messages/send-message.js";
 
 interface FirebaseUser {
   uid: string;

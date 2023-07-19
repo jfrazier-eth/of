@@ -1,4 +1,3 @@
-import { Context } from "@/lib/api/context";
 import { onMessage } from "../../messages/index.js";
 
 import { handleActiveTabMessage } from "./active-tab.js";
@@ -10,6 +9,7 @@ import {
   handleGetOFSettingsMessage,
   handleSaveOFSettingsMessage,
 } from "./of-settings.js";
+import { Context } from "@/extension/lib/api/context.js";
 
 export const MessageHandlers = {
   USER_INFO: handleUserInfoMessage,

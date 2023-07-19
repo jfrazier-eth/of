@@ -1,4 +1,4 @@
-import { getSettings, postSettings } from "@/lib/api/settings";
+import { getSettings, postSettings } from "@/extension/lib/api/settings.js";
 import {
   GetOFSettingsMessage,
   SaveOFSettingsMessage,

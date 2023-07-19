@@ -1,4 +1,4 @@
-import { Context } from "@/lib/api/context";
+import { Context } from "@/extension/lib/api/context.js";
 import { Message } from "../../messages/index.js";
 import { MessagesByKind, ResponsesByKind } from "../../messages/mappings.js";
 

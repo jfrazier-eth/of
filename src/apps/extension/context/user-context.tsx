@@ -6,9 +6,13 @@ import React, {
   useState,
 } from "react";
 import { Data } from "./data.js";
-import { UserInfoMessage, sendMessage } from "@/lib/extension/messages";
-import { UserInfo } from "@/lib/extension/background/message-handlers/user-info";
+
 import { FirebaseUserContext } from "./firebase-user-context.jsx";
+import {
+  UserInfoMessage,
+  sendMessage,
+} from "../lib/extension/messages/index.js";
+import { UserInfo } from "../lib/extension/background/message-handlers/user-info.js";
 
 const UserInfoContext = createContext<Data<UserInfo>>({
   isReady: false,

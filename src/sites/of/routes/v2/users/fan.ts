@@ -35,7 +35,10 @@ export const getFanHandle = async (context: SessionContext, fanId: string) => {
   }
 };
 
-export const getFanStats = async (context: SessionContext, fanHandle: string) => {
+export const getFanStats = async (
+  context: SessionContext,
+  fanHandle: string
+) => {
   const path = `/api2/v2/users/${fanHandle}`;
   const url = context.getUrl(path);
   const otherHeaders = {
@@ -63,7 +66,8 @@ export const getFanStats = async (context: SessionContext, fanHandle: string) =>
           subscribedAt: response.body.subscribedOnData.subscribeAt,
           renewedAt: response.body.subscribedOnData.renewedAt,
           subscriptionDuration: response.body.subscribedOnData.duration,
-          activeSubscription: response.body.subscribedOnData.hasActivePaidSubscriptions,
+          activeSubscription:
+            response.body.subscribedOnData.hasActivePaidSubscriptions,
         },
         amountSpent: {
           subscribePrice: response.body.subscribedOnData.subscribePrice,
@@ -73,7 +77,7 @@ export const getFanStats = async (context: SessionContext, fanHandle: string) =>
           postsSum: response.body.subscribedOnData.postsSumm,
           streamsSum: response.body.subscribedOnData.streamsSumm,
           totalSum: response.body.subscribedOnData.totalSumm,
-        }
+        },
       };
     }
     throw new UnexpectedStatusCodeError(url, context, response.statusCode);
@@ -82,8 +86,10 @@ export const getFanStats = async (context: SessionContext, fanHandle: string) =>
   }
 };
 
-
-export const getNewFans = async (context: SessionContext, dates: { startDate: string, endDate: string }) => {
+export const getNewFans = async (
+  context: SessionContext,
+  dates: { startDate: string; endDate: string }
+) => {
   const path = "/api2/v2/subscriptions/subscribers/latest";
   const otherHeaders = {
     Host: "onlyfans.com",
@@ -122,10 +128,11 @@ export const getNewFans = async (context: SessionContext, dates: { startDate: st
       });
 
       if (response.statusCode === 200) {
-        const currentFans = response.body.users.map((fan) => ({
+        const currentFans = response.body.users.map((fan: any) => ({
           id: fan.id,
           name: fan.name,
-          latestSubscriptionDate: fan.subscribedOnData?.subscribes?.[0]?.startDate ?? null,
+          latestSubscriptionDate:
+            fan.subscribedOnData?.subscribes?.[0]?.startDate ?? null,
           totalSpent: fan.subscribedOnData.totalSumm,
           isExpired: fan.subscribedOnExpiredNow,
         }));
