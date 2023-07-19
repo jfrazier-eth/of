@@ -19,7 +19,7 @@
   "exclude": [
     "node_modules",
     "./src/sites/common/client/got-adapter.ts",
-    "./src/creds/",
-    "./jest.config.ts"
+    "src/creds/",
+    "jest.config.ts"
   ]
 }
