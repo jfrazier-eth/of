@@ -6,7 +6,7 @@ import MediaInput from "./inputs/MediaInput";
 import PriceInput from "./inputs/PriceInput";
 import Toggle from "./inputs/Toggle";
 
-const Settings: React.FC<{
+const OFSettings: React.FC<{
   settings: UserOFSettings;
   setSettings: (handler: (prevState: UserOFSettings) => UserOFSettings) => void;
   saveSettings: () => Promise<void>;
@@ -193,4 +193,4 @@ const Settings: React.FC<{
   );
 };
 
-export default Settings;
+export default OFSettings;

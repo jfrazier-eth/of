@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import Login from "@/extension/components/Login";
-import Settings from "@/extension/components/Settings";
+import OFSettings from "@/extension/components/OFSettings";
 import { UserInfoContext } from "@/extension/context/user-context";
 import { UserOFSettingsContext } from "@/extension/context/user-of-settings";
 
@@ -22,7 +22,7 @@ export default function Page() {
     if (userInfo.value.isLoggedIn && settings.isReady) {
       return (
         <Main>
-          <Settings settings={settings.value} setSettings={setSettings} saveSettings={saveSettings} />
+          <OFSettings settings={settings.value} setSettings={setSettings} saveSettings={saveSettings} />
         </Main>
       );
     } else {
