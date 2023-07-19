@@ -82,7 +82,6 @@ router.post(
       case Site.OF: {
         const body = req.body as PostLoginRequestBody<Site.OF>;
         if ("params" in body && body.params && body.params.xbc && body.params.sess && body.params.authId) {
-          // TODO connect account to user
           await OFLogins.saveLogin({
             xbc: body.params.xbc,
             sess: body.params.sess,

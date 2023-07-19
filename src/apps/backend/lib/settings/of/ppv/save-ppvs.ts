@@ -27,7 +27,8 @@ export const savePPV = async (params: SaveOFPPVParams) => {
   });
 
   const insert = pgp.helpers.insert(pgPPV, columnSet);
-  const query = `${insert} ON CONFLICT (id) of DO UPDATE SET ${columns}`;
+  const excludedColumns = columns.map((col) => `${col} = EXCLUDED.${col}`).join(", ");
+  const query = `${insert} ON CONFLICT (id) of DO UPDATE SET ${excludedColumns}`;
 
   try {
     await pg.query(query);
