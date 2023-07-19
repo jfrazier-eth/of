@@ -1,11 +1,8 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
+
 import { getUser } from "../lib/users/get-user";
 
-export const checkUserAuth = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const checkUserAuth = async (req: Request, res: Response, next: NextFunction) => {
   const apiKey = req.headers["x-api-key"];
   const userId = req.headers["x-user-id"];
 

@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+
 import { config } from "../config";
 
 const isAuthorised = (req: Request, res: Response, next: NextFunction) => {

@@ -1,6 +1,7 @@
-import { PGUser } from "./types";
-import { transformPGUser } from "./pg-transformer";
 import { pg } from "@/backend/db/postgres";
+
+import { transformPGUser } from "./pg-transformer";
+import { PGUser } from "./types";
 
 export const getUserByFirebaseId = async (firebaseId: string) => {
   const query = "SELECT * from users WHERE firebase_auth_id = $1";
@@ -8,10 +9,7 @@ export const getUserByFirebaseId = async (firebaseId: string) => {
 
   const result = await pg.query<PGUser[]>(query, values);
 
-  console.assert(
-    result.length <= 1,
-    `Received multiple users with the same id! Query ${query} Values ${values}`
-  );
+  console.assert(result.length <= 1, `Received multiple users with the same id! Query ${query} Values ${values}`);
 
   if (result.length === 1) {
     return transformPGUser(result[0]);
@@ -25,10 +23,7 @@ export const getUser = async (id: string) => {
 
   const result = await pg.query<PGUser[]>(query, values);
 
-  console.assert(
-    result.length <= 1,
-    `Received multiple users with the same id! Query ${query} Values ${values}`
-  );
+  console.assert(result.length <= 1, `Received multiple users with the same id! Query ${query} Values ${values}`);
 
   if (result.length === 1) {
     return transformPGUser(result[0]);

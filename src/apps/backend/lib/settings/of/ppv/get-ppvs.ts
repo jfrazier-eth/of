@@ -1,12 +1,9 @@
-import { PGOFPPV } from "./types";
-import { transformPGOFPPV } from "./pg-transformer";
 import { pg } from "@/backend/db/postgres";
 
-export const getPPVs = async (options: {
-  userId: string;
-  siteUserId: string;
-  enabled?: boolean;
-}) => {
+import { transformPGOFPPV } from "./pg-transformer";
+import { PGOFPPV } from "./types";
+
+export const getPPVs = async (options: { userId: string; siteUserId: string; enabled?: boolean }) => {
   let query = `SELECT * from of_ppvs WHERE user_id = $1 AND site_user_id = $2`;
 
   const values = [options.userId, options.siteUserId];

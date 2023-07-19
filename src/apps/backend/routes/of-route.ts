@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import { generateResponse } from "../controllers/generate-response";
 import { getSettings, postSettings } from "../controllers/settings";
 

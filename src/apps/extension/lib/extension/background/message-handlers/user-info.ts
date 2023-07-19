@@ -1,4 +1,5 @@
 import { postLogin } from "@/extension/lib/api/login";
+
 import { UserInfoMessage } from "../../messages/index";
 import { Handler } from "./types";
 
@@ -26,19 +27,17 @@ interface StoredUserInfo {
 }
 
 const getCachedUser = async (uid: string) => {
-  const cachedUser = await new Promise<StoredUserInfo | null>(
-    (resolve, reject) => {
-      const key = `user-${uid}`;
-      chrome.storage.local.get(key, (result) => {
-        try {
-          const value = JSON.parse(result[key]) as StoredUserInfo;
-          resolve(value);
-        } catch (err) {
-          resolve(null);
-        }
-      });
-    }
-  );
+  const cachedUser = await new Promise<StoredUserInfo | null>((resolve, reject) => {
+    const key = `user-${uid}`;
+    chrome.storage.local.get(key, (result) => {
+      try {
+        const value = JSON.parse(result[key]) as StoredUserInfo;
+        resolve(value);
+      } catch (err) {
+        resolve(null);
+      }
+    });
+  });
 
   return cachedUser;
 };
@@ -55,10 +54,7 @@ const setCachedUser = async (user: StoredUserInfo) => {
   });
 };
 
-export const handleUserInfoMessage: Handler<UserInfoMessage> = async (
-  message,
-  context
-) => {
+export const handleUserInfoMessage: Handler<UserInfoMessage> = async (message, context) => {
   let user = await getCachedUser(message.data.uid);
 
   if (!user) {

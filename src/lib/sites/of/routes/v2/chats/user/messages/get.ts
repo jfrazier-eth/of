@@ -1,8 +1,6 @@
-import {
-  RequestError,
-  UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors";
+import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
 import { SessionContext } from "@/sites/of";
+
 import { ReceivedMessage } from "./types";
 
 const getPath = (userIdOfChat: string) => {
@@ -31,10 +29,7 @@ export interface GetMessagesResponseBody {
   hasMore: boolean;
 }
 
-export const get = async (
-  context: SessionContext,
-  options: GetMessagesOptions
-) => {
+export const get = async (context: SessionContext, options: GetMessagesOptions) => {
   const path = getPath(options.otherUserId);
   const searchParams = new URLSearchParams({
     limit: `10`, // has to be 10

@@ -1,10 +1,9 @@
-import { OFSettings, PGOFSettings } from "./types";
-import { transformPGOFSettings } from "./pg-transformer";
 import { pg } from "@/backend/db/postgres";
 
-export const getSettings = async (
-  siteUserId: string
-): Promise<OFSettings | null> => {
+import { transformPGOFSettings } from "./pg-transformer";
+import { OFSettings, PGOFSettings } from "./types";
+
+export const getSettings = async (siteUserId: string): Promise<OFSettings | null> => {
   const query = "SELECT * from of_settings WHERE site_user_id = $1";
   const values = [siteUserId];
   const result = await pg.query<PGOFSettings[]>(query, values);

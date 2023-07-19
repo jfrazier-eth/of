@@ -1,5 +1,6 @@
-import { config } from "../config";
 import mongoose from "mongoose";
+
+import { config } from "../config";
 
 const options = {
   useNewUrlParser: true,
@@ -8,7 +9,7 @@ const options = {
 
 const connection = mongoose.createConnection(
   config.mongo.connectionUrl,
-  options as unknown as mongoose.ConnectOptions // TODO it looks like useNewUrlParser and useUnifiedTopology are not in the mongoose.ConnectOptions type
+  (options as unknown) as mongoose.ConnectOptions // TODO it looks like useNewUrlParser and useUnifiedTopology are not in the mongoose.ConnectOptions type
 );
 
 connection.once("open", () => {

@@ -1,8 +1,6 @@
-import {
-  RequestError,
-  UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors";
+import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
 import { SessionContext } from "@/sites/of/context";
+
 import { getPath } from "./path";
 import { SentMessage } from "./types";
 
@@ -32,10 +30,7 @@ export interface PostMessagesOptions extends PostMessageBody {
 
 export type PostMessageResponseBody = SentMessage;
 
-export const post = async (
-  context: SessionContext,
-  options: PostMessagesOptions
-) => {
+export const post = async (context: SessionContext, options: PostMessagesOptions) => {
   const path = getPath(options.toUserId);
   const url = context.getUrl(path);
 

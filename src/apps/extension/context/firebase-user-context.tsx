@@ -1,14 +1,8 @@
-import {
-  ReactNode,
-  useEffect,
-  createContext,
-  useState,
-  useContext,
-} from "react";
-import { FirebaseAuthContext } from "./firebase-auth-context";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 
-import { Data } from "./data";
 import { sendMessage } from "../lib/extension/messages/send-message";
+import { Data } from "./data";
+import { FirebaseAuthContext } from "./firebase-auth-context";
 
 interface FirebaseUser {
   uid: string;
@@ -16,9 +10,7 @@ interface FirebaseUser {
   apiKey: string;
 }
 
-export const FirebaseUserContext = createContext<
-  Data<{ user: FirebaseUser | null }>
->({
+export const FirebaseUserContext = createContext<Data<{ user: FirebaseUser | null }>>({
   isReady: false,
 });
 
@@ -76,9 +68,5 @@ export const FirebaseUserProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [auth, setUser, sendMessage]);
 
-  return (
-    <FirebaseUserContext.Provider value={user}>
-      {children}
-    </FirebaseUserContext.Provider>
-  );
+  return <FirebaseUserContext.Provider value={user}>{children}</FirebaseUserContext.Provider>;
 };

@@ -1,4 +1,5 @@
 import { ServiceAccount } from "firebase-admin";
+
 import prodServiceAccount from "../../creds/firebase-prod.json";
 
 const getEnvVariable = (key: string) => {

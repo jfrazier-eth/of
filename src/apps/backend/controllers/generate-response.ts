@@ -1,7 +1,8 @@
-import { Response, Request } from "express";
-import { chatGptCompletion } from "./helper";
-import { userSettingsModel } from "../models/only-fans/user-settings";
+import { Request, Response } from "express";
+
 import { msgHistoryModel } from "../models/only-fans/message-history";
+import { userSettingsModel } from "../models/only-fans/user-settings";
+import { chatGptCompletion } from "./helper";
 
 interface ChatMessage {
   role: string;
@@ -18,11 +19,7 @@ function formatChat(chatArray: ChatArray): string {
   return chatStr;
 }
 
-const constructPayload = (
-  fanName: string,
-  scripts: string,
-  msgHistory: string
-) => {
+const constructPayload = (fanName: string, scripts: string, msgHistory: string) => {
   const messages: any[] = [];
 
   const emojis = "💦🥵💋";
@@ -89,11 +86,7 @@ const generateResponse = async (req: Request, res: Response) => {
 
     //generate response only if it isn't tipped msg
     if (!tipStatus.isTip) {
-      const payload = constructPayload(
-        req.body.fanName,
-        scripts,
-        conversationHistory
-      );
+      const payload = constructPayload(req.body.fanName, scripts, conversationHistory);
 
       let response = await chatGptCompletion(payload);
       response = await JSON.parse(response);

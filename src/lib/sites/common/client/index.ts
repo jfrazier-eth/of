@@ -1,11 +1,6 @@
 import { adapter as kyAdapter } from "./ky-adapter";
 import { mergeOptions } from "./merge-options";
-import {
-  ClientOptions,
-  RequestAdapter,
-  RequestOptions,
-  Response,
-} from "./types";
+import { ClientOptions, RequestAdapter, RequestOptions, Response } from "./types";
 
 export let adapter = kyAdapter;
 
@@ -13,19 +8,14 @@ export const setAdapter = (adapter: RequestAdapter<unknown, unknown>) => {
   adapter = kyAdapter;
 };
 
-export const request = async <ReqBody, ResBody>(
-  options: RequestOptions<ReqBody>
-): Promise<Response<ResBody>> => {
+export const request = async <ReqBody, ResBody>(options: RequestOptions<ReqBody>): Promise<Response<ResBody>> => {
   return (await adapter(options)) as Response<ResBody>;
 };
 
 export const getClient = (clientOptions: ClientOptions) => {
   return {
     clientOptions,
-    get: async <ResBody = unknown>(
-      url: string | URL,
-      options: Omit<RequestOptions, "method" | "url"> = {}
-    ) => {
+    get: async <ResBody = unknown>(url: string | URL, options: Omit<RequestOptions, "method" | "url"> = {}) => {
       return await request<unknown, ResBody>({
         ...mergeOptions(clientOptions, options),
         method: "GET",
@@ -34,10 +24,7 @@ export const getClient = (clientOptions: ClientOptions) => {
       });
     },
 
-    post: async <ResBody = unknown>(
-      url: string | URL,
-      options: Omit<RequestOptions, "method" | "url"> = {}
-    ) => {
+    post: async <ResBody = unknown>(url: string | URL, options: Omit<RequestOptions, "method" | "url"> = {}) => {
       return await request<unknown, ResBody>({
         ...mergeOptions(clientOptions, options),
         method: "POST",
@@ -46,10 +33,7 @@ export const getClient = (clientOptions: ClientOptions) => {
       });
     },
 
-    put: async <ResBody = unknown>(
-      url: string | URL,
-      options: Omit<RequestOptions, "method" | "url"> = {}
-    ) => {
+    put: async <ResBody = unknown>(url: string | URL, options: Omit<RequestOptions, "method" | "url"> = {}) => {
       return await request<unknown, ResBody>({
         ...mergeOptions(clientOptions, options),
         method: "PUT",
@@ -58,10 +42,7 @@ export const getClient = (clientOptions: ClientOptions) => {
       });
     },
 
-    patch: async <ResBody = unknown>(
-      url: string | URL,
-      options: Omit<RequestOptions, "method" | "url"> = {}
-    ) => {
+    patch: async <ResBody = unknown>(url: string | URL, options: Omit<RequestOptions, "method" | "url"> = {}) => {
       return await request<unknown, ResBody>({
         ...mergeOptions(clientOptions, options),
         method: "PATCH",
@@ -70,10 +51,7 @@ export const getClient = (clientOptions: ClientOptions) => {
       });
     },
 
-    delete: async <ResBody = unknown>(
-      url: string | URL,
-      options: Omit<RequestOptions, "method" | "url"> = {}
-    ) => {
+    delete: async <ResBody = unknown>(url: string | URL, options: Omit<RequestOptions, "method" | "url"> = {}) => {
       return await request<unknown, ResBody>({
         ...mergeOptions(clientOptions, options),
         method: "DELETE",

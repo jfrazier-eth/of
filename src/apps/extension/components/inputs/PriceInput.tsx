@@ -8,7 +8,7 @@ interface PriceInputProps {
 const PriceInput: React.FC<PriceInputProps> = ({ price, setPrice }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPrice(Number(e.target.value));
-  }
+  };
   return (
     <div>
       <div className="relative mt-2 rounded-md shadow-sm">
@@ -32,8 +32,7 @@ const PriceInput: React.FC<PriceInputProps> = ({ price, setPrice }) => {
         </div>
       </div>
     </div>
-  )
-}
-
+  );
+};
 
 export default PriceInput;

@@ -1,15 +1,9 @@
-import React, {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { Data } from "./data";
+import React, { ReactNode, createContext, useContext, useEffect, useState } from "react";
 
-import { FirebaseUserContext } from "./firebase-user-context";
-import { UserInfoMessage, sendMessage } from "../lib/extension/messages/index";
 import { UserInfo } from "../lib/extension/background/message-handlers/user-info";
+import { UserInfoMessage, sendMessage } from "../lib/extension/messages/index";
+import { Data } from "./data";
+import { FirebaseUserContext } from "./firebase-user-context";
 
 const UserInfoContext = createContext<Data<UserInfo>>({
   isReady: false,
@@ -61,11 +55,7 @@ const UserInfoProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
   }, [sendMessage, setValue, firebaseUser, firebaseUser.isReady]);
 
-  return (
-    <UserInfoContext.Provider value={value}>
-      {children}
-    </UserInfoContext.Provider>
-  );
+  return <UserInfoContext.Provider value={value}>{children}</UserInfoContext.Provider>;
 };
 
 export { UserInfoContext, UserInfoProvider };

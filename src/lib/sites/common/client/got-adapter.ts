@@ -1,4 +1,5 @@
 import got from "got";
+
 import { RequestAdapter, Response } from "./types";
 
 export const adapter: RequestAdapter<unknown, unknown> = async (request) => {

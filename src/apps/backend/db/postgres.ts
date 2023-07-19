@@ -1,4 +1,5 @@
 import PgPromise from "pg-promise";
+
 import { config } from "../config";
 
 export const pgp = PgPromise();

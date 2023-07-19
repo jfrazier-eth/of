@@ -1,7 +1,8 @@
+import { Request, Response, Router } from "express";
+
 import { checkUserAuth } from "@/backend/controllers/user-auth";
 import { Site } from "@/backend/lib/accounts";
-import { getLogin, LoginParamsBySite } from "@/backend/lib/logins/get-login";
-import { Request, Response, Router } from "express";
+import { LoginParamsBySite, getLogin } from "@/backend/lib/logins/get-login";
 
 const router: Router = Router();
 
@@ -18,12 +19,7 @@ interface GetLoginResponseBody<S extends Site> {
 router.get(
   "/api/user/:userId/sites/:site/login",
   async (
-    req: Request<
-      { userId: string; site: Site },
-      null,
-      null,
-      GetLoginQueryParams
-    >,
+    req: Request<{ userId: string; site: Site }, null, null, GetLoginQueryParams>,
     res: Response<GetLoginResponseBody<Site> | { message: string }>
   ) => {
     const site = req.params.site;

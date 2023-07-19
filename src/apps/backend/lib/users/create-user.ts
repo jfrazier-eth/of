@@ -1,10 +1,9 @@
-import { AccountParams, createAccount } from "../accounts/create-account";
-
-import { User } from "./types";
-
-import { transformUser } from "./pg-transformer";
-import { uid } from "@/utils/uid";
 import { pg, pgp } from "@/backend/db/postgres";
+import { uid } from "@/utils/uid";
+
+import { AccountParams, createAccount } from "../accounts/create-account";
+import { transformUser } from "./pg-transformer";
+import { User } from "./types";
 
 export interface UserParams {
   name: string;

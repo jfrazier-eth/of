@@ -17,9 +17,7 @@ export const getActiveTab = async () => {
   return tabs[0] ?? null;
 };
 
-export const handleActiveTabMessage: Handler<ActiveTabMessage> = async (
-  message
-) => {
+export const handleActiveTabMessage: Handler<ActiveTabMessage> = async (message) => {
   const activeTab = await getActiveTab();
 
   if (activeTab.id) {

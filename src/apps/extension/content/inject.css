@@ -15,9 +15,7 @@
   line-height: 20px;
   color: #fefefe;
   background: #00aff0;
-  transition: opacity 0.15s ease, 
-  background-color 0.15s ease,
-  box-shadow 0.15s ease;
+  transition: opacity 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
   display: inline-block;
   text-align: center;
   text-transform: uppercase;

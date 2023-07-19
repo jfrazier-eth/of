@@ -1,8 +1,6 @@
-import {
-  RequestError,
-  UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors";
+import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
 import { SessionContext } from "@/sites/of/context";
+
 import { GetMeResponseBody } from "./types";
 
 const path = "/api2/v2/users/me";

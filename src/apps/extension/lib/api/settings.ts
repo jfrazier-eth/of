@@ -7,10 +7,7 @@ export async function getSettings(context: Context) {
     throw new Error("User not logged in");
   }
 
-  const url = context.getUrl(
-    path,
-    new URLSearchParams({ userId: context.user.userId })
-  );
+  const url = context.getUrl(path, new URLSearchParams({ userId: context.user.userId }));
   const headers = context.getHeaders();
   const response = await fetch(url, {
     method: "GET",

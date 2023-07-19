@@ -1,5 +1,6 @@
 import { cert } from "firebase-admin/app";
 import { App, initializeApp } from "firebase-admin/app";
+
 import { config } from "../config";
 
 let app: App;

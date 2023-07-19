@@ -1,11 +1,7 @@
 import { Context } from "@/sites/common/context";
-import {
-  RequestError,
-  UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors";
+import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
 
-export const OF_RULES_EP =
-  "https://raw.githubusercontent.com/deviint/onlyfans-dynamic-rules/main/dynamicRules.json";
+export const OF_RULES_EP = "https://raw.githubusercontent.com/deviint/onlyfans-dynamic-rules/main/dynamicRules.json";
 
 export const OF_RULES_TTS = 5 * 60_000;
 
@@ -33,16 +29,10 @@ export interface OFDynamicParams {
   isCurrent: boolean;
 }
 
-let ofDynamicParams: { value: OFDynamicParams; updatedAt: number } | null =
-  null;
+let ofDynamicParams: { value: OFDynamicParams; updatedAt: number } | null = null;
 
-export async function getOFDynamicParams(
-  context: Context
-): Promise<OFDynamicParams> {
-  if (
-    !ofDynamicParams ||
-    ofDynamicParams.updatedAt < Date.now() - OF_RULES_TTS
-  ) {
+export async function getOFDynamicParams(context: Context): Promise<OFDynamicParams> {
+  if (!ofDynamicParams || ofDynamicParams.updatedAt < Date.now() - OF_RULES_TTS) {
     const params = await fetchOFDynamicParams(context);
     ofDynamicParams = {
       value: params,
@@ -53,9 +43,7 @@ export async function getOFDynamicParams(
   return ofDynamicParams.value;
 }
 
-export async function fetchOFDynamicParams(
-  context: Context
-): Promise<OFDynamicParams> {
+export async function fetchOFDynamicParams(context: Context): Promise<OFDynamicParams> {
   const url = new URL(OF_RULES_EP);
   try {
     const response = await context.client.get<OFDynamicParamsResponse>(url);

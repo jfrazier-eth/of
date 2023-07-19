@@ -1,9 +1,11 @@
 import { Queue, Worker } from "bullmq";
-import { redis } from "../db/redis";
-import { pg } from "../db/postgres";
-import { PGOFSettings } from "../lib/settings/of/types";
-import * as Lib from "../lib/index";
+
 import { ONE_MIN } from "@/utils/constants";
+
+import { pg } from "../db/postgres";
+import { redis } from "../db/redis";
+import * as Lib from "../lib/index";
+import { PGOFSettings } from "../lib/settings/of/types";
 
 interface DataType {
   timestamp: number;
@@ -32,12 +34,9 @@ const triggerQueue = new Queue<DataType, ResultType>(triggerQueueName, {
   connection: redis.duplicate(),
 });
 
-const processingQueue = new Queue<ProcessingDataType, ProcessingResultType>(
-  processingQueueName,
-  {
-    connection: redis.duplicate(),
-  }
-);
+const processingQueue = new Queue<ProcessingDataType, ProcessingResultType>(processingQueueName, {
+  connection: redis.duplicate(),
+});
 
 const triggerWorker = new Worker<DataType, ResultType>(
   triggerQueueName,
@@ -49,10 +48,7 @@ const triggerWorker = new Worker<DataType, ResultType>(
     }
     type ResponseType = Pick<
       PGOFSettings,
-      | "user_id"
-      | "site_user_id"
-      | "welcome_message_id"
-      | "welcome_message_enabled"
+      "user_id" | "site_user_id" | "welcome_message_id" | "welcome_message_enabled"
     >;
     const query =
       "SELECT (user_id, site_user_id, welcome_message_id, welcome_message_enabled) FROM of_settings WHERE welcome_message_enabled = true";
@@ -85,15 +81,10 @@ const triggerWorker = new Worker<DataType, ResultType>(
 const processingWorker = new Worker<ProcessingDataType, ProcessingResultType>(
   processingQueueName,
   async (job) => {
-    const welcomeMessage = await Lib.Settings.OF.WelcomeMessages.getMessage(
-      job.data.welcomeMessageId
-    );
+    const welcomeMessage = await Lib.Settings.OF.WelcomeMessages.getMessage(job.data.welcomeMessageId);
 
     if (!welcomeMessage) {
-      console.warn(
-        "No welcome message found for id",
-        job.data.welcomeMessageId
-      );
+      console.warn("No welcome message found for id", job.data.welcomeMessageId);
       return {};
     }
 

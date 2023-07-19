@@ -1,15 +1,12 @@
-import { onMessage } from "../../messages/index";
+import { Context } from "@/extension/lib/api/context";
 
+import { onMessage } from "../../messages/index";
 import { handleActiveTabMessage } from "./active-tab";
 import { handleGenerateResponseMessage } from "./generate-response";
+import { handleGetOFSettingsMessage, handleSaveOFSettingsMessage } from "./of-settings";
 import { Handler } from "./types";
 import { handleUserInfoMessage } from "./user-info";
 import { handleUserSettingsMessage } from "./user-settings";
-import {
-  handleGetOFSettingsMessage,
-  handleSaveOFSettingsMessage,
-} from "./of-settings";
-import { Context } from "@/extension/lib/api/context";
 
 export const MessageHandlers = {
   USER_INFO: handleUserInfoMessage,

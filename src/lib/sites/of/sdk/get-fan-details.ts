@@ -19,10 +19,7 @@ export async function getFanStats(context: SessionContext, fanHandle: string) {
   }
 }
 
-export async function getNewFans(
-  context: SessionContext,
-  dates: { startDate: string; endDate: string }
-) {
+export async function getNewFans(context: SessionContext, dates: { startDate: string; endDate: string }) {
   try {
     const newFans = await Routes.V2.Users.fan.getNewFans(context, dates);
     return newFans;

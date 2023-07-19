@@ -1,9 +1,11 @@
-import { Browsers } from "./index";
-import { CookieJar } from "tough-cookie";
 import { HttpsProxyAgent } from "https-proxy-agent";
+import { CookieJar } from "tough-cookie";
+
+import { clone } from "@/utils/clone";
+
 import { Client, getClient } from "./client/index";
 import { ClientOptions } from "./client/types";
-import { clone } from "@/utils/clone";
+import { Browsers } from "./index";
 
 export interface ContextOptions {
   baseUrl: string | URL;

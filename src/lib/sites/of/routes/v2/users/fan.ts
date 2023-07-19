@@ -1,8 +1,6 @@
-import {
-  RequestError,
-  UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors";
+import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
 import { SessionContext } from "@/sites/of/context";
+
 import { FanStatsResponseBody, NewFansResponseBody } from "./types";
 
 export const getFanHandle = async (context: SessionContext, fanId: string) => {
@@ -35,10 +33,7 @@ export const getFanHandle = async (context: SessionContext, fanId: string) => {
   }
 };
 
-export const getFanStats = async (
-  context: SessionContext,
-  fanHandle: string
-) => {
+export const getFanStats = async (context: SessionContext, fanHandle: string) => {
   const path = `/api2/v2/users/${fanHandle}`;
   const url = context.getUrl(path);
   const otherHeaders = {
@@ -66,8 +61,7 @@ export const getFanStats = async (
           subscribedAt: response.body.subscribedOnData.subscribeAt,
           renewedAt: response.body.subscribedOnData.renewedAt,
           subscriptionDuration: response.body.subscribedOnData.duration,
-          activeSubscription:
-            response.body.subscribedOnData.hasActivePaidSubscriptions,
+          activeSubscription: response.body.subscribedOnData.hasActivePaidSubscriptions,
         },
         amountSpent: {
           subscribePrice: response.body.subscribedOnData.subscribePrice,
@@ -86,10 +80,7 @@ export const getFanStats = async (
   }
 };
 
-export const getNewFans = async (
-  context: SessionContext,
-  dates: { startDate: string; endDate: string }
-) => {
+export const getNewFans = async (context: SessionContext, dates: { startDate: string; endDate: string }) => {
   const path = "/api2/v2/subscriptions/subscribers/latest";
   const otherHeaders = {
     Host: "onlyfans.com",
@@ -131,8 +122,7 @@ export const getNewFans = async (
         const currentFans = response.body.users.map((fan) => ({
           id: fan.id,
           name: fan.name,
-          latestSubscriptionDate:
-            fan.subscribedOnData?.subscribes?.[0]?.startDate ?? null,
+          latestSubscriptionDate: fan.subscribedOnData?.subscribes?.[0]?.startDate ?? null,
           totalSpent: fan.subscribedOnData.totalSumm,
           isExpired: fan.subscribedOnExpiredNow,
         }));

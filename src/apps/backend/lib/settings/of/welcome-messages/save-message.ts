@@ -1,12 +1,10 @@
-import { OFWelcomeMessage } from "./types";
-import { transformOFWelcomeMessage } from "./pg-transform";
 import { pg, pgp } from "@/backend/db/postgres";
 import { uid } from "@/utils/uid";
 
-export type SaveOFWelcomeMessageParams = Pick<
-  OFWelcomeMessage,
-  "message" | "siteUserId" | "userId"
-> & {
+import { transformOFWelcomeMessage } from "./pg-transform";
+import { OFWelcomeMessage } from "./types";
+
+export type SaveOFWelcomeMessageParams = Pick<OFWelcomeMessage, "message" | "siteUserId" | "userId"> & {
   createdAt?: OFWelcomeMessage["createdAt"];
   updatedAt?: OFWelcomeMessage["updatedAt"];
   id?: OFWelcomeMessage["id"];

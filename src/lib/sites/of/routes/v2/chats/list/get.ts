@@ -1,12 +1,7 @@
-import {
-  RequestError,
-  UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors";
+import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
 import { SessionContext } from "@/sites/of/context";
-import {
-  GetUnreadMessagesResponseBody,
-  GetUnreadMessagesOptions,
-} from "./types";
+
+import { GetUnreadMessagesOptions, GetUnreadMessagesResponseBody } from "./types";
 
 const getHeaders = (userId: string) => {
   const headers = {
@@ -17,10 +12,7 @@ const getHeaders = (userId: string) => {
 
   return headers;
 };
-export const get = async (
-  context: SessionContext,
-  options: GetUnreadMessagesOptions
-) => {
+export const get = async (context: SessionContext, options: GetUnreadMessagesOptions) => {
   const searchParams = new URLSearchParams({
     limit: `${options.limit ?? 10}`,
     offset: `${options.offset ?? 0}`,
@@ -39,12 +31,9 @@ export const get = async (
       ...contextHeaders,
     };
 
-    const response = await context.client.get<GetUnreadMessagesResponseBody>(
-      url,
-      {
-        headers: reqHeaders,
-      }
-    );
+    const response = await context.client.get<GetUnreadMessagesResponseBody>(url, {
+      headers: reqHeaders,
+    });
 
     if (response.status === 200) {
       return response.body;

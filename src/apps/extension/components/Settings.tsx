@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import Toggle from "./inputs/Toggle";
-import PriceInput from "./inputs/PriceInput";
-import MediaInput from "./inputs/MediaInput";
-import { Loader } from "./Loader";
+import React, { useEffect, useState } from "react";
+
 import { LoggedInUser } from "../lib/extension/background/message-handlers/user-info";
 import { sendMessage } from "../lib/extension/messages/send-message";
+import { Loader } from "./Loader";
+import MediaInput from "./inputs/MediaInput";
+import PriceInput from "./inputs/PriceInput";
+import Toggle from "./inputs/Toggle";
 
 function countWords(script: string) {
   script = script.trim();
@@ -97,9 +98,7 @@ const Settings: React.FC<{ user: LoggedInUser }> = (props) => {
         <div className="flex flex-col items-start justify-start h-screen w-full">
           <div className="bg-primary text-white w-full text-left p-4">
             <h1 className="text-base font-bold">Settings</h1>
-            <p className="text-sm mt-2">
-              Change the settings below to change how the AI performs
-            </p>
+            <p className="text-sm mt-2">Change the settings below to change how the AI performs</p>
           </div>
           <div className="p-4 text-gray-900 w-full ">
             <div className="flex">
@@ -111,10 +110,7 @@ const Settings: React.FC<{ user: LoggedInUser }> = (props) => {
             <label htmlFor="price" className={labelClass}>
               Spending Threshold
             </label>
-            <PriceInput
-              price={spendingThreshold}
-              setPrice={setSpendingThreshold}
-            />
+            <PriceInput price={spendingThreshold} setPrice={setSpendingThreshold} />
             <label htmlFor="script" className={labelClass}>
               <span>Sample Scripts for Training</span>
             </label>
@@ -127,8 +123,7 @@ const Settings: React.FC<{ user: LoggedInUser }> = (props) => {
             ></textarea>
             {scriptWordCount > 700 && (
               <div className="text-red-500 text-sm mt-2">
-                The current script is {scriptWordCount} words, please keep it
-                under 700 words.
+                The current script is {scriptWordCount} words, please keep it under 700 words.
               </div>
             )}
             <div className="mt-4">
@@ -136,10 +131,7 @@ const Settings: React.FC<{ user: LoggedInUser }> = (props) => {
                 <label className={labelClass}>
                   <span className="mr-2">Welcome Message default</span>
                 </label>
-                <Toggle
-                  enabled={welcomeMessageDefault}
-                  setEnabled={toggleWelcomeMessageDefault}
-                />
+                <Toggle enabled={welcomeMessageDefault} setEnabled={toggleWelcomeMessageDefault} />
               </div>
               <label className={`flex flex-col ${labelClass}`}>
                 <span className="mr-2">Select an image</span>

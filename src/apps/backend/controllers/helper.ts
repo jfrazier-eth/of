@@ -1,5 +1,6 @@
 //These are universal and application independent functions
 import axios from "axios";
+
 import { config } from "../config";
 
 const chatGptEndPoint = "https://api.openai.com/v1/chat/completions";

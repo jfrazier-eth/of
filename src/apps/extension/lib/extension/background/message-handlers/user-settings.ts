@@ -35,9 +35,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   },
 };
 
-export const handleUserSettingsMessage: Handler<UserSettingsMessage> = async (
-  message
-) => {
+export const handleUserSettingsMessage: Handler<UserSettingsMessage> = async (message) => {
   return Promise.resolve({
     kind: "USER_SETTINGS",
     data: DEFAULT_USER_SETTINGS,

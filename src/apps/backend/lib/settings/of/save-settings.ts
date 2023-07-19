@@ -1,11 +1,11 @@
 import { pg, pgp } from "@/backend/db/postgres";
+
 import { transformOFSettings } from "./pg-transformer";
 import { OFSettings } from "./types";
 
-export type SaveOFSettingsParams = Pick<
-  OFSettings,
-  "userId" | "siteUserId" | "settings" | "updatedAt"
-> & { createdAt?: OFSettings["createdAt"] };
+export type SaveOFSettingsParams = Pick<OFSettings, "userId" | "siteUserId" | "settings" | "updatedAt"> & {
+  createdAt?: OFSettings["createdAt"];
+};
 
 export const saveSettings = async (params: SaveOFSettingsParams) => {
   const now = Date.now();

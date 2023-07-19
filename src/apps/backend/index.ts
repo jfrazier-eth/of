@@ -1,14 +1,14 @@
-import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
+import express, { NextFunction, Request, Response } from "express";
+
+import { config } from "./config";
+import { checkUserAuth } from "./controllers/user-auth";
 import "./db/mongo";
 import "./db/redis";
-
+import { router as siteLoginRouter } from "./routes/api/auth";
+import { router as login } from "./routes/api/login";
 //routes
 import { ofRoute } from "./routes/of-route";
-import { config } from "./config";
-import { router as login } from "./routes/api/login";
-import { checkUserAuth } from "./controllers/user-auth";
-import { router as siteLoginRouter } from "./routes/api/auth";
 
 const app = express();
 

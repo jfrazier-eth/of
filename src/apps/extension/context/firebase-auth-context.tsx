@@ -1,5 +1,5 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
 import { Auth } from "firebase/auth";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD7u12-_sxcnbWO198olpP_rrHcagFUDGY",
@@ -28,14 +28,7 @@ const FirebaseAuthProvider = ({ children }: { children: ReactNode }) => {
   const [app, setApp] = useState<any | null>(null);
   const [auth, setAuth] = useState<Auth | null>(null);
   useEffect(() => {
-    if (
-      !!window &&
-      !ui &&
-      !app &&
-      !auth &&
-      "firebaseui" in window &&
-      "firebase" in window
-    ) {
+    if (!!window && !ui && !app && !auth && "firebaseui" in window && "firebase" in window) {
       const windowFirebase = window.firebase as any;
       const firebaseApp: any = windowFirebase.initializeApp(firebaseConfig);
       const auth = windowFirebase.auth();

@@ -1,7 +1,7 @@
-import { postAuth } from "../api/site-auth";
-import { Auth } from "./types";
 import { Context } from "../api/context";
+import { postAuth } from "../api/site-auth";
 import { API_BASE_URL } from "../constants";
+import { Auth } from "./types";
 
 export async function saveAuth(auth: Auth) {
   const cachedAuth = await getCachedAuth(auth.xbc);

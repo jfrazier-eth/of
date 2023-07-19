@@ -31,6 +31,4 @@ export const getDefaultClientOptions = (): ClientOptions => {
   };
 };
 
-export type RequestAdapter<ReqBody, ResBody> = (
-  request: RequestOptions<ReqBody>
-) => Promise<Response<ResBody>>;
+export type RequestAdapter<ReqBody, ResBody> = (request: RequestOptions<ReqBody>) => Promise<Response<ResBody>>;
