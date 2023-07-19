@@ -1,5 +1,5 @@
-import { RequestError } from "@/sites/common/errors/request-errors.js";
-import { LoggedInContext } from "@/sites/fansly/context.js";
+import { RequestError } from "@/sites/common/errors/request-errors";
+import { LoggedInContext } from "@/sites/fansly/context";
 
 const path = "/api/v1/account";
 

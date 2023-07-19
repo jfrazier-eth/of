@@ -1,6 +1,6 @@
 import ky from "ky";
-import { RequestAdapter, Response, getDefaultClientOptions } from "./types.js";
-import { mergeOptions } from "./merge-options.js";
+import { RequestAdapter, Response, getDefaultClientOptions } from "./types";
+import { mergeOptions } from "./merge-options";
 
 export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
   const url = request.url.toString();

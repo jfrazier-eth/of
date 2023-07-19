@@ -1,4 +1,4 @@
-import { PGUser, User } from "./types.js";
+import { PGUser, User } from "./types";
 
 export const transformPGUser = (pgUser: PGUser): User => {
   return {

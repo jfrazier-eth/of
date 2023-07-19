@@ -1,4 +1,4 @@
-import { Account, PGAccount } from "./types.js";
+import { Account, PGAccount } from "./types";
 
 export const transformPGAccount = (pgAccount: PGAccount): Account => {
   return {

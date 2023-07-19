@@ -1,4 +1,4 @@
-import { Routes, SessionContext } from "../index.js";
+import { Routes, SessionContext } from "../index";
 
 export async function sendMessage(
   context: SessionContext,

@@ -1,4 +1,4 @@
-import { OFPPV, PGOFPPV } from "./types.js";
+import { OFPPV, PGOFPPV } from "./types";
 
 export const transformPGOFPPV = (pgPPV: PGOFPPV): OFPPV => ({
   id: pgPPV.id,

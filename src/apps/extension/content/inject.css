@@ -1,0 +1,42 @@
+.seductiveBlurred {
+  filter: blur(4px);
+  -webkit-filter: blur(4px);
+}
+
+.seductiveUnBlurred:hover {
+  filter: blur(0px);
+  -webkit-filter: blur(0px);
+}
+
+.generate-button {
+  border: none;
+  padding: 8px 18px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #fefefe;
+  background: #00aff0;
+  transition: opacity 0.15s ease, 
+  background-color 0.15s ease,
+  box-shadow 0.15s ease;
+  display: inline-block;
+  text-align: center;
+  text-transform: uppercase;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border: none;
+  cursor: pointer;
+  min-width: none !important;
+  margin-right: 1rem;
+  border-radius: 1000px;
+  font-weight: 500;
+}
+
+.generate-button-img {
+  width: 20px;
+  height: 20px;
+  filter: none !important;
+  min-width: none !important;
+}

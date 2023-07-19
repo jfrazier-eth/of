@@ -1,4 +1,4 @@
-import { OFWelcomeMessage, PGOFWelcomeMessage } from "./types.js";
+import { OFWelcomeMessage, PGOFWelcomeMessage } from "./types";
 
 export const transformPGOFWelcomeMessage = (pgMessage: PGOFWelcomeMessage) => {
   const message: OFWelcomeMessage = {

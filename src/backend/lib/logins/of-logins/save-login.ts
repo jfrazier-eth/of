@@ -1,6 +1,6 @@
-import { pg, pgp } from "@/backend/db/postgres.js";
-import { transformOFLogin } from "./pg-transformer.js";
-import { OFLogin } from "./types.js";
+import { pg, pgp } from "@/backend/db/postgres";
+import { transformOFLogin } from "./pg-transformer";
+import { OFLogin } from "./types";
 
 export type SaveLoginParams = {
   xbc: string;

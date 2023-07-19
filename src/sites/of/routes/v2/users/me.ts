@@ -1,9 +1,9 @@
-import { SessionContext } from "@/sites/of/context.js";
+import { SessionContext } from "@/sites/of/context";
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors.js";
-import { GetMeResponseBody } from "./types.js";
+} from "@/sites/common/errors/request-errors";
+import { GetMeResponseBody } from "./types";
 
 const path = "/api2/v2/users/me";
 

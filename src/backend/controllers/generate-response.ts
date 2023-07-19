@@ -1,7 +1,7 @@
 import { Response, Request } from "express";
-import { chatGptCompletion } from "./helper.js";
-import { userSettingsModel } from "../models/only-fans/user-settings.js";
-import { msgHistoryModel } from "../models/only-fans/message-history.js";
+import { chatGptCompletion } from "./helper";
+import { userSettingsModel } from "../models/only-fans/user-settings";
+import { msgHistoryModel } from "../models/only-fans/message-history";
 
 interface ChatMessage {
   role: string;

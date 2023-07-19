@@ -1,9 +1,9 @@
 import { Queue, Worker } from "bullmq";
-import { redis } from "../db/redis.js";
-import { pg } from "../db/postgres.js";
-import { PGOFSettings } from "../lib/settings/of/types.js";
-import { ONE_MIN } from "@/utils/constants.js";
-import * as Lib from "../lib/index.js";
+import { redis } from "../db/redis";
+import { pg } from "../db/postgres";
+import { PGOFSettings } from "../lib/settings/of/types";
+import { ONE_MIN } from "@/utils/constants";
+import * as Lib from "../lib/index";
 
 interface DataType {
   timestamp: number;

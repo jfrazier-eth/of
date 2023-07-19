@@ -1,10 +1,10 @@
-import { getApp } from "@/backend/db/firebase.js";
-import { createUser } from "@/backend/lib/users/create-user.js";
-import { getUser, getUserByFirebaseId } from "@/backend/lib/users/get-user.js";
+import { getApp } from "@/backend/db/firebase";
+import { createUser } from "@/backend/lib/users/create-user";
+import { getUserByFirebaseId } from "@/backend/lib/users/get-user";
 import { Request, Response, Router } from "express";
 import { getAuth } from "firebase-admin/auth";
 
-const router = Router();
+const router: Router = Router();
 
 router.post(
   "/",

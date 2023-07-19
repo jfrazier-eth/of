@@ -1,5 +1,5 @@
 import got from "got";
-import { RequestAdapter, Response } from "./types.js";
+import { RequestAdapter, Response } from "./types";
 
 export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
   const url = request.url.toString();
@@ -11,7 +11,7 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
       responseType: request.responseType,
       cookieJar: request.cookieJar,
       headers: request.headers,
-      json: request.json,
+      body: request.json ? JSON.stringify(request.json) : undefined,
       agent: {
         https: request.httpsAgent,
       },

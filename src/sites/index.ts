@@ -1,2 +1,2 @@
-export * as OF from "./of/index.js";
-export * as Fansly from "./fansly/index.js";
+export * as OF from "./of/index";
+export * as Fansly from "./fansly/index";

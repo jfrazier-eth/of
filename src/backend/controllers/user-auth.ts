@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { getUser } from "../lib/users/get-user.js";
+import { getUser } from "../lib/users/get-user";
 
 export const checkUserAuth = async (
   req: Request,

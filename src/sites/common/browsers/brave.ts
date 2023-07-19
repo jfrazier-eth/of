@@ -1,4 +1,4 @@
-import { Browser } from "./types.js";
+import { Browser } from "./types";
 
 export const headers = {
   "User-Agent":

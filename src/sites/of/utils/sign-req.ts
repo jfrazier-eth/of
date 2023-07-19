@@ -1,5 +1,5 @@
 import { createHash } from "crypto";
-import { OFDynamicParams } from "./of-dynamic-params.js";
+import { OFDynamicParams } from "./of-dynamic-params";
 
 /**
  * Encodes the OF `sign` header for a request.

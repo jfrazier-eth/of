@@ -1,6 +1,6 @@
-import { ContextOptions } from "@/sites/common/context.js";
-import { Browsers, Context } from "@/sites/common/index.js";
-import { clone } from "@/utils/clone.js";
+import { ContextOptions } from "@/sites/common/context";
+import { Browsers, Context } from "@/sites/common/index";
+import { clone } from "@/utils/clone";
 
 export interface UserFanslyParams {
   userId: string;

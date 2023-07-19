@@ -1,0 +1,30 @@
+{
+  "name": "OF EXT",
+  "description": "",
+  "version": "1.0",
+  "manifest_version": 2,
+  "permissions": [
+    "cookies",
+    "scripting",
+    "storage",
+    "webRequest",
+    "http://onlyfans.com/*",
+    "https://onlyfans.com/*"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_popup": "index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://onlyfans.com/*", "https://onlyfans.com/*"],
+      "js": ["content.js"],
+      "css": ["inject.css"]
+    }
+  ],
+  "content_security_policy": "script-src 'self' https://www.gstatic.com/; object-src 'self'",
+  "web_accessible_resources": ["generate.svg"]
+}

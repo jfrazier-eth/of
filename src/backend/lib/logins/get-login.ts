@@ -1,5 +1,5 @@
-import { Site } from "../accounts/types.js";
-import { OFLogin, getLogin as getOFLogin } from "./of-logins/index.js";
+import { Site } from "../accounts/types";
+import { OFLogin, getLogin as getOFLogin } from "./of-logins/index";
 
 export interface GetLoginParams {
   site: Site;

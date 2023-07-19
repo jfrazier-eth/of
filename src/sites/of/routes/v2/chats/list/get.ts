@@ -1,13 +1,13 @@
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors.js";
-import { SessionContext } from "@/sites/of/context.js";
+} from "@/sites/common/errors/request-errors";
+import { SessionContext } from "@/sites/of/context";
 
 import {
   GetUnreadMessagesResponseBody,
   GetUnreadMessagesOptions,
-} from "./types.js";
+} from "./types";
 
 const getHeaders = (userId: string) => {
   const headers = {

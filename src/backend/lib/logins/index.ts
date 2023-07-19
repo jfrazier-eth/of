@@ -1,1 +1,1 @@
-export * as OFLogins from "./of-logins/index.js";
+export * as OFLogins from "./of-logins/index";

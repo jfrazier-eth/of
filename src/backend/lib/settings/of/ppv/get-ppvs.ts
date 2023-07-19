@@ -1,6 +1,6 @@
-import { pg } from "@/backend/db/postgres.js";
-import { PGOFPPV } from "./types.js";
-import { transformPGOFPPV } from "./pg-transformer.js";
+import { pg } from "@/backend/db/postgres";
+import { PGOFPPV } from "./types";
+import { transformPGOFPPV } from "./pg-transformer";
 
 export const getPPVs = async (options: {
   userId: string;

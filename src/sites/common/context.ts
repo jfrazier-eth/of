@@ -1,9 +1,9 @@
-import { clone } from "@/utils/clone.js";
-import { Browsers } from "./index.js";
+import { clone } from "@/utils/clone";
+import { Browsers } from "./index";
 import { CookieJar } from "tough-cookie";
 import { HttpsProxyAgent } from "https-proxy-agent";
-import { Client, getClient } from "./client/index.js";
-import { ClientOptions } from "./client/types.js";
+import { Client, getClient } from "./client/index";
+import { ClientOptions } from "./client/types";
 
 export interface ContextOptions {
   baseUrl: string | URL;

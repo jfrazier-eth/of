@@ -1,9 +1,9 @@
-import { SessionContext } from "@/sites/of/context.js";
+import { SessionContext } from "@/sites/of/context";
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors.js";
-import { FanStatsResponseBody, NewFansResponseBody } from "./types.js";
+} from "@/sites/common/errors/request-errors";
+import { FanStatsResponseBody, NewFansResponseBody } from "./types";
 
 export const getFanHandle = async (context: SessionContext, fanId: string) => {
   const otherHeaders = {

@@ -1,9 +1,9 @@
 import {
   RequestError,
   UnexpectedStatusCodeError,
-} from "@/sites/common/errors/request-errors.js";
-import { SessionContext } from "@/sites/of/context.js";
-import { ReceivedMessage } from "./types.js";
+} from "@/sites/common/errors/request-errors";
+import { SessionContext } from "@/sites/of/context";
+import { ReceivedMessage } from "./types";
 
 const getPath = (userIdOfChat: string) => {
   return `/api2/v2/chats/${userIdOfChat}/messages`;

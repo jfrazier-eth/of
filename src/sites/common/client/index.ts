@@ -1,11 +1,11 @@
-import { adapter as kyAdapter } from "./ky-adapter.js";
-import { mergeOptions } from "./merge-options.js";
+import { adapter as kyAdapter } from "./ky-adapter";
+import { mergeOptions } from "./merge-options";
 import {
   ClientOptions,
   RequestAdapter,
   RequestOptions,
   Response,
-} from "./types.js";
+} from "./types";
 
 export let adapter = kyAdapter;
 

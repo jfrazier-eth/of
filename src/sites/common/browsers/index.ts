@@ -1,3 +1,3 @@
-export { brave } from "./brave.js";
+export { brave } from "./brave";
 
-export { Browser } from "./types.js";
+export type { Browser } from "./types";

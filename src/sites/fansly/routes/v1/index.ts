@@ -1,1 +1,1 @@
-export * as Account from "./account/index.js";
+export * as Account from "./account/index";

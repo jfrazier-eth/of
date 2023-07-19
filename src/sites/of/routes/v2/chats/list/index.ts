@@ -1,1 +1,1 @@
-export * as Get from "./get.js";
+export * as Get from "./get";

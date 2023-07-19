@@ -1,5 +1,5 @@
-import { Routes, SessionContext } from "../index.js";
-import { ReceivedMessage } from "../routes/v2/chats/user/messages/types.js";
+import { Routes, SessionContext } from "../index";
+import { ReceivedMessage } from "../routes/v2/chats/user/messages/types";
 
 export async function getMessages(
   context: SessionContext,
@@ -20,13 +20,13 @@ export async function getMessages(
       otherUserId,
       startAfterMessageId: startAfterMessageId,
     });
-    console.log(response.list.length)
+    console.log(response.list.length);
 
     hasNextPage = response.hasMore;
     if (hasNextPage) {
-      startAfterMessageId = response.list[response.list.length - 1].id.toString();
+      startAfterMessageId =
+        response.list[response.list.length - 1].id.toString();
     }
-
 
     messages = [...messages, ...response.list];
   }
@@ -34,13 +34,15 @@ export async function getMessages(
   return messages.slice(0, maxNumMessages);
 }
 
-
 export const transformMessages = (
   creatorId: string,
   messages: ReceivedMessage[]
 ) => {
   return messages
-    .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+    .sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    )
     .map((message) => {
       return {
         role: message.fromUser.id.toString() === creatorId ? "creator" : "fan",
@@ -52,4 +54,3 @@ export const transformMessages = (
       };
     });
 };
-

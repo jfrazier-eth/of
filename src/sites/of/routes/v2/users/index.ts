@@ -1,2 +1,2 @@
-export * as me from "./me.js";
-export * as fan from "./fan.js";
+export * as me from "./me";
+export * as fan from "./fan";
