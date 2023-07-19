@@ -1,23 +1,63 @@
 import ky from "ky";
-import { RequestAdapter, Response } from "./types.js";
+import { RequestAdapter, Response, getDefaultClientOptions } from "./types.js";
+import { mergeOptions } from "./merge-options.js";
 
 export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
   const url = request.url.toString();
 
+  const options = mergeOptions(getDefaultClientOptions(), request);
+
   try {
+    let reqHeaders = options.headers ?? {};
+    if (request.cookieJar) {
+      // TODO check this
+      const cookie = await request.cookieJar.getCookieString(url.toString());
+      reqHeaders["Cookie"] = cookie;
+    }
+
     const response = await ky(url.toString(), {
       method: request.method,
-      throwHttpErrors: request.throwHttpErrors,
-      responseType: request.responseType,
-      cookieJar: request.cookieJar,
-      headers: request.headers,
-      json: request.json,
+      throwHttpErrors: options.throwHttpErrors,
+      headers: reqHeaders,
+      json: options.json,
     });
 
-    const res: Response<ResBody> = {
+    let body;
+    switch (options.responseType) {
+      case "text": {
+        body = response.body;
+        break;
+      }
+      case "json": {
+        body = await response.json();
+        break;
+      }
+    }
+
+    let headers: Record<string, string | string[]> = {};
+
+    response.headers.forEach((value, key) => {
+      if (key in headers) {
+        const existingHeader = headers[key];
+        if (typeof existingHeader === "string") {
+          headers[key] = [existingHeader, value];
+        } else if (Array.isArray(existingHeader)) {
+          existingHeader.push(value);
+        } else {
+          console.assert(
+            true,
+            `Unexpected state encountered. Existing header ${existingHeader} Type: ${typeof existingHeader}`
+          );
+        }
+      } else {
+        headers[key] = value;
+      }
+    });
+
+    const res: Response = {
       status: response.status,
-      body: response.body as ResBody,
-      headers: response.headers,
+      body: body,
+      headers: headers,
     };
 
     return res;
