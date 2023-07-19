@@ -10,10 +10,9 @@
     "node": "20.4.0"
   },
   "scripts": {
-    "v": "pnpm -v",
     "build": "pnpm clean && tsc -p ./tsconfig.backend.json",
     "clean": "rimraf ./dist",
-    "start": "pnpm build && pnpm migrate up && node -r dotenv/config -r module-alias/register ./dist/backend/index.js",
+    "start": "pnpm build && pnpm migrate up && node -r dotenv/config -r module-alias/register ./dist/apps/backend/index.js",
     "lint": "next lint",
     "test": "node node_modules/jest/bin/jest.js",
     "migrate": "ts-node --project tsconfig.migrations.json node_modules/node-pg-migrate/bin/node-pg-migrate",
@@ -87,10 +86,11 @@
     "pg-promise": "^11.5.0"
   },
   "_moduleAliases": {
-    "@/backend": "dist/backend",
-    "@/sites": "dist/sites",
-    "@/utils": "dist/utils",
-    "@/extension/*": "dist/apps/extension"
+    "@/backend": "dist/apps/backend",
+    "@/sites": "dist/lib/sites",
+    "@/utils": "dist/lib/utils",
+    "@/extension": "dist/apps/extension",
+    "@/lib": "dist/lib"
   },
   "private": true
 }

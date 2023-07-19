@@ -18,15 +18,14 @@
     "skipLibCheck": true,
     "target": "es5",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "baseUrl": "src",
     "jsx": "preserve",
     "paths": {
-      "@/backend/*": ["backend/*"],
-      "@/sites/*": ["sites/*"],
-      "@/utils/*": ["utils/*"],
-      "@/extension/*": ["apps/extension/*"]
-    },
-    "allowJs": true
+      "@/backend/*": ["./src/apps/backend/*"],
+      "@/sites/*": ["./src/lib/sites/*"],
+      "@/utils/*": ["./src/lib/utils/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/extension/*": ["./src/apps/extension/*"]
+    }
   },
   "include": ["src/**/*"],
   "ts-node": {

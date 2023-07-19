@@ -6,7 +6,7 @@
   },
   "include": ["src/**/*", "src/creds/firebase-prod.json"],
   "exclude": [
-    "./src/apps/**/*",
+    "./src/apps/extension",
     "./src/pages/**/*",
     "./tsconfig.extension.json"
   ]
