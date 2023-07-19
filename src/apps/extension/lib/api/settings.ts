@@ -1,3 +1,4 @@
+import { UserOFSettings } from "../extension/messages/responses";
 import { Context } from "./context";
 
 const path = "/api/of/settings";
@@ -16,11 +17,15 @@ export async function getSettings(context: Context) {
       ...headers,
     },
   });
-  return response.json();
+
+  const body = await response.json();
+  return body as UserOFSettings;
 }
 
-//authenticate before posting
-export async function postSettings(settings: any, context: Context) {
+export async function postSettings(
+  settings: any,
+  context: Context
+): Promise<{ success: true } | { success: false; error: string }> {
   const url = context.getUrl(path);
   const headers = context.getHeaders();
   const response = await fetch(url, {
@@ -31,5 +36,13 @@ export async function postSettings(settings: any, context: Context) {
     },
     body: JSON.stringify(settings),
   });
-  return response.json();
+  if (response.status === 200) {
+    return {
+      success: true,
+    };
+  }
+  return {
+    success: false,
+    error: `Failed to save settings. Status code: ${response.status}`,
+  };
 }

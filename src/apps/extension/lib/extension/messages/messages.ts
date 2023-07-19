@@ -1,3 +1,5 @@
+import { UserOFSettings } from "./responses";
+
 interface BaseMessage {
   kind: string;
 }
@@ -33,7 +35,7 @@ export interface GetOFSettingsMessage extends BaseMessage {
 
 export interface SaveOFSettingsMessage extends BaseMessage {
   kind: "SAVE_OF_SETTINGS";
-  data: any;
+  data: UserOFSettings;
 }
 
 export type Message =

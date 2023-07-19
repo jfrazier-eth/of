@@ -1,88 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import { LoggedInUser } from "../lib/extension/background/message-handlers/user-info";
-import { sendMessage } from "../lib/extension/messages/send-message";
+import { UserOFSettings } from "../lib/extension/messages/responses";
 import { Loader } from "./Loader";
 import MediaInput from "./inputs/MediaInput";
 import PriceInput from "./inputs/PriceInput";
 import Toggle from "./inputs/Toggle";
 
-function countWords(script: string) {
-  script = script.trim();
-  const words = script.split(/\s+/);
-  const wordCount = words.length;
-  return wordCount;
-}
-
-const Settings: React.FC<{ user: LoggedInUser }> = (props) => {
-  const [autoMessages, setAutoMessages] = useState(false);
-  const [spendingThreshold, setSpendingThreshold] = useState(100);
-  const [scripts, setScripts] = useState("");
-  const [welcomeMessage, setWelcomeMessage] = useState("");
-  const [welcomeMessageDefault, setWelcomeMessageDefault] = useState(false);
-
-  //Need to figure out how to handle images. Is it better if we just take valut URLs, instead of letting ppl to upload?
-  // const [selectedImage, setSelectedImage] = useState("");
-  // const [ppvDefault1, setPpvDefault1] = useState("");
-  // const [ppvDefault2, setPpvDefault2] = useState("");
-  const [welcomePrice, setWelcomePrice] = useState(10);
-  const [ppvPrice1, setPpvPrice1] = useState(5);
-  const [ppvPrice2, setPpvPrice2] = useState(5);
-
+const OFSettings: React.FC<{
+  settings: UserOFSettings;
+  setSettings: (handler: (prevState: UserOFSettings) => UserOFSettings) => void;
+  saveSettings: () => Promise<void>;
+}> = ({ settings, setSettings, saveSettings }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [scriptWordCount, setScriptWordCount] = useState(0);
-
-  useEffect(() => {
-    setScriptWordCount(countWords(scripts));
-  }, [scripts]);
 
   const toggleAutoMessages = () => {
-    setAutoMessages(!autoMessages);
+    setSettings((prev) => {
+      return {
+        ...prev,
+        autoMessages: !prev.autoMessages,
+      };
+    });
   };
 
   const toggleWelcomeMessageDefault = () => {
-    setWelcomeMessageDefault(!welcomeMessageDefault);
+    setSettings((prev) => {
+      return {
+        ...prev,
+        welcomeMessageDefault: !prev.welcomeMessageDefault,
+      };
+    });
   };
-
-  useEffect(() => {
-    const fetchSettings = async () => {
-      const settings = await sendMessage({
-        kind: "GET_OF_SETTINGS",
-      });
-      setAutoMessages(settings.data.autoMessages);
-      setSpendingThreshold(settings.data.spendingThreshold);
-      setScripts(settings.data.scripts);
-      setWelcomeMessage(settings.data.welcomeMessage);
-      setWelcomeMessageDefault(settings.data.welcomeMessageDefault);
-      setWelcomePrice(settings.data.welcomePrice);
-      setPpvPrice1(settings.data.ppvPrice1);
-      setPpvPrice2(settings.data.ppvPrice2);
-    };
-    fetchSettings();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (scriptWordCount > 700) {
-      alert("Please ensure the script is under 700 words before saving.");
-      return;
-    }
     setIsLoading(true);
-
-    await sendMessage({
-      kind: "SAVE_OF_SETTINGS",
-      data: {
-        userId: props.user.userId,
-        autoMessages,
-        spendingThreshold,
-        scripts,
-        welcomeMessage,
-        welcomeMessageDefault,
-        welcomePrice,
-        ppvPrice1,
-        ppvPrice2,
-      },
-    });
+    await saveSettings();
     setIsLoading(false);
   };
   const labelClass = "block text-sm font-medium leading-6 mt-4";
@@ -105,33 +57,53 @@ const Settings: React.FC<{ user: LoggedInUser }> = (props) => {
               <label className={labelClass}>
                 <span className="mr-2">Enable Automatic Messages</span>
               </label>
-              <Toggle enabled={autoMessages} setEnabled={toggleAutoMessages} />
+              <Toggle enabled={settings.autoMessages} setEnabled={toggleAutoMessages} />
             </div>
             <label htmlFor="price" className={labelClass}>
               Spending Threshold
             </label>
-            <PriceInput price={spendingThreshold} setPrice={setSpendingThreshold} />
+            <PriceInput
+              price={settings.spendingThreshold}
+              setPrice={(newValueOrHandler) => {
+                setSettings((prevState) => ({
+                  ...prevState,
+                  spendingThreshold:
+                    typeof newValueOrHandler === "function"
+                      ? newValueOrHandler(prevState.spendingThreshold)
+                      : newValueOrHandler,
+                }));
+              }}
+            />
             <label htmlFor="script" className={labelClass}>
               <span>Sample Scripts for Training</span>
             </label>
             <textarea
-              value={scripts}
-              onChange={(e) => setScripts(e.target.value)}
+              value={settings.scripts}
+              onChange={(e) =>
+                setSettings((prev) => {
+                  if (e.target.value.length >= 700) {
+                    alert("Script must be less than 700 characters.");
+                    return {
+                      ...prev,
+                      scripts: e.target.value.substring(0, 700),
+                    };
+                  }
+                  return {
+                    ...prev,
+                    scripts: e.target.value,
+                  };
+                })
+              }
               className={textAreaClass}
               rows={8}
               placeholder="Paste your sample scripts here. The AI will use these to influence it's messaging style. (Max 700 words)"
             ></textarea>
-            {scriptWordCount > 700 && (
-              <div className="text-red-500 text-sm mt-2">
-                The current script is {scriptWordCount} words, please keep it under 700 words.
-              </div>
-            )}
             <div className="mt-4">
               <div className="flex">
                 <label className={labelClass}>
                   <span className="mr-2">Welcome Message default</span>
                 </label>
-                <Toggle enabled={welcomeMessageDefault} setEnabled={toggleWelcomeMessageDefault} />
+                <Toggle enabled={settings.welcomeMessageDefault} setEnabled={toggleWelcomeMessageDefault} />
               </div>
               <label className={`flex flex-col ${labelClass}`}>
                 <span className="mr-2">Select an image</span>
@@ -140,13 +112,29 @@ const Settings: React.FC<{ user: LoggedInUser }> = (props) => {
               <label htmlFor="welcomePrice" className={labelClass}>
                 Set Price
               </label>
-              <PriceInput price={welcomePrice} setPrice={setWelcomePrice} />
+              <PriceInput
+                price={settings.welcomePrice}
+                setPrice={(newValueOrHandler) => {
+                  setSettings((prevState) => ({
+                    ...prevState,
+                    welcomePrice:
+                      typeof newValueOrHandler === "function"
+                        ? newValueOrHandler(prevState.welcomePrice)
+                        : newValueOrHandler,
+                  }));
+                }}
+              />
               <label htmlFor="welcomeMessage" className={labelClass}>
                 <span className="mr-2">Default Welcome Message</span>
               </label>
               <textarea
-                value={welcomeMessage}
-                onChange={(e) => setWelcomeMessage(e.target.value)}
+                value={settings.welcomeMessage}
+                onChange={(e) => {
+                  setSettings((prev) => ({
+                    ...prev,
+                    welcomeMessage: e.target.value,
+                  }));
+                }}
                 className={textAreaClass}
                 rows={4}
                 placeholder="Insert default welcome message to send to subscribers initially."
@@ -158,7 +146,18 @@ const Settings: React.FC<{ user: LoggedInUser }> = (props) => {
               <label htmlFor="price1" className={labelClass}>
                 Set Price
               </label>
-              <PriceInput price={ppvPrice1} setPrice={setPpvPrice1} />
+              <PriceInput
+                price={settings.ppvPrice1}
+                setPrice={(newValueOrHandler) => {
+                  setSettings((prevState) => ({
+                    ...prevState,
+                    ppvPrice1:
+                      typeof newValueOrHandler === "function"
+                        ? newValueOrHandler(prevState.ppvPrice1)
+                        : newValueOrHandler,
+                  }));
+                }}
+              />
               <label className={`flex flex-col ${labelClass}`}>
                 <span className="mr-2">PPV default 2</span>
               </label>
@@ -166,7 +165,18 @@ const Settings: React.FC<{ user: LoggedInUser }> = (props) => {
               <label htmlFor="price2" className={labelClass}>
                 Set Price
               </label>
-              <PriceInput price={ppvPrice2} setPrice={setPpvPrice2} />
+              <PriceInput
+                price={settings.ppvPrice2}
+                setPrice={(newValueOrHandler) => {
+                  setSettings((prevState) => ({
+                    ...prevState,
+                    ppvPrice2:
+                      typeof newValueOrHandler === "function"
+                        ? newValueOrHandler(prevState.ppvPrice2)
+                        : newValueOrHandler,
+                  }));
+                }}
+              />
               <div className="flex justify-end my-6">
                 <button
                   type="submit"
@@ -183,4 +193,4 @@ const Settings: React.FC<{ user: LoggedInUser }> = (props) => {
   );
 };
 
-export default Settings;
+export default OFSettings;

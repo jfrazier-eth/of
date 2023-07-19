@@ -9,10 +9,16 @@ export interface OFSettings {
 
 export const handleGetOFSettingsMessage: Handler<GetOFSettingsMessage> = async (message, context) => {
   const response = await getSettings(context);
-  return response;
+  return {
+    kind: "GET_OF_SETTINGS",
+    data: response,
+  };
 };
 
 export const handleSaveOFSettingsMessage: Handler<SaveOFSettingsMessage> = async (message, context) => {
   const response = await postSettings(message.data, context);
-  return response;
+  return {
+    kind: "SAVE_OF_SETTINGS",
+    data: response,
+  };
 };
