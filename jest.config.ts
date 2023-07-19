@@ -9,18 +9,13 @@ module.exports = {
   moduleDirectories: ["node_modules", "src"],
   testRegex: ".*\\.spec\\.ts$",
   transform: {
-    "^.+\\.(t|j)s$": [
-      "ts-jest",
-      {
-        useESM: true,
-      },
-    ],
+    "^.+\\.(t|j)s$": ["ts-jest"],
   },
   collectCoverageFrom: ["**/*.(t|j)s"],
   coverageDirectory: "../coverage",
   testEnvironment: "node",
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    useESM: true,
+    prefix: "<rootDir>/../",
   }),
   setupFiles: ["dotenv/config"],
 };

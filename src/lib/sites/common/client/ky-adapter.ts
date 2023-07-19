@@ -1,4 +1,4 @@
-import ky from "ky";
+import ky from "ky-universal";
 
 import { mergeOptions } from "./merge-options";
 import { RequestAdapter, Response, getDefaultClientOptions } from "./types";
