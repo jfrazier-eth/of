@@ -29,14 +29,36 @@ export interface GenerateResponseResponse extends BaseResponse {
   };
 }
 
+export interface UserOFSettings {
+  userId: string;
+  autoMessages: boolean;
+  welcomeMessageDefault: boolean;
+  spendingThreshold: number;
+  scripts: string;
+  welcomeMessage: string;
+  welcomePrice: number;
+  ppvPrice1: number;
+  ppvPrice2: number;
+  selectedImage: string;
+  ppvDefault1: string;
+  ppvDefault2: string;
+}
+
 export interface GetOFSettingsResponse extends BaseResponse {
   kind: "GET_OF_SETTINGS";
-  data: any;
+  data: UserOFSettings;
 }
 
 export interface SaveOFSettingsResponse extends BaseResponse {
   kind: "SAVE_OF_SETTINGS";
-  data: any;
+  data:
+    | {
+        success: true;
+      }
+    | {
+        success: false;
+        error: string;
+      };
 }
 
 export type Response =

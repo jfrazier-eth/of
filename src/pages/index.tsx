@@ -3,6 +3,7 @@ import * as React from "react";
 import Login from "@/extension/components/Login";
 import Settings from "@/extension/components/Settings";
 import { UserInfoContext } from "@/extension/context/user-context";
+import { UserOFSettingsContext } from "@/extension/context/user-of-settings";
 
 const Main = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -16,12 +17,17 @@ const Main = ({ children }: { children: React.ReactNode }) => {
 
 export default function Page() {
   const userInfo = React.useContext(UserInfoContext);
-
+  const { settings, setSettings, saveSettings } = React.useContext(UserOFSettingsContext);
   if (userInfo.isReady) {
-    if (userInfo.value.isLoggedIn) {
+    if (userInfo.value.isLoggedIn && settings.isReady) {
       return (
         <Main>
-          <Settings user={userInfo.value} />
+          <Settings
+            user={userInfo.value}
+            settings={settings.value}
+            setSettings={setSettings}
+            saveSettings={saveSettings}
+          />
         </Main>
       );
     } else {
