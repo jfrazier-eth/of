@@ -4,7 +4,7 @@
     "noEmit": false,
     "outDir": "./dist"
   },
-  "include": ["src/creds/firebase-prod.json"],
+  "include": ["src/**/*", "src/creds/firebase-prod.json"],
   "exclude": [
     "./src/apps/**/*",
     "./src/pages/**/*",

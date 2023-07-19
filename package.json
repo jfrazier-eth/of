@@ -13,11 +13,11 @@
     "v": "pnpm -v",
     "build": "pnpm clean && tsc -p ./tsconfig.backend.json",
     "clean": "rimraf ./dist",
-    "start": "pnpm build && pnpm migrate up && node -r dotenv/config --loader esm-module-alias/loader ./dist/backend/index.js",
+    "start": "pnpm build && pnpm migrate up && node -r dotenv/config -r module-alias/register ./dist/backend/index.js",
     "lint": "next lint",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "node node_modules/jest/bin/jest.js",
     "migrate": "ts-node --project tsconfig.migrations.json node_modules/node-pg-migrate/bin/node-pg-migrate",
-    "start:script": "pnpm build && node -r dotenv/config --loader esm-module-alias/loader ./dist/index.js",
+    "start:script": "pnpm build && node -r dotenv/config ./dist/index.js",
     "ext:dev": "next dev",
     "ext:start": "next start",
     "ext:check": "tsc -p ./tsconfig.extension.json",
@@ -61,8 +61,8 @@
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
     "@tailwindcss/forms": "^0.5.4",
-    "esm-module-alias": "^2.0.3",
-    "nanoid": "^4.0.2",
+    "module-alias": "^2.2.3",
+    "nanoid": "3.3.6",
     "next": "13.4.10",
     "postcss": "8.4.25",
     "react": "18.2.0",
@@ -86,10 +86,11 @@
     "pg": "^8.11.1",
     "pg-promise": "^11.5.0"
   },
-  "aliases": {
+  "_moduleAliases": {
     "@/backend": "dist/backend",
     "@/sites": "dist/sites",
-    "@/utils": "dist/utils"
+    "@/utils": "dist/utils",
+    "@/extension/*": "dist/apps/extension"
   },
   "private": true
 }
