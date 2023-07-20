@@ -8,7 +8,7 @@ import { UserOFSettingsContext } from "@/extension/context/user-of-settings";
 const Main = ({ children }: { children: React.ReactNode }) => {
   return (
     <main
-      className={`flex h-full flex-col items-center justify-between p-4 bg-white min-w-[30rem] max-w-[30rem] text-black`}
+      className={`flex h-full flex-col items-center justify-between bg-white min-w-[20rem] overflow-y-auto min-h-[40rem] w-fit text-black`}
     >
       {children}
     </main>
@@ -18,6 +18,7 @@ const Main = ({ children }: { children: React.ReactNode }) => {
 export default function Page() {
   const userInfo = React.useContext(UserInfoContext);
   const { settings, setSettings, saveSettings } = React.useContext(UserOFSettingsContext);
+
   if (userInfo.isReady) {
     if (userInfo.value.isLoggedIn && settings.isReady) {
       return (
