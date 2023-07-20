@@ -32,6 +32,11 @@
   font-weight: 500;
 }
 
+.generate-button:disabled {
+  background-color: #016f96;
+  cursor: not-allowed;
+}
+
 .generate-button-img {
   width: 20px;
   height: 20px;
