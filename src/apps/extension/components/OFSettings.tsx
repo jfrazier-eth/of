@@ -46,7 +46,7 @@ const OFSettings: React.FC<{
       onSubmit={handleSubmit}
       className="flex relative h-full flex-col divide-gray-200 bg-white shadow-xl w-[400px]"
     >
-      <div className="h-0 flex-1 overflow-y-auto">
+      <div className="h-0 flex-1">
         <div className="flex flex-col items-start justify-start h-screen w-full">
           <div className="bg-primary text-white w-full text-left p-4">
             <h1 className="text-base font-bold">Settings</h1>

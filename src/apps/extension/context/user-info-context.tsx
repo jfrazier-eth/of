@@ -53,7 +53,7 @@ const UserInfoProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         },
       });
     }
-  }, [sendMessage, setValue, firebaseUser, firebaseUser.isReady]);
+  }, [sendMessage, setValue, firebaseUser]);
 
   return <UserInfoContext.Provider value={value}>{children}</UserInfoContext.Provider>;
 };
