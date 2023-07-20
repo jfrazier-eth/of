@@ -1,8 +1,12 @@
 {
-  "name": "OF EXT",
-  "description": "",
+  "name": "OnlyAgent",
+  "description": "Supercharge your OnlyFans page & drive more PPV sales with the power of AI",
   "version": "1.0",
   "manifest_version": 2,
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png"
+  },
   "permissions": [
     "cookies",
     "scripting",
