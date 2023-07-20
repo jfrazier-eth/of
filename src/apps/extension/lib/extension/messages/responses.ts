@@ -48,6 +48,7 @@ export interface UserOFSettings {
   selectedImage: string;
   ppvDefault1: string;
   ppvDefault2: string;
+  emojis: string;
 }
 
 export interface GetOFSettingsResponse extends BaseResponse {

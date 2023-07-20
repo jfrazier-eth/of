@@ -9,7 +9,10 @@ export const getUserByFirebaseId = async (firebaseId: string) => {
 
   const result = await pg.query<PGUser[]>(query, values);
 
-  console.assert(result.length <= 1, `Received multiple users with the same id! Query ${query} Values ${values}`);
+  console.assert(
+    result.length <= 1,
+    `Received multiple users with the same id! Query ${query} Values ${values}`
+  );
 
   if (result.length === 1) {
     return transformPGUser(result[0]);
@@ -23,7 +26,10 @@ export const getUser = async (id: string) => {
 
   const result = await pg.query<PGUser[]>(query, values);
 
-  console.assert(result.length <= 1, `Received multiple users with the same id! Query ${query} Values ${values}`);
+  console.assert(
+    result.length <= 1,
+    `Received multiple users with the same id! Query ${query} Values ${values}`
+  );
 
   if (result.length === 1) {
     return transformPGUser(result[0]);

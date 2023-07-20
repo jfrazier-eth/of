@@ -1,19 +1,28 @@
 import { UserSettings } from "../lib/extension/background/message-handlers/user-settings";
 import { sendMessage } from "../lib/extension/messages/index";
 
-function blurImages(images: HTMLCollectionOf<HTMLImageElement> | HTMLImageElement[], blurRadiusRem: number) {
+function blurImages(
+  images: HTMLCollectionOf<HTMLImageElement> | HTMLImageElement[],
+  blurRadiusRem: number
+) {
   for (let i = 0; i < images.length; i++) {
     images[i].style.filter = `blur(${blurRadiusRem}rem)`;
   }
 }
 
-function blueVideos(videos: HTMLCollectionOf<HTMLVideoElement> | HTMLVideoElement[], blurRadiusRem: number) {
+function blueVideos(
+  videos: HTMLCollectionOf<HTMLVideoElement> | HTMLVideoElement[],
+  blurRadiusRem: number
+) {
   for (let i = 0; i < videos.length; i++) {
     videos[i].style.filter = `blur(${blurRadiusRem}rem)`;
   }
 }
 
-function blurVideoCovers(div: HTMLCollectionOf<HTMLDivElement> | HTMLDivElement[], blurRadiusRem: number) {
+function blurVideoCovers(
+  div: HTMLCollectionOf<HTMLDivElement> | HTMLDivElement[],
+  blurRadiusRem: number
+) {
   for (let i = 0; i < div.length; i++) {
     div[i].style.filter = `blur(${blurRadiusRem}rem)`;
   }
@@ -52,7 +61,10 @@ const handleMutations = (settings: UserSettings["incognito"]): MutationCallback 
           settings.videos.blur
         ) {
           const videoCovers = (node as HTMLDivElement).getElementsByClassName("blurred-poster");
-          blurVideoCovers(videoCovers as HTMLCollectionOf<HTMLDivElement>, settings.videos.blurRadiusRem);
+          blurVideoCovers(
+            videoCovers as HTMLCollectionOf<HTMLDivElement>,
+            settings.videos.blurRadiusRem
+          );
         }
       });
     }
@@ -67,7 +79,10 @@ type DomNode = ChildNode &
     nextSibling: DomNode;
   };
 
-function handleText(textNode: DomNode | HTMLElement, textSettings: UserSettings["incognito"]["text"]) {
+function handleText(
+  textNode: DomNode | HTMLElement,
+  textSettings: UserSettings["incognito"]["text"]
+) {
   const parent = textNode.parentElement;
   if (textSettings.blur && parent) {
     parent.classList.add("seductiveBlurred");
@@ -118,6 +133,23 @@ sendMessage({
   .catch((err) => {
     console.error("Failed to load user settings.", err);
   });
+
+function setNativeValue(element: Element, value: string) {
+  const { set: valueSetter } = Object.getOwnPropertyDescriptor(element, "value") || {};
+  const prototype = Object.getPrototypeOf(element);
+  const { set: prototypeValueSetter } = Object.getOwnPropertyDescriptor(prototype, "value") || {};
+
+  if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
+    prototypeValueSetter.call(element, value);
+  } else if (valueSetter) {
+    valueSetter.call(element, value);
+  } else {
+    throw new Error("The given element does not have a value setter");
+  }
+
+  element.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
 function addButton(uid: string) {
   const buttonId = "generate-button";
   const buttonElement = document.getElementById(buttonId);
@@ -141,15 +173,17 @@ function addButton(uid: string) {
     sendMessage({
       kind: "GENERATE_RESPONSE",
       data: {
-        chattingWith: {
-          uid,
+        chat: {
+          withUser: {
+            id: uid,
+          },
         },
       },
     })
       .then((response) => {
         const textarea = document.querySelector("#new_post_text_input");
         if (textarea) {
-          (textarea as HTMLTextAreaElement).value = response.data.message;
+          setNativeValue(textarea, response.data.message);
         } else {
           console.error("Failed to find textarea");
         }

@@ -103,7 +103,10 @@ const OFSettings: React.FC<{
                 <label className={labelClass}>
                   <span className="mr-2">Welcome Message default</span>
                 </label>
-                <Toggle enabled={settings.welcomeMessageDefault} setEnabled={toggleWelcomeMessageDefault} />
+                <Toggle
+                  enabled={settings.welcomeMessageDefault}
+                  setEnabled={toggleWelcomeMessageDefault}
+                />
               </div>
               <label className={`flex flex-col ${labelClass}`}>
                 <span className="mr-2">Select an image</span>

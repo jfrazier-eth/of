@@ -80,7 +80,10 @@ export const getFanStats = async (context: SessionContext, fanHandle: string) =>
   }
 };
 
-export const getNewFans = async (context: SessionContext, dates: { startDate: string; endDate: string }) => {
+export const getNewFans = async (
+  context: SessionContext,
+  dates: { startDate: string; endDate: string }
+) => {
   const path = "/api2/v2/subscriptions/subscribers/latest";
   const otherHeaders = {
     Host: "onlyfans.com",

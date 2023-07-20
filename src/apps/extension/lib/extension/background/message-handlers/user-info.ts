@@ -74,7 +74,10 @@ const setCachedUser = async (user: StoredUserInfo) => {
   });
 };
 
-export const handleActiveUserInfoMessage: Handler<ActiveUserInfoMessage> = async (message, context) => {
+export const handleActiveUserInfoMessage: Handler<ActiveUserInfoMessage> = async (
+  message,
+  context
+) => {
   const user = await getActiveUser();
   console.log(`Active user`, user);
 

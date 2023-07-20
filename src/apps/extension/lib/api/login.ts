@@ -1,6 +1,9 @@
 import { Context } from "./context";
 
-export const postLogin = async (token: string, context: Context): Promise<{ apiKey: string; userId: string }> => {
+export const postLogin = async (
+  token: string,
+  context: Context
+): Promise<{ apiKey: string; userId: string }> => {
   const url = context.getUrl("/api/login");
 
   const response = await fetch(url.toString(), {

@@ -1,6 +1,6 @@
 {
   "tabWidth": 2,
-  "printWidth": 120,
+  "printWidth": 100,
   "trailingComma": "es5",
   "semi": true,
   "importOrder": ["<THIRD_PARTY_MODULES>", "^@[^/]+", "^@/", "^[./]"],

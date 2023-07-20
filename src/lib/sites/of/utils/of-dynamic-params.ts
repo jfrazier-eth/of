@@ -1,7 +1,8 @@
 import { Context } from "@/sites/common/context";
 import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
 
-export const OF_RULES_EP = "https://raw.githubusercontent.com/deviint/onlyfans-dynamic-rules/main/dynamicRules.json";
+export const OF_RULES_EP =
+  "https://raw.githubusercontent.com/deviint/onlyfans-dynamic-rules/main/dynamicRules.json";
 
 export const OF_RULES_TTS = 5 * 60_000;
 

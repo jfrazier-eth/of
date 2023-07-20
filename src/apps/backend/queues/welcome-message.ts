@@ -81,7 +81,9 @@ const triggerWorker = new Worker<DataType, ResultType>(
 const processingWorker = new Worker<ProcessingDataType, ProcessingResultType>(
   processingQueueName,
   async (job) => {
-    const welcomeMessage = await Lib.Settings.OF.WelcomeMessages.getMessage(job.data.welcomeMessageId);
+    const welcomeMessage = await Lib.Settings.OF.WelcomeMessages.getMessage(
+      job.data.welcomeMessageId
+    );
 
     if (!welcomeMessage) {
       console.warn("No welcome message found for id", job.data.welcomeMessageId);

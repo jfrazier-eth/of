@@ -1,4 +1,4 @@
-import ky from "ky-universal";
+import ky from "ky";
 
 import { mergeOptions } from "./merge-options";
 import { RequestAdapter, Response, getDefaultClientOptions } from "./types";
@@ -10,11 +10,6 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
 
   try {
     let reqHeaders = options.headers ?? {};
-    if (request.cookieJar) {
-      // TODO check this
-      const cookie = await request.cookieJar.getCookieString(url.toString());
-      reqHeaders["Cookie"] = cookie;
-    }
 
     const response = await ky(url.toString(), {
       method: request.method,

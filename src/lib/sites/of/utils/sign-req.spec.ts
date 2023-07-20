@@ -1,7 +1,7 @@
 import { OFDynamicParams } from "./of-dynamic-params";
 import { signReq } from "./sign-req";
 
-it("can generate the expected sign header", () => {
+it("can generate the expected sign header", async () => {
   const url = new URL("https://onlyfans.com/api2/v2/init");
 
   const time = 1688047708049;
@@ -51,7 +51,7 @@ it("can generate the expected sign header", () => {
   };
   const authId = "0";
 
-  const { sign } = signReq(url, time, dynamicParams, authId);
+  const { sign } = await signReq(url, time, dynamicParams, authId);
 
   const expectedSign = "8957:bb0fe3aa1c62f8d4c2f08c8083fba2f0928d933b:78f:649d22c8";
 

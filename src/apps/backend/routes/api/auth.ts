@@ -31,14 +31,10 @@ router.get(
     }
 
     if (typeof userIdHeader !== "string" || !userIdHeader) {
-      res.status(500).json({ message: "Server error" });
       console.error(`Expected user id to be present`);
-      return;
-    }
-
-    if (userIdHeader !== userId) {
-      res.status(400).json({ message: "Bad Request" });
-      return;
+      return res.sendStatus(500);
+    } else if (userIdHeader !== userId) {
+      return res.sendStatus(400);
     }
 
     const login = await getLogin({
@@ -81,7 +77,13 @@ router.post(
     switch (site) {
       case Site.OF: {
         const body = req.body as PostLoginRequestBody<Site.OF>;
-        if ("params" in body && body.params && body.params.xbc && body.params.sess && body.params.authId) {
+        if (
+          "params" in body &&
+          body.params &&
+          body.params.xbc &&
+          body.params.sess &&
+          body.params.authId
+        ) {
           await OFLogins.saveLogin({
             xbc: body.params.xbc,
             sess: body.params.sess,

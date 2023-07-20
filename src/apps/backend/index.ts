@@ -5,6 +5,7 @@ import { config } from "./config";
 import { checkUserAuth } from "./controllers/user-auth";
 import "./db/mongo";
 import "./db/redis";
+import { router as apiRouter } from "./routes/api";
 import { router as siteLoginRouter } from "./routes/api/auth";
 import { router as login } from "./routes/api/login";
 //routes
@@ -19,6 +20,7 @@ app.get("/api", (req, res) => {
   res.send("Hello world!");
 });
 app.use("/api/login", login);
+app.use(apiRouter);
 app.use("/api/of", checkUserAuth, ofRoute);
 app.use(checkUserAuth, siteLoginRouter);
 

@@ -1,6 +1,3 @@
-import { HttpsProxyAgent } from "https-proxy-agent";
-import { CookieJar } from "tough-cookie";
-
 import { clone } from "@/utils/clone";
 
 import { Client, getClient } from "./client/index";
@@ -9,7 +6,7 @@ import { Browsers } from "./index";
 
 export interface ContextOptions {
   baseUrl: string | URL;
-  browser: Browsers.Browser;
+  browser?: Browsers.Browser;
   proxy?: string | URL | null;
 }
 
@@ -32,36 +29,29 @@ export class Context {
     };
   }
 
-  public get cookieJar() {
-    return this._cookieJar;
-  }
-
   public get client() {
     return this._client;
   }
 
-  protected _browser: Browsers.Browser;
+  protected _browser: Browsers.Browser | null;
   protected _proxy: URL | null;
-  protected _cookieJar: CookieJar;
   protected _client: Client;
 
   constructor(options: ContextOptions) {
     this._baseUrl = new URL(options.baseUrl.toString());
-    this._browser = options.browser;
-    this._cookieJar = new CookieJar();
+    this._browser = options.browser ?? null;
 
     const clientOptions: ClientOptions = {
       throwHttpErrors: false,
       responseType: "json",
-      cookieJar: this._cookieJar,
     };
 
     this._proxy = options.proxy ? new URL(options.proxy) : null;
     if (this._proxy) {
-      clientOptions.httpsAgent = new HttpsProxyAgent(this._proxy, {
-        keepAlive: true,
-      });
-      clientOptions.rejectUnauthorized = this._proxy.hostname !== "127.0.0.1";
+      // clientOptions.httpsAgent = new HttpsProxyAgent(this._proxy, {
+      //   keepAlive: true,
+      // });
+      // clientOptions.rejectUnauthorized = this._proxy.hostname !== "127.0.0.1";
     }
 
     this._client = getClient(clientOptions);
@@ -77,6 +67,9 @@ export class Context {
   }
 
   public async getHeaders(_url: URL): Promise<Record<string, string>> {
-    return Promise.resolve(this.browser.headers);
+    if (this.browser) {
+      return Promise.resolve(this.browser.headers);
+    }
+    return Promise.resolve({});
   }
 }

@@ -18,6 +18,7 @@ const userSettings = new Schema(
     selectedImage: String,
     ppvDefault1: String,
     ppvDefault2: String,
+    favoriteEmojis: String,
   },
   { timestamps: true }
 );

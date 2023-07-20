@@ -27,8 +27,10 @@ export interface ActiveTabMessage extends BaseMessage {
 export interface GenerateResponseMessage extends BaseMessage {
   kind: "GENERATE_RESPONSE";
   data: {
-    chattingWith: {
-      uid: string;
+    chat: {
+      withUser: {
+        id: string;
+      };
     };
   };
 }
