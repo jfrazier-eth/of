@@ -1,12 +1,10 @@
 import { HttpsProxyAgent } from "https-proxy-agent";
-import { CookieJar } from "tough-cookie";
 
 export type HTTPMethod = "GET" | "POST" | "PUT" | "PATCH" | "HEAD" | "DELETE";
 
 export type ClientOptions = {
   throwHttpErrors?: boolean;
   responseType?: "text" | "json";
-  cookieJar?: CookieJar;
   rejectUnauthorized?: boolean;
   httpsAgent?: HttpsProxyAgent<string>;
 };
@@ -31,4 +29,6 @@ export const getDefaultClientOptions = (): ClientOptions => {
   };
 };
 
-export type RequestAdapter<ReqBody, ResBody> = (request: RequestOptions<ReqBody>) => Promise<Response<ResBody>>;
+export type RequestAdapter<ReqBody, ResBody> = (
+  request: RequestOptions<ReqBody>
+) => Promise<Response<ResBody>>;

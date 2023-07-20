@@ -20,7 +20,6 @@ export async function getMessages(
       otherUserId,
       startAfterMessageId: startAfterMessageId,
     });
-    console.log(response.list.length);
 
     hasNextPage = response.hasMore;
     if (hasNextPage) {

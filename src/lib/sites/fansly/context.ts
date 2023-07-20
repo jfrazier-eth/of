@@ -21,8 +21,10 @@ export class LoggedInContext extends Context {
   }
 
   public async getHeaders(url: URL): Promise<Record<string, string>> {
+    const browserHeaders = this.browser ? this.browser.headers : {};
+
     return Promise.resolve({
-      ...this.browser.headers,
+      ...browserHeaders,
       Authorization: this._userParams.auth,
     });
   }

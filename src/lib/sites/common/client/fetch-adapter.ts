@@ -1,5 +1,3 @@
-import ky from "ky";
-
 import { mergeOptions } from "./merge-options";
 import { RequestAdapter, Response, getDefaultClientOptions } from "./types";
 
@@ -11,11 +9,10 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
   try {
     let reqHeaders = options.headers ?? {};
 
-    const response = await ky(url.toString(), {
+    const response = await fetch(url.toString(), {
       method: request.method,
-      throwHttpErrors: options.throwHttpErrors,
       headers: reqHeaders,
-      json: options.json,
+      body: options.json ? JSON.stringify(options.json) : null,
     });
 
     let body;

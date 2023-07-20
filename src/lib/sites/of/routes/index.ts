@@ -7,7 +7,8 @@ const headers = {
   Host: "onlyfans.com",
   Pragma: "no-cache",
   "Cache-Control": "no-cache",
-  Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+  Accept:
+    "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
 };
 
 export const get = async (context: Context) => {
@@ -16,7 +17,7 @@ export const get = async (context: Context) => {
   try {
     const response = await context.client.get(url, {
       headers: {
-        ...context.browser.headers,
+        ...(await context.getHeaders(url)),
         ...headers,
       },
     });

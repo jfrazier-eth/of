@@ -25,28 +25,31 @@ export class SessionContext extends Context {
   constructor(sessionParams: UserSessionParams, options: ContextOptions) {
     super(options);
     this._userParams = clone(sessionParams);
-    this._cookieJar.setCookie(
-      `sess=${sessionParams.sess}; path=/; domain=.onlyfans.com; secure; HttpOnly`,
-      this.options.baseUrl.toString()
-    );
+    // this._cookieJar.setCookie(
+    //   `sess=${sessionParams.sess}; path=/; domain=.onlyfans.com; secure; HttpOnly`,
+    //   this.options.baseUrl.toString()
+    // );
   }
 
   public async getHeaders(url: URL): Promise<Record<string, string>> {
     const { sign, time, appToken } = await this.getDynamicHeaders(url);
 
+    const browserHeaders = this.browser ? this.browser.headers : {};
+
     return {
-      ...this.browser.headers,
+      ...browserHeaders,
       Sign: sign,
       Time: `${time}`,
       "X-Bc": this._userParams.xbc,
       "App-Token": appToken,
+      Cookie: `sess=${this._userParams.sess}`,
     };
   }
 
   protected async getDynamicHeaders(url: URL) {
     const time = new Date().getTime();
     const dynamicParams = await getOFDynamicParams(this);
-    const { sign } = signReq(url, time, dynamicParams, this._userParams.authId);
+    const { sign } = await signReq(url, time, dynamicParams, this._userParams.authId);
 
     return {
       sign,

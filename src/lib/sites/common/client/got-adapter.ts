@@ -10,7 +10,7 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
       method: request.method,
       throwHttpErrors: request.throwHttpErrors,
       responseType: request.responseType,
-      cookieJar: request.cookieJar,
+      // cookieJar: request.cookieJar,
       headers: request.headers,
       body: request.json ? JSON.stringify(request.json) : undefined,
       agent: {
