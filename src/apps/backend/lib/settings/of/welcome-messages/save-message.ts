@@ -4,7 +4,10 @@ import { uid } from "@/utils/uid";
 import { transformOFWelcomeMessage } from "./pg-transform";
 import { OFWelcomeMessage } from "./types";
 
-export type SaveOFWelcomeMessageParams = Pick<OFWelcomeMessage, "message" | "siteUserId" | "userId"> & {
+export type SaveOFWelcomeMessageParams = Pick<
+  OFWelcomeMessage,
+  "message" | "siteUserId" | "userId"
+> & {
   createdAt?: OFWelcomeMessage["createdAt"];
   updatedAt?: OFWelcomeMessage["updatedAt"];
   id?: OFWelcomeMessage["id"];

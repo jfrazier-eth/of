@@ -8,7 +8,10 @@ export const getMessage = async (messageId: string): Promise<OFWelcomeMessage | 
   const values = [messageId];
   const result = await pg.query<PGOFWelcomeMessage[]>(query, values);
 
-  console.assert(result.length <= 1, `Received multiple messages with the same id! Query ${query} Values ${values}`);
+  console.assert(
+    result.length <= 1,
+    `Received multiple messages with the same id! Query ${query} Values ${values}`
+  );
 
   if (result.length === 1) {
     return transformPGOFWelcomeMessage(result[0]);

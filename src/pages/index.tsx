@@ -22,7 +22,11 @@ export default function Page() {
     if (userInfo.value.isLoggedIn && settings.isReady) {
       return (
         <Main>
-          <OFSettings settings={settings.value} setSettings={setSettings} saveSettings={saveSettings} />
+          <OFSettings
+            settings={settings.value}
+            setSettings={setSettings}
+            saveSettings={saveSettings}
+          />
         </Main>
       );
     } else {

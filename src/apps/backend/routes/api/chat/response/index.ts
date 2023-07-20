@@ -40,7 +40,10 @@ router.post(
       const settings = await userSettingsModel.findOne({ userId: user.id });
 
       const chatCompletionRequest = transformRequest(
-        req.body,
+        {
+          user,
+          chat,
+        },
         {
           customScript: settings?.scripts ?? "",
           emojis: settings?.favoriteEmojis ?? "",
