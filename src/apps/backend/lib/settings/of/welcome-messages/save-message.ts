@@ -34,7 +34,8 @@ export const saveMessage = async (params: SaveOFWelcomeMessageParams) => {
   });
 
   const insert = pgp.helpers.insert(pgMessage, columnSet);
-  const query = `${insert} ON CONFLICT (id) of DO UPDATE SET ${columns}`;
+  const excludedColumns = columns.map((col) => `${col} = EXCLUDED.${col}`).join(", ");
+  const query = `${insert} ON CONFLICT (id) of DO UPDATE SET ${excludedColumns}`;
 
   try {
     await pg.query(query);

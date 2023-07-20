@@ -5,7 +5,7 @@ import { handleActiveTabMessage } from "./active-tab";
 import { handleGenerateResponseMessage } from "./generate-response";
 import { handleGetOFSettingsMessage, handleSaveOFSettingsMessage } from "./of-settings";
 import { Handler } from "./types";
-import { handleUserInfoMessage } from "./user-info";
+import { handleActiveUserInfoMessage, handleUserInfoMessage } from "./user-info";
 import { handleUserSettingsMessage } from "./user-settings";
 
 export const MessageHandlers = {
@@ -15,6 +15,7 @@ export const MessageHandlers = {
   GENERATE_RESPONSE: handleGenerateResponseMessage,
   GET_OF_SETTINGS: handleGetOFSettingsMessage,
   SAVE_OF_SETTINGS: handleSaveOFSettingsMessage,
+  ACTIVE_USER_INFO: handleActiveUserInfoMessage,
 };
 
 export const registerMessageHandler = (context: Context) => {

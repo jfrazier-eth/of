@@ -12,6 +12,10 @@ export interface UserInfoMessage extends BaseMessage {
   };
 }
 
+export interface ActiveUserInfoMessage extends BaseMessage {
+  kind: "ACTIVE_USER_INFO";
+}
+
 export interface UserSettingsMessage extends BaseMessage {
   kind: "USER_SETTINGS";
 }
@@ -40,6 +44,7 @@ export interface SaveOFSettingsMessage extends BaseMessage {
 
 export type Message =
   | UserInfoMessage
+  | ActiveUserInfoMessage
   | UserSettingsMessage
   | ActiveTabMessage
   | GenerateResponseMessage

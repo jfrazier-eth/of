@@ -2,7 +2,7 @@ import type { AppProps } from "next/app";
 
 import { FirebaseAuthProvider } from "@/extension/context/firebase-auth-context";
 import { FirebaseUserProvider } from "@/extension/context/firebase-user-context";
-import { UserInfoProvider } from "@/extension/context/user-context";
+import { UserInfoProvider } from "@/extension/context/user-info-context";
 import { UserOFSettingsProvider } from "@/extension/context/user-of-settings";
 
 import "../styles/globals.css";

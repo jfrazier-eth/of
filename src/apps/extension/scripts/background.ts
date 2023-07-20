@@ -38,16 +38,16 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
               authId,
               sess,
             };
-
-            saveAuth(auth)
+            context.isReady
               .then(() => {
-                console.log("Saved auth");
+                return saveAuth(auth, context);
               })
               .catch((err) => {
-                console.log("Failed to save auth", err);
+                console.error(`Failed to save auth for ${xbc}`, err);
               });
           });
         }
+        return;
       }
     }
   },

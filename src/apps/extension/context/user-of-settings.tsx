@@ -3,7 +3,7 @@ import { ReactNode, SetStateAction, createContext, useContext, useEffect, useSta
 import { sendMessage } from "../lib/extension/messages";
 import { UserOFSettings } from "../lib/extension/messages/responses";
 import { Data } from "./data";
-import { UserInfoContext } from "./user-context";
+import { UserInfoContext } from "./user-info-context";
 
 interface UserOFSettingsContextValue {
   settings: Data<UserOFSettings>;
@@ -45,7 +45,7 @@ export const UserOFSettingsProvider: React.FC<{ children: ReactNode }> = ({ chil
     return () => {
       isMounted = false;
     };
-  }, [userInfo.isReady]);
+  }, [userInfo]);
 
   const saveSettings = async () => {
     if (value.isReady) {

@@ -1,5 +1,6 @@
 import {
   ActiveTabMessage,
+  ActiveUserInfoMessage,
   GenerateResponseMessage,
   GetOFSettingsMessage,
   SaveOFSettingsMessage,
@@ -8,6 +9,7 @@ import {
 } from "./messages";
 import {
   ActiveTabResponse,
+  ActiveUserInfoResponse,
   GenerateResponseResponse,
   GetOFSettingsResponse,
   SaveOFSettingsResponse,
@@ -22,6 +24,7 @@ export type MessagesByKind = {
   GENERATE_RESPONSE: GenerateResponseMessage;
   GET_OF_SETTINGS: GetOFSettingsMessage;
   SAVE_OF_SETTINGS: SaveOFSettingsMessage;
+  ACTIVE_USER_INFO: ActiveUserInfoMessage;
 };
 
 export type ResponsesByKind = {
@@ -31,4 +34,5 @@ export type ResponsesByKind = {
   GENERATE_RESPONSE: GenerateResponseResponse;
   GET_OF_SETTINGS: GetOFSettingsResponse;
   SAVE_OF_SETTINGS: SaveOFSettingsResponse;
+  ACTIVE_USER_INFO: ActiveUserInfoResponse;
 };
