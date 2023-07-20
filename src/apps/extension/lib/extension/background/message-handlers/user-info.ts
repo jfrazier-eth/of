@@ -1,4 +1,5 @@
 import { postLogin } from "@/extension/lib/api/login";
+import { getActiveAuth } from "@/extension/lib/auth";
 
 import { ActiveUserInfoMessage, UserInfoMessage } from "../../messages/index";
 import { Handler } from "./types";
@@ -61,6 +62,7 @@ const getActiveUser = async () => {
 const setCachedUser = async (user: StoredUserInfo) => {
   const key = `user-${user.firebase.uid}`;
   const activeUser = `user-active`;
+  console.log(`Setting active user`, user);
   return new Promise<void>((resolve) => {
     chrome.storage.local.set(
       {
@@ -73,15 +75,20 @@ const setCachedUser = async (user: StoredUserInfo) => {
 };
 
 export const handleActiveUserInfoMessage: Handler<ActiveUserInfoMessage> = async (message, context) => {
-  let user = await getActiveUser();
+  const user = await getActiveUser();
+  console.log(`Active user`, user);
 
   if (user?.api) {
+    const cachedOfAuth = await getActiveAuth();
     return {
       kind: "ACTIVE_USER_INFO",
       data: {
         isLoggedIn: true,
         userId: user.api.userId,
         apiKey: user.api.apiKey,
+        of: {
+          auth: cachedOfAuth,
+        },
       },
     };
   }

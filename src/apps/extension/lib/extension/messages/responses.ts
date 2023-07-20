@@ -1,4 +1,5 @@
-import { UserInfo } from "../background/message-handlers/user-info";
+import { Auth } from "../../auth/types";
+import { LoggedInUser, LoggedOutUser, UserInfo } from "../background/message-handlers/user-info";
 import { UserSettings } from "../background/message-handlers/user-settings";
 
 interface BaseResponse {
@@ -12,7 +13,7 @@ export interface UserInfoResponse extends BaseResponse {
 
 export interface ActiveUserInfoResponse extends BaseResponse {
   kind: "ACTIVE_USER_INFO";
-  data: UserInfo;
+  data: (LoggedInUser & { of: { auth: Auth | null } }) | LoggedOutUser;
 }
 
 export interface UserSettingsResponse extends BaseResponse {
