@@ -12,9 +12,9 @@ const connection = mongoose.createConnection(
   (options as unknown) as mongoose.ConnectOptions // TODO it looks like useNewUrlParser and useUnifiedTopology are not in the mongoose.ConnectOptions type
 );
 
-connection.once("open", () => {
-  console.log("Connected to Mongo!");
-});
+// connection.once("open", () => {
+//   console.log("Connected to Mongo!");
+// });
 connection.on("error", (err) => {
   console.error(`MongoDB Error`, err);
 });

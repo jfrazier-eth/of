@@ -2,8 +2,8 @@ import { Router } from "express";
 
 import { router as responseRouter } from "./response";
 
-const router: Router = Router();
+const router: Router = Router({ mergeParams: true });
 
-router.use(responseRouter);
+router.use("/chat", responseRouter);
 
 export { router };
