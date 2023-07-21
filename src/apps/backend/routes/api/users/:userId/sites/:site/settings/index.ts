@@ -8,7 +8,7 @@ import { post } from "./post";
 const router: Router = Router({ mergeParams: true });
 router.use(checkUserAuth);
 
-router.get("/", get);
-router.post("/", post);
+router.get("/settings", get);
+router.post("/settings", post);
 
 export { router };

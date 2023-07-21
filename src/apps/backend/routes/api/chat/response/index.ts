@@ -6,6 +6,7 @@ import { post } from "./post";
 
 const router: Router = Router({ mergeParams: true });
 
-router.post("/response", checkUserAuth, post);
+router.use(checkUserAuth);
+router.post("/response", post);
 
 export { router };
