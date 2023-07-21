@@ -3,6 +3,7 @@ import { Context } from "@/extension/lib/api/context";
 import { onMessage } from "../../messages/index";
 import { handleActiveTabMessage } from "./active-tab";
 import { handleGenerateResponseMessage } from "./generate-response";
+import { handleGetVaultItemsMessage } from "./get-vault-items";
 import { handleGetOFSettingsMessage, handleSaveOFSettingsMessage } from "./of-settings";
 import { Handler } from "./types";
 import { handleActiveUserInfoMessage, handleUserInfoMessage } from "./user-info";
@@ -16,6 +17,7 @@ export const MessageHandlers = {
   GET_OF_SETTINGS: handleGetOFSettingsMessage,
   SAVE_OF_SETTINGS: handleSaveOFSettingsMessage,
   ACTIVE_USER_INFO: handleActiveUserInfoMessage,
+  GET_VAULT_ITEMS: handleGetVaultItemsMessage,
 };
 
 export const registerMessageHandler = (context: Context) => {

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 
 import { UserOFSettings } from "../lib/extension/messages/responses";
+import { Button } from "./Button";
 import { Loader } from "./Loader";
 import MediaInput from "./inputs/MediaInput";
 import PriceInput from "./inputs/PriceInput";
 import Toggle from "./inputs/Toggle";
+import { MediaGrid } from "./media-grid/MediaGrid";
 
 const OFSettings: React.FC<{
   settings: UserOFSettings;
@@ -12,6 +14,7 @@ const OFSettings: React.FC<{
   saveSettings: () => Promise<void>;
 }> = ({ settings, setSettings, saveSettings }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [mediaGridOpen, setMediaGridOpen] = useState(false);
 
   const toggleAutoMessages = () => {
     setSettings((prev) => {
@@ -44,8 +47,16 @@ const OFSettings: React.FC<{
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex relative h-full flex-col divide-gray-200 bg-white shadow-xl w-[400px]"
+      className={
+        "flex relative h-full flex-col divide-gray-200 bg-white shadow-xl w-[400px] overflow-auto"
+      }
     >
+      <MediaGrid
+        title="Select media from your vault"
+        open={mediaGridOpen}
+        onClose={() => setMediaGridOpen(false)}
+        onSelect={() => console.log(`Item selected`)}
+      />
       <div className="h-0 flex-1">
         <div className="flex flex-col items-start justify-start h-screen w-full">
           <div className="bg-primary text-white w-full text-left p-4">
@@ -109,9 +120,10 @@ const OFSettings: React.FC<{
                 />
               </div>
               <label className={`flex flex-col ${labelClass}`}>
-                <span className="mr-2">Select an image</span>
+                <Button onClick={() => setMediaGridOpen(true)} label="Select media" />
               </label>
-              <MediaInput />
+
+              {/* <MediaInput /> */}
               <label htmlFor="welcomePrice" className={labelClass}>
                 Set Price
               </label>

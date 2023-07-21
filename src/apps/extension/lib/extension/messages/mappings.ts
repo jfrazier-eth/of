@@ -3,6 +3,7 @@ import {
   ActiveUserInfoMessage,
   GenerateResponseMessage,
   GetOFSettingsMessage,
+  GetVaultItemsMessage,
   SaveOFSettingsMessage,
   UserInfoMessage,
   UserSettingsMessage,
@@ -12,6 +13,7 @@ import {
   ActiveUserInfoResponse,
   GenerateResponseResponse,
   GetOFSettingsResponse,
+  GetVaultItemsResponse,
   SaveOFSettingsResponse,
   UserInfoResponse,
   UserSettingsResponse,
@@ -25,6 +27,7 @@ export type MessagesByKind = {
   GET_OF_SETTINGS: GetOFSettingsMessage;
   SAVE_OF_SETTINGS: SaveOFSettingsMessage;
   ACTIVE_USER_INFO: ActiveUserInfoMessage;
+  GET_VAULT_ITEMS: GetVaultItemsMessage;
 };
 
 export type ResponsesByKind = {
@@ -35,4 +38,5 @@ export type ResponsesByKind = {
   GET_OF_SETTINGS: GetOFSettingsResponse;
   SAVE_OF_SETTINGS: SaveOFSettingsResponse;
   ACTIVE_USER_INFO: ActiveUserInfoResponse;
+  GET_VAULT_ITEMS: GetVaultItemsResponse;
 };

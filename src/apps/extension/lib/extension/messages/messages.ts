@@ -44,6 +44,13 @@ export interface SaveOFSettingsMessage extends BaseMessage {
   data: UserOFSettings;
 }
 
+export interface GetVaultItemsMessage extends BaseMessage {
+  kind: "GET_VAULT_ITEMS";
+  data: {
+    offset: number;
+  };
+}
+
 export type Message =
   | UserInfoMessage
   | ActiveUserInfoMessage
@@ -51,4 +58,5 @@ export type Message =
   | ActiveTabMessage
   | GenerateResponseMessage
   | GetOFSettingsMessage
-  | SaveOFSettingsMessage;
+  | SaveOFSettingsMessage
+  | GetVaultItemsMessage;

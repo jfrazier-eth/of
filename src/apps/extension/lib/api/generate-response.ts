@@ -3,6 +3,7 @@ import {
   GenerateChatRequestBody,
   GenerateChatResponseBody,
 } from "@/backend/routes/api/chat/response/types";
+import { OF_BASE_URL } from "@/sites/of";
 import { SessionContext } from "@/sites/of/context";
 import { getMessages } from "@/sites/of/sdk/get-messages";
 
@@ -36,7 +37,7 @@ export async function generateResponse(
         authUid: null,
       },
       {
-        baseUrl: "https://onlyfans.com",
+        baseUrl: OF_BASE_URL,
       }
     );
 

@@ -1,3 +1,5 @@
+import { VaultMediaItem } from "@/sites/of/routes/v2/vault/media";
+
 import { Auth } from "../../auth/types";
 import { LoggedInUser, LoggedOutUser, UserInfo } from "../background/message-handlers/user-info";
 import { UserSettings } from "../background/message-handlers/user-settings";
@@ -33,6 +35,17 @@ export interface GenerateResponseResponse extends BaseResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetVaultItemsResponse extends BaseResponse {
+  kind: "GET_VAULT_ITEMS";
+  data:
+    | {
+        items: VaultMediaItem[];
+        hasNextPage: boolean;
+        offset: number;
+      }
+    | { error: string };
 }
 
 export interface UserOFSettings {
@@ -75,4 +88,5 @@ export type Response =
   | ActiveTabResponse
   | GenerateResponseResponse
   | GetOFSettingsResponse
-  | SaveOFSettingsResponse;
+  | SaveOFSettingsResponse
+  | GetVaultItemsResponse;

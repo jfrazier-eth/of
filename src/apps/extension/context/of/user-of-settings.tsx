@@ -1,9 +1,9 @@
 import { ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from "react";
 
-import { sendMessage } from "../lib/extension/messages";
-import { UserOFSettings } from "../lib/extension/messages/responses";
-import { Data } from "./data";
-import { UserInfoContext } from "./user-info-context";
+import { sendMessage } from "../../lib/extension/messages";
+import { UserOFSettings } from "../../lib/extension/messages/responses";
+import { Data } from "../data";
+import { UserInfoContext } from "../user-info-context";
 
 interface UserOFSettingsContextValue {
   settings: Data<UserOFSettings>;
