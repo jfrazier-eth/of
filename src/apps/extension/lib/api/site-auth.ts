@@ -4,7 +4,7 @@ import { Auth } from "../auth/types";
 import { Context } from "./context";
 
 const getPath = (userId: string) => {
-  return `/api/user/${userId}/sites/${Site.OF}/login`;
+  return `/api/users/${userId}/sites/${Site.OF}/login`;
 };
 
 export async function postAuth(context: Context, auth: Auth) {

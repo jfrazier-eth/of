@@ -6,9 +6,7 @@ import { checkUserAuth } from "./controllers/user-auth";
 import "./db/mongo";
 import "./db/redis";
 import { router as apiRouter } from "./routes/api";
-import { router as siteLoginRouter } from "./routes/api/auth";
 import { router as login } from "./routes/api/login";
-//routes
 import { ofRoute } from "./routes/of-route";
 
 const app = express();
@@ -16,13 +14,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/api", (req, res) => {
-  res.send("Hello world!");
-});
-app.use("/api/login", login);
-app.use(apiRouter);
+app.use("/", apiRouter);
 app.use("/api/of", checkUserAuth, ofRoute);
-app.use(checkUserAuth, siteLoginRouter);
 
 app.use((_req, res, _next) => {
   res.status(404).json({ error: "Not found" });
