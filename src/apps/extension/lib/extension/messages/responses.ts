@@ -48,6 +48,14 @@ export interface GetVaultItemsResponse extends BaseResponse {
     | { error: string };
 }
 
+export interface UserMedia {
+  id: string;
+  type: "photo" | "video" | "gif" | "audio";
+  squarePreview: string;
+  source: string;
+  createdAt: number;
+}
+
 export interface UserOFSettings {
   userId: string;
   autoMessages: boolean;
@@ -56,11 +64,14 @@ export interface UserOFSettings {
   scripts: string;
   welcomeMessage: string;
   welcomePrice: number;
+  welcomeMedia?: UserMedia;
   ppvPrice1: number;
   ppvPrice2: number;
   selectedImage: string;
   ppvDefault1: string;
+  ppvDefault1Media?: UserMedia;
   ppvDefault2: string;
+  ppvDefault2Media?: UserMedia;
   emojis: string;
 }
 

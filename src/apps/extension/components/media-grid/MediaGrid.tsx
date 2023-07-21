@@ -1,20 +1,17 @@
-import React, { LegacyRef } from "react";
+import React from "react";
 
 import { Dialog } from "@headlessui/react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
 import { useVaultMedia } from "@/extension/context/of/vault-media";
-import { VaultMediaItem } from "@/sites/of/routes/v2/vault/media";
+import { UserMedia } from "@/extension/lib/extension/messages/responses";
 
-import { AudioMedia } from "./AudioMedia";
-import { GifMedia } from "./GifMedia";
-import { ImageMedia } from "./ImageMedia";
-import { VideoMedia } from "./VideoMedia";
+import { Media } from "./Media";
 
 interface MediaGridProps {
   open: boolean;
   onClose: () => void;
-  onSelect: (media: VaultMediaItem) => void;
+  onSelect: (media: UserMedia) => void;
   title: string;
 }
 
@@ -30,13 +27,8 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ open, onClose, onSelect, t
     overscan: 5,
   });
 
-  const handleSelection = (id: string) => {
-    const vaultItem = items.find((item) => item.id.toString() === id);
-    if (!vaultItem) {
-      console.error(`Failed to find the selected media item`);
-    } else {
-      onSelect(vaultItem);
-    }
+  const handleSelection = (item: UserMedia) => {
+    onSelect(item);
     onClose();
   };
 
@@ -62,7 +54,7 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ open, onClose, onSelect, t
     <Dialog
       open={open}
       onClose={onClose}
-      className="fixed inset-0 flex items-center justify-center z-10"
+      className="fixed inset-0 flex items-center justify-center z-10 max-h-[80%] max-w-[80%] m-auto"
     >
       <Dialog.Overlay className="fixed inset-0 bg-black opacity-10" />
       <div className="bg-white text-black rounded-lg p-4 max-h-full h-full w-full relative overflow-y-scroll">
@@ -77,39 +69,14 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ open, onClose, onSelect, t
               return <div key="media-grid-loading">Loading more...</div>;
             }
 
-            const vaultItem = items[virtualRow.index];
-            let mediaComponent;
-
-            switch (vaultItem.type) {
-              case "photo":
-                mediaComponent = <ImageMedia src={vaultItem.squarePreview} />;
-                break;
-              case "gif":
-                if (vaultItem.convertedToVideo) {
-                  mediaComponent = (
-                    <VideoMedia src={vaultItem.source.source} preview={vaultItem.squarePreview} />
-                  );
-                } else {
-                  mediaComponent = <GifMedia src={vaultItem.squarePreview} />;
-                }
-                break;
-              case "video":
-                mediaComponent = (
-                  <VideoMedia src={vaultItem.source.source} preview={vaultItem.squarePreview} />
-                );
-                break;
-              case "audio":
-                mediaComponent = <AudioMedia src={vaultItem.squarePreview} />;
-                break;
-            }
-
+            const item = items[virtualRow.index];
             return (
               <div
-                key={vaultItem.id.toString()}
-                onClick={() => handleSelection(vaultItem.id.toString())}
+                key={item.id}
+                onClick={() => handleSelection(item)}
                 className="cursor-pointer transition-colors duration-200 hover:bg-gray-200 rounded h-fit w-fit"
               >
-                {mediaComponent}
+                <Media media={item} />
               </div>
             );
           })}

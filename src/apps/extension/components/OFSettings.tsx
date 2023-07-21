@@ -6,7 +6,10 @@ import { Loader } from "./Loader";
 import MediaInput from "./inputs/MediaInput";
 import PriceInput from "./inputs/PriceInput";
 import Toggle from "./inputs/Toggle";
+import { Media } from "./media-grid/Media";
 import { MediaGrid } from "./media-grid/MediaGrid";
+
+type Section = "WELCOME" | "PPV1" | "PPV2";
 
 const OFSettings: React.FC<{
   settings: UserOFSettings;
@@ -14,7 +17,10 @@ const OFSettings: React.FC<{
   saveSettings: () => Promise<void>;
 }> = ({ settings, setSettings, saveSettings }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [mediaGridOpen, setMediaGridOpen] = useState(false);
+  const [mediaGridContext, setMediaGridContext] = useState<{ isOpen: boolean; section: Section }>({
+    isOpen: false,
+    section: "WELCOME",
+  });
 
   const toggleAutoMessages = () => {
     setSettings((prev) => {
@@ -53,9 +59,34 @@ const OFSettings: React.FC<{
     >
       <MediaGrid
         title="Select media from your vault"
-        open={mediaGridOpen}
-        onClose={() => setMediaGridOpen(false)}
-        onSelect={() => console.log(`Item selected`)}
+        open={mediaGridContext.isOpen}
+        onClose={() => setMediaGridContext((prev) => ({ isOpen: false, section: prev.section }))}
+        onSelect={(item) => {
+          console.log(`Media selected ${item.id} Section ${mediaGridContext.section}}`);
+          switch (mediaGridContext.section) {
+            case "WELCOME": {
+              setSettings((prev) => ({
+                ...prev,
+                welcomeMedia: item,
+              }));
+              break;
+            }
+            case "PPV1": {
+              setSettings((prev) => ({
+                ...prev,
+                ppvDefault1Media: item,
+              }));
+              break;
+            }
+            case "PPV2": {
+              setSettings((prev) => ({
+                ...prev,
+                ppvDefault2Media: item,
+              }));
+              break;
+            }
+          }
+        }}
       />
       <div className="h-0 flex-1">
         <div className="flex flex-col items-start justify-start h-screen w-full">
@@ -119,11 +150,6 @@ const OFSettings: React.FC<{
                   setEnabled={toggleWelcomeMessageDefault}
                 />
               </div>
-              <label className={`flex flex-col ${labelClass}`}>
-                <Button onClick={() => setMediaGridOpen(true)} label="Select media" />
-              </label>
-
-              {/* <MediaInput /> */}
               <label htmlFor="welcomePrice" className={labelClass}>
                 Set Price
               </label>
@@ -154,10 +180,22 @@ const OFSettings: React.FC<{
                 rows={4}
                 placeholder="Insert default welcome message to send to subscribers initially."
               ></textarea>
+              {settings.welcomeMedia && (
+                <div className="flex flex-col mt-2 w-[50%]">
+                  <Media media={settings.welcomeMedia} />
+                </div>
+              )}
+              <label className={`flex flex-col ${labelClass} mt-2`}>
+                <Button
+                  onClick={() => setMediaGridContext({ isOpen: true, section: "WELCOME" })}
+                  label="Select welcome message media"
+                />
+              </label>
+
               <label className={`flex flex-col ${labelClass}`}>
                 <span className="mr-2">PPV default 1</span>
               </label>
-              <MediaInput />
+
               <label htmlFor="price1" className={labelClass}>
                 Set Price
               </label>
@@ -173,10 +211,20 @@ const OFSettings: React.FC<{
                   }));
                 }}
               />
+              {settings.ppvDefault1Media && (
+                <div className="flex flex-col mt-2 w-[50%]">
+                  <Media media={settings.ppvDefault1Media} />
+                </div>
+              )}
+              <label className={`flex flex-col ${labelClass} mt-2`}>
+                <Button
+                  onClick={() => setMediaGridContext({ isOpen: true, section: "PPV1" })}
+                  label="Select PPV1 media"
+                />
+              </label>
               <label className={`flex flex-col ${labelClass}`}>
                 <span className="mr-2">PPV default 2</span>
               </label>
-              <MediaInput />
               <label htmlFor="price2" className={labelClass}>
                 Set Price
               </label>
@@ -192,6 +240,17 @@ const OFSettings: React.FC<{
                   }));
                 }}
               />
+              {settings.ppvDefault2Media && (
+                <div className="flex flex-col mt-2 w-[50%]">
+                  <Media media={settings.ppvDefault2Media} />
+                </div>
+              )}
+              <label className={`flex flex-col ${labelClass} mt-2`}>
+                <Button
+                  onClick={() => setMediaGridContext({ isOpen: true, section: "PPV2" })}
+                  label="Select PPV2 media"
+                />
+              </label>
               <div className="flex justify-end my-6">
                 <button
                   type="submit"
