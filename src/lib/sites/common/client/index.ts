@@ -4,8 +4,8 @@ import { ClientOptions, RequestAdapter, RequestOptions, Response } from "./types
 
 export let adapter = fetchAdapter;
 
-export const setAdapter = (adapter: RequestAdapter<unknown, unknown>) => {
-  adapter = fetchAdapter;
+export const setAdapter = (newAdapter: RequestAdapter<unknown, unknown>) => {
+  adapter = newAdapter;
 };
 
 export const request = async <ReqBody, ResBody>(

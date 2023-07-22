@@ -32,7 +32,9 @@ export const get = async (context: SessionContext): Promise<void> => {
     }
     throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
-    console.error(err);
+    if (err instanceof UnexpectedStatusCodeError) {
+      throw err;
+    }
     throw RequestError.create(err, url, context);
   }
 };

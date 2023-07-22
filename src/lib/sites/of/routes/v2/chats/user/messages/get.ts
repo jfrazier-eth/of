@@ -59,6 +59,9 @@ export const get = async (context: SessionContext, options: GetMessagesOptions) 
 
     throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
+    if (err instanceof UnexpectedStatusCodeError) {
+      throw err;
+    }
     throw RequestError.create(err, url, context);
   }
 };

@@ -1,26 +1,27 @@
 import { useState } from "react";
 
+import { MediaType } from "@/backend/lib/user-media/types";
+import { ClientUserMedia } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/settings/types";
 import { sendMessage } from "@/extension/lib/extension/messages";
-import { UserMedia } from "@/extension/lib/extension/messages/responses";
 import { VaultMediaItem } from "@/sites/of/routes/v2/vault/media";
 
-const transformVaultMediaItem = (item: VaultMediaItem): UserMedia => {
-  let type = item.type;
+const transformVaultMediaItem = (item: VaultMediaItem): ClientUserMedia => {
+  let type: MediaType = item.type;
   if (item.convertedToVideo) {
     type = "video";
   }
   return {
-    id: item.id.toString(),
     type: type,
     squarePreview: item.squarePreview,
     source: item.source.source,
-    createdAt: new Date(item.createdAt).getTime(),
+    mediaCreatedAt: new Date(item.createdAt).getTime(),
+    siteMediaId: item.id.toString(),
   };
 };
 
 export const useVaultMedia = () => {
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [items, setItems] = useState<UserMedia[]>([]);
+  const [items, setItems] = useState<ClientUserMedia[]>([]);
   const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
 
   const fetchNextPage = async () => {

@@ -16,6 +16,8 @@ export const signReq = async (
 ) => {
   let urlPart = url.searchParams.size === 0 ? url.pathname : `${url.pathname}${url.search}`;
 
+  console.log(urlPart);
+
   const msg = [dynamicParams.staticParam, time, urlPart, authId].join("\n");
 
   const hexHash = await sha1(msg);

@@ -1,4 +1,4 @@
-import { UserOFSettings } from "./responses";
+import { ClientOFSettings } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/settings/types";
 
 interface BaseMessage {
   kind: string;
@@ -41,7 +41,7 @@ export interface GetOFSettingsMessage extends BaseMessage {
 
 export interface SaveOFSettingsMessage extends BaseMessage {
   kind: "SAVE_OF_SETTINGS";
-  data: UserOFSettings;
+  data: ClientOFSettings;
 }
 
 export interface GetVaultItemsMessage extends BaseMessage {

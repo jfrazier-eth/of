@@ -16,7 +16,7 @@
     "start": "pnpm build && pnpm migrate up && node -r dotenv/config -r module-alias/register ./dist/apps/backend/index.js",
     "test": "node node_modules/jest/bin/jest.js",
     "migrate": "ts-node --project tsconfig.migrations.json node_modules/node-pg-migrate/bin/node-pg-migrate",
-    "start:script": "pnpm build && node -r dotenv/config ./dist/index.js",
+    "start:script": "pnpm build && node -r dotenv/config -r module-alias/register ./dist/index.js",
     "ext:dev": "next dev",
     "ext:start": "next start",
     "ext:clean": "rimraf ./ext-dist",

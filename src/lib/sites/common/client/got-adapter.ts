@@ -1,9 +1,18 @@
 import got from "got";
+import { HttpsProxyAgent } from "https-proxy-agent";
 
 import { RequestAdapter, Response } from "./types";
 
 export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
   const url = request.url.toString();
+
+  console.log(`Using got adapter for ${url}`);
+  const proxy = process.env.HTTPS_PROXY;
+  let agent;
+  if (proxy) {
+    agent = new HttpsProxyAgent(proxy);
+    console.log(`Using proxy ${proxy}`);
+  }
 
   try {
     const response = await got(url, {
@@ -14,10 +23,10 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
       headers: request.headers,
       body: request.json ? JSON.stringify(request.json) : undefined,
       agent: {
-        https: request.httpsAgent,
+        https: agent,
       },
       https: {
-        rejectUnauthorized: request.rejectUnauthorized ?? true,
+        rejectUnauthorized: !proxy?.includes("127.0.0.1"),
       },
     });
 

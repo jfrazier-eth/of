@@ -65,6 +65,9 @@ export async function fetchOFDynamicParams(context: Context): Promise<OFDynamicP
     }
     throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
+    if (err instanceof UnexpectedStatusCodeError) {
+      throw err;
+    }
     throw RequestError.create(err, url, context);
   }
 }

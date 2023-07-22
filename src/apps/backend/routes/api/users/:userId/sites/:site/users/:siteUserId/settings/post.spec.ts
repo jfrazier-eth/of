@@ -4,6 +4,8 @@ import { app } from "@/backend/app";
 import { Site } from "@/backend/lib/accounts/types";
 
 test("It should require auth", async () => {
-  const response = await request(app).post(`/api/users/userId/sites/${Site.OF}/settings`);
+  const response = await request(app).post(
+    `/api/users/userId/sites/${Site.OF}/users/siteUserId/settings`
+  );
   expect(response.statusCode).toBe(401);
 });

@@ -1,12 +1,14 @@
 import cors from "cors";
 import express, { Express, NextFunction, Request, Response } from "express";
 
+import { parseHeaders } from "./controllers/parse-headers";
 import { router as apiRouter } from "./routes/api";
 
 const app: Express = express();
 app.use(cors());
 app.use(express.json());
-app.use("/", apiRouter);
+
+app.use("/", parseHeaders, apiRouter);
 
 app.use((_req, res, _next) => {
   res.status(404).json({ error: "Not found" });

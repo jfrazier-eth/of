@@ -6,6 +6,6 @@ const router: Router = Router({
   mergeParams: true,
 });
 
-router.post("/", post);
+router.post("/login", post);
 
 export { router };

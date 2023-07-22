@@ -1,26 +1,32 @@
 import { NextFunction, Request, Response } from "express";
 
 import { getUser } from "../lib/users/get-user";
+import { User } from "../lib/users/types";
+import { HeaderLocals } from "./parse-headers";
 
-export const checkUserAuth = async (req: Request, res: Response, next: NextFunction) => {
-  const apiKey = req.headers["x-api-key"];
-  const userId = req.headers["x-user-id"];
+export type AuthLocals = { user: User } & HeaderLocals;
+
+export const checkUserAuth = async (
+  req: Request<unknown, unknown, unknown, unknown, { apiKey: string; userId: string }>,
+  res: Response<unknown, AuthLocals>,
+  next: NextFunction
+) => {
+  const userId = res.locals.userId;
+  const apiKey = res.locals.apiKey;
 
   if (typeof userId !== "string" || typeof apiKey !== "string") {
-    res.status(401).json({ message: "Unauthorized request - invalid headers" });
-    return;
+    return res.sendStatus(401);
   }
 
   const user = await getUser(userId);
   if (!user) {
-    res.status(401).json({ message: "Unauthorized request" });
-    return;
+    return res.sendStatus(401);
   }
 
   if (user.apiKey !== apiKey) {
-    res.status(401).json({ messageL: "Unauthorized request" });
-    return;
+    return res.sendStatus(401);
   }
 
+  res.locals.user = user;
   next();
 };

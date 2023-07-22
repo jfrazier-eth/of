@@ -3,15 +3,15 @@ import React from "react";
 import { Dialog } from "@headlessui/react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
+import { ClientUserMedia } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/settings/types";
 import { useVaultMedia } from "@/extension/context/of/vault-media";
-import { UserMedia } from "@/extension/lib/extension/messages/responses";
 
 import { Media } from "./Media";
 
 interface MediaGridProps {
   open: boolean;
   onClose: () => void;
-  onSelect: (media: UserMedia) => void;
+  onSelect: (media: ClientUserMedia) => void;
   title: string;
 }
 
@@ -27,7 +27,7 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ open, onClose, onSelect, t
     overscan: 5,
   });
 
-  const handleSelection = (item: UserMedia) => {
+  const handleSelection = (item: ClientUserMedia) => {
     onSelect(item);
     onClose();
   };

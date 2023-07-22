@@ -15,8 +15,10 @@ export type LoginParamsBySite = {
   [Site.OF]: OFLogin["params"];
 };
 
-export const getLogin = async (params: GetLoginParams) => {
+export const getLogin = async <S extends Site>(
+  params: GetLoginParams
+): Promise<LoginParamsBySite[S] | null> => {
   const handler = getLoginBySite[params.site];
-  const login = await handler(params);
+  const login = (await handler(params)) as LoginParamsBySite[S] | null;
   return login;
 };

@@ -25,10 +25,6 @@ export class SessionContext extends Context {
   constructor(sessionParams: UserSessionParams, options: ContextOptions) {
     super(options);
     this._userParams = clone(sessionParams);
-    // this._cookieJar.setCookie(
-    //   `sess=${sessionParams.sess}; path=/; domain=.onlyfans.com; secure; HttpOnly`,
-    //   this.options.baseUrl.toString()
-    // );
   }
 
   public async getHeaders(url: URL): Promise<Record<string, string>> {

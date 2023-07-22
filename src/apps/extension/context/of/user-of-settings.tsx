@@ -1,13 +1,14 @@
 import { ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from "react";
 
+import { ClientOFSettings } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/settings/types";
+
 import { sendMessage } from "../../lib/extension/messages";
-import { UserOFSettings } from "../../lib/extension/messages/responses";
 import { Data } from "../data";
 import { UserInfoContext } from "../user-info-context";
 
 interface UserOFSettingsContextValue {
-  settings: Data<UserOFSettings>;
-  setSettings: (handler: (prevState: UserOFSettings) => UserOFSettings) => void;
+  settings: Data<ClientOFSettings>;
+  setSettings: (handler: (prevState: ClientOFSettings) => ClientOFSettings) => void;
   saveSettings: () => Promise<void>;
 }
 
@@ -19,7 +20,7 @@ export const UserOFSettingsContext = createContext<UserOFSettingsContextValue>({
 
 export const UserOFSettingsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const userInfo = useContext(UserInfoContext);
-  const [value, setValue] = useState<Data<UserOFSettings>>({ isReady: false });
+  const [value, setValue] = useState<Data<ClientOFSettings>>({ isReady: false });
 
   useEffect(() => {
     if (!userInfo.isReady || !userInfo.value.isLoggedIn) {
@@ -62,7 +63,7 @@ export const UserOFSettingsProvider: React.FC<{ children: ReactNode }> = ({ chil
     <UserOFSettingsContext.Provider
       value={{
         settings: value,
-        setSettings: (handler: (prevState: UserOFSettings) => UserOFSettings) => {
+        setSettings: (handler: (prevState: ClientOFSettings) => ClientOFSettings) => {
           setValue((prev) => {
             if (!prev.isReady) {
               throw new Error("Settings not found");

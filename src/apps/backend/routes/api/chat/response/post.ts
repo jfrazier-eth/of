@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
 import { config } from "@/backend/config";
+import { AuthLocals } from "@/backend/controllers/user-auth";
 import { userSettingsModel } from "@/backend/models/only-fans/user-settings";
 import * as OpenAI from "@/lib/open-ai";
 import { getClient } from "@/sites/common/client";
@@ -10,15 +11,11 @@ import { GenerateChatRequestBody, GenerateChatResponseBody } from "./types";
 
 export const post = async (
   req: Request<{}, {}, GenerateChatRequestBody, {}>,
-  res: Response<GenerateChatResponseBody>
+  res: Response<GenerateChatResponseBody, AuthLocals>
 ) => {
+  const { userId } = res.locals;
   const { user, chat } = req.body;
-  const userIdHeader = req.headers["x-user-id"];
-
-  if (typeof userIdHeader !== "string" || !userIdHeader) {
-    console.error(`Expected user id to be present`);
-    return res.sendStatus(500);
-  } else if (userIdHeader !== user.id) {
+  if (userId !== user.id) {
     return res.sendStatus(400);
   }
 
@@ -30,7 +27,7 @@ export const post = async (
 
     const apiKey = config.openAI.apiKey;
 
-    // TODO get settings
+    // TODO update settings
     const settings = await userSettingsModel.findOne({ userId: user.id });
 
     const chatCompletionRequest = transformRequest(

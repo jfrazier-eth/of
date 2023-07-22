@@ -1,3 +1,4 @@
+import { OFSettings } from "@/backend/lib/settings/of/types";
 import { VaultMediaItem } from "@/sites/of/routes/v2/vault/media";
 
 import { Auth } from "../../auth/types";
@@ -48,36 +49,9 @@ export interface GetVaultItemsResponse extends BaseResponse {
     | { error: string };
 }
 
-export interface UserMedia {
-  id: string;
-  type: "photo" | "video" | "gif" | "audio";
-  squarePreview: string;
-  source: string;
-  createdAt: number;
-}
-
-export interface UserOFSettings {
-  userId: string;
-  autoMessages: boolean;
-  welcomeMessageDefault: boolean;
-  spendingThreshold: number;
-  scripts: string;
-  welcomeMessage: string;
-  welcomePrice: number;
-  welcomeMedia?: UserMedia;
-  ppvPrice1: number;
-  ppvPrice2: number;
-  selectedImage: string;
-  ppvDefault1: string;
-  ppvDefault1Media?: UserMedia;
-  ppvDefault2: string;
-  ppvDefault2Media?: UserMedia;
-  emojis: string;
-}
-
 export interface GetOFSettingsResponse extends BaseResponse {
   kind: "GET_OF_SETTINGS";
-  data: UserOFSettings;
+  data: OFSettings;
 }
 
 export interface SaveOFSettingsResponse extends BaseResponse {

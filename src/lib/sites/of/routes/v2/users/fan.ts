@@ -29,6 +29,9 @@ export const getFanHandle = async (context: SessionContext, fanId: string) => {
     }
     throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
+    if (err instanceof UnexpectedStatusCodeError) {
+      throw err;
+    }
     throw RequestError.create(err, url, context);
   }
 };
@@ -76,6 +79,9 @@ export const getFanStats = async (context: SessionContext, fanHandle: string) =>
     }
     throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
+    if (err instanceof UnexpectedStatusCodeError) {
+      throw err;
+    }
     throw RequestError.create(err, url, context);
   }
 };
@@ -140,6 +146,9 @@ export const getNewFans = async (
         throw new UnexpectedStatusCodeError(url, context, response.status);
       }
     } catch (err) {
+      if (err instanceof UnexpectedStatusCodeError) {
+        throw err;
+      }
       throw RequestError.create(err, url, context);
     }
   }

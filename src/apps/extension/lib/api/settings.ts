@@ -1,14 +1,23 @@
-import { UserOFSettings } from "../extension/messages/responses";
+import { Site } from "@/backend/lib/accounts/types";
+import { OFSettings } from "@/backend/lib/settings/of/types";
+import { ClientOFSettings } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/settings/types";
+
 import { Context } from "./context";
 
-const path = "/api/of/settings";
+const getPath = (userId: string, siteUserId: string, site: Site) => {
+  return `/api/users/${userId}/sites/${site}/users/${siteUserId}/settings`;
+};
 
-export async function getSettings(context: Context) {
+export async function getOFSettings(context: Context): Promise<OFSettings> {
   if (!context.user) {
     throw new Error("User not logged in");
+  } else if (!context.ofAuth) {
+    throw new Error("Not connected to OF");
   }
 
-  const url = context.getUrl(path, new URLSearchParams({ userId: context.user.userId }));
+  const path = getPath(context.user.userId, context.ofAuth.authId, Site.OF);
+
+  const url = context.getUrl(path);
   const headers = context.getHeaders();
   const response = await fetch(url, {
     method: "GET",
@@ -19,13 +28,20 @@ export async function getSettings(context: Context) {
   });
 
   const body = await response.json();
-  return body as UserOFSettings;
+  return body as OFSettings;
 }
 
-export async function postSettings(
-  settings: any,
+export async function postOFSettings(
+  settings: ClientOFSettings,
   context: Context
 ): Promise<{ success: true } | { success: false; error: string }> {
+  if (!context.user) {
+    throw new Error("User not logged in");
+  } else if (!context.ofAuth) {
+    throw new Error("Not connected to OF");
+  }
+
+  const path = getPath(context.user.userId, context.ofAuth.authId, Site.OF);
   const url = context.getUrl(path);
   const headers = context.getHeaders();
   const response = await fetch(url, {
