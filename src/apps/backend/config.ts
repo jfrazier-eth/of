@@ -35,4 +35,7 @@ export const config = {
   firebase: {
     serviceAccount: prodServiceAccount as ServiceAccount,
   },
+  ofApi: {
+    apiKey: getEnvVariable("OF_API_API_KEY"),
+  },
 };

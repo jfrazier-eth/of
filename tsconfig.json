@@ -16,7 +16,7 @@
     "resolveJsonModule": true,
     "strict": true,
     "skipLibCheck": true,
-    "target": "es5",
+    "target": "ES2016",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "jsx": "preserve",
     "paths": {

@@ -46,7 +46,7 @@ export const UserOFSettingsProvider: React.FC<{ children: ReactNode }> = ({ chil
     return () => {
       isMounted = false;
     };
-  }, [userInfo]);
+  }, [userInfo, sendMessage]);
 
   const saveSettings = async () => {
     if (value.isReady) {

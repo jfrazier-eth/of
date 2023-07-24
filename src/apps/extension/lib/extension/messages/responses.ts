@@ -1,4 +1,5 @@
 import { OFSettings } from "@/backend/lib/settings/of/types";
+import { ClientOFDynamicParams } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/sign/params/types";
 import { VaultMediaItem } from "@/sites/of/routes/v2/vault/media";
 
 import { Auth } from "../../auth/types";
@@ -66,6 +67,32 @@ export interface SaveOFSettingsResponse extends BaseResponse {
       };
 }
 
+export interface UpdateOFRevisionResponse extends BaseResponse {
+  kind: "UPDATE_OF_REVISION";
+  data:
+    | {
+        success: true;
+        revision: string;
+      }
+    | {
+        success: false;
+        message: string;
+      };
+}
+
+export interface GetOFDynamicParamsResponse extends BaseResponse {
+  kind: "GET_OF_DYNAMIC_PARAMS";
+  data:
+    | {
+        success: true;
+        params: ClientOFDynamicParams;
+      }
+    | {
+        success: false;
+        message: string;
+      };
+}
+
 export type Response =
   | UserInfoResponse
   | ActiveUserInfoResponse
@@ -74,4 +101,6 @@ export type Response =
   | GenerateResponseResponse
   | GetOFSettingsResponse
   | SaveOFSettingsResponse
-  | GetVaultItemsResponse;
+  | GetVaultItemsResponse
+  | UpdateOFRevisionResponse
+  | GetOFDynamicParamsResponse;

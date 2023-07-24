@@ -24,7 +24,8 @@ export const handleGetVaultItemsMessage: Handler<GetVaultItemsMessage> = async (
       },
       {
         baseUrl: OF_BASE_URL,
-      }
+      },
+      context.ofParams
     );
 
     const response = await OF.Sdk.getVault(ofContext, {

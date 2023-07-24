@@ -33,7 +33,7 @@ export default function Page() {
     } else {
       return (
         <Main>
-          <Login />
+          <Login userInfo={userInfo} />
         </Main>
       );
     }

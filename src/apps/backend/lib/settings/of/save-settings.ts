@@ -106,7 +106,7 @@ export const saveSettings = async (
   const insert = pgp.helpers.insert(pgSettings, columnSet);
 
   const excludedColumns = columns.map((col) => `${col} = EXCLUDED.${col}`).join(", ");
-  const query = `${insert} ON CONFLICT (site_user_id) of DO UPDATE SET ${excludedColumns}`;
+  const query = `${insert} ON CONFLICT (site_user_id) DO UPDATE SET ${excludedColumns}`;
   try {
     const primary = savePGUserMedia(media.primaryPPV);
     const secondary = savePGUserMedia(media.secondaryPPV);

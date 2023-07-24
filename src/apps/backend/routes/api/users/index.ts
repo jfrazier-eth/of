@@ -4,10 +4,13 @@ import { parseParams } from "@/backend/controllers/parse-params";
 
 import { router as loginRouter } from "./:userId/sites/:site/users/:siteUserId/login";
 import { router as settingsRouter } from "./:userId/sites/:site/users/:siteUserId/settings";
+import { router as signRouter } from "./:userId/sites/:site/users/:siteUserId/sign";
 
 const router: Router = Router({ mergeParams: true });
 
-router.use("/users/:userId/sites/:site/users/:siteUserId", parseParams, loginRouter);
-router.use("/users/:userId/sites/:site/users/:siteUserId", parseParams, settingsRouter);
+const path = "/users/:userId/sites/:site/users/:siteUserId";
+router.use(path, parseParams, loginRouter);
+router.use(path, parseParams, settingsRouter);
+router.use(path, parseParams, signRouter);
 
 export { router };

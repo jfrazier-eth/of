@@ -51,6 +51,17 @@ export interface GetVaultItemsMessage extends BaseMessage {
   };
 }
 
+export interface UpdateOFRevisionMessage extends BaseMessage {
+  kind: "UPDATE_OF_REVISION";
+  data: {
+    revision: string;
+  };
+}
+
+export interface GetOFDynamicParamsMessage extends BaseMessage {
+  kind: "GET_OF_DYNAMIC_PARAMS";
+}
+
 export type Message =
   | UserInfoMessage
   | ActiveUserInfoMessage
@@ -59,4 +70,6 @@ export type Message =
   | GenerateResponseMessage
   | GetOFSettingsMessage
   | SaveOFSettingsMessage
-  | GetVaultItemsMessage;
+  | GetVaultItemsMessage
+  | UpdateOFRevisionMessage
+  | GetOFDynamicParamsMessage;

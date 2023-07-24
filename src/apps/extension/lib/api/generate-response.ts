@@ -38,7 +38,8 @@ export async function generateResponse(
       },
       {
         baseUrl: OF_BASE_URL,
-      }
+      },
+      context.ofParams
     );
 
     const messages = await getMessages(ofContext, params.withUser.id, {

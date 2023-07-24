@@ -7,6 +7,7 @@ import { Message } from "../extension/messages";
 import { MessagesByKind, ResponsesByKind } from "../extension/messages/mappings";
 import { sendMessage } from "../extension/messages/send-message";
 import { isBackground } from "../extension/utils/is-background";
+import { BrowserOFParamsHandler } from "./of-params-handler";
 
 export class Context {
   protected _baseUrl: URL;
@@ -34,14 +35,16 @@ export class Context {
   }
 
   public set ofAuth(value: Auth | null) {
-    console.log(`User OF AUth changed`, value);
     this._ofAuth = clone(value);
   }
+
+  public ofParams: BrowserOFParamsHandler;
 
   constructor(baseUrl: string | URL) {
     this._baseUrl = new URL(baseUrl);
     this._user = null;
     this._ofAuth = null;
+    this.ofParams = new BrowserOFParamsHandler(null);
     this.isReady = this._init();
   }
 
@@ -57,6 +60,7 @@ export class Context {
           this.ofAuth = response.data.of.auth;
         }
       }
+      await this.ofParams.isReady;
       console.warn("No active user");
     } catch (err) {
       console.error(err);

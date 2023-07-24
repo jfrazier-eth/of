@@ -1,7 +1,7 @@
 import { clone } from "@/utils/clone";
 
 import { Context, ContextOptions } from "../common/context";
-import { getOFDynamicParams } from "./utils/of-dynamic-params";
+import { ParamsHandler } from "./params-handler";
 import { signReq } from "./utils/sign-req";
 
 export interface UserSessionParams {
@@ -22,7 +22,11 @@ export class SessionContext extends Context {
     return clone(this._userParams);
   }
 
-  constructor(sessionParams: UserSessionParams, options: ContextOptions) {
+  constructor(
+    sessionParams: UserSessionParams,
+    options: ContextOptions,
+    public ofParams: ParamsHandler
+  ) {
     super(options);
     this._userParams = clone(sessionParams);
   }
@@ -44,7 +48,12 @@ export class SessionContext extends Context {
 
   protected async getDynamicHeaders(url: URL) {
     const time = new Date().getTime();
-    const dynamicParams = await getOFDynamicParams(this);
+
+    const dynamicParams = await this.ofParams.getParams();
+
+    if (!dynamicParams) {
+      throw new Error("Dynamic params are not ready");
+    }
     const { sign } = await signReq(url, time, dynamicParams, this._userParams.authId);
 
     return {

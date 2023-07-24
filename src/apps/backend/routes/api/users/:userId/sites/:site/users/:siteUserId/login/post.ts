@@ -1,6 +1,7 @@
 import { PostRequest, UserAuthResponseWithUnsafeParams } from "@/backend/controllers/types";
 import { Site } from "@/backend/lib/accounts";
 import { OFLogins } from "@/backend/lib/logins/index";
+import { serverOFParamsHandler } from "@/backend/lib/of-params-handler";
 import { Browsers } from "@/sites/common";
 import { UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
 import { OF } from "@/sites/index";
@@ -33,11 +34,13 @@ export const post: PostLogin<Site> = async (req, res) => {
           {
             baseUrl: OF.OF_BASE_URL,
             browser: Browsers.brave,
-          }
+          },
+          serverOFParamsHandler
         );
         try {
           // ensure the creds are valid
-          await OF.Routes.V2.Users.me.get(sess);
+          // await OF.Routes.V2.Users.me.get(sess);
+          await OF.Routes.V2.Chats.List.Get.get(sess, {});
           await OFLogins.saveLogin({
             xbc: body.params.xbc,
             sess: body.params.sess,
