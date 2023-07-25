@@ -1,3 +1,4 @@
+import { serverOFParamsHandler } from "@/backend/lib/of-params-handler";
 import { Browsers } from "@/sites/common";
 import { setAdapter } from "@/sites/common/client";
 import { adapter } from "@/sites/common/client/got-adapter";
@@ -55,22 +56,23 @@ async function main() {
   // browser: Browsers.Browser;
   // proxy?: string | URL | null;
 
-  // const context = new SessionContext(
-  //   {
-  //     authId,
-  //     xbc,
-  //     sess,
-  //     authUid: null,
-  //   },
-  //   {
-  //     baseUrl: "https://onlyfans.com",
-  //     browser: Browsers.brave,
-  //     proxy: proxy ?? null,
-  //   }
-  // );
+  const context = new SessionContext(
+    {
+      authId,
+      xbc,
+      sess,
+      authUid: null,
+    },
+    {
+      baseUrl: "https://onlyfans.com",
+      browser: Browsers.brave,
+      proxy: proxy ?? null,
+    },
+    serverOFParamsHandler
+  );
 
-  // const res = await OF.Routes.V2.Users.me.get(context);
-  // console.log(res);
+  const res = await OF.Routes.V2.Users.me.get(context);
+  console.log(res);
   // const fanId = "341475026";
   // const fanHandle = "blkmichcutie";
   // const stats = await OF.Sdk.getFanStats(context, fanHandle);

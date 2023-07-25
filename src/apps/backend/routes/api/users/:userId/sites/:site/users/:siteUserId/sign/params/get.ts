@@ -37,14 +37,14 @@ export const get = async (
           return res.sendStatus(500);
         }
         const clientParams = transformOFDynamicParams(params);
-        res.status(200).json(clientParams);
+        return res.status(200).json(clientParams);
       } catch (err) {
-        res.sendStatus(500);
+        return res.sendStatus(500);
       }
     }
 
     default: {
-      res.sendStatus(400);
+      return res.sendStatus(400);
     }
   }
 };

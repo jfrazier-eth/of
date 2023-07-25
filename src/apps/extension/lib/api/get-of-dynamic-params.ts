@@ -8,6 +8,7 @@ const getPath = (userId: string, siteUserId: string) => {
 };
 
 export const getOFDynamicParams = async (context: Context, revision?: string) => {
+  await context._isInitialized;
   if (!context.user) {
     throw new Error("User not logged in");
   }

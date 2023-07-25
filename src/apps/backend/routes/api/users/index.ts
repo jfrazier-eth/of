@@ -9,8 +9,8 @@ import { router as signRouter } from "./:userId/sites/:site/users/:siteUserId/si
 const router: Router = Router({ mergeParams: true });
 
 const path = "/users/:userId/sites/:site/users/:siteUserId";
+router.use(path, parseParams, signRouter);
 router.use(path, parseParams, loginRouter);
 router.use(path, parseParams, settingsRouter);
-router.use(path, parseParams, signRouter);
 
 export { router };

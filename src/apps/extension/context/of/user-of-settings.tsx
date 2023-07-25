@@ -26,6 +26,7 @@ export const UserOFSettingsProvider: React.FC<{ children: ReactNode }> = ({ chil
     if (!userInfo.isReady || !userInfo.value.isLoggedIn) {
       return;
     }
+
     let isMounted = true;
 
     sendMessage({
@@ -34,10 +35,14 @@ export const UserOFSettingsProvider: React.FC<{ children: ReactNode }> = ({ chil
       .then((res) => {
         if (!isMounted) return;
 
-        setValue({
-          isReady: true,
-          value: res.data,
-        });
+        if (res.data.success) {
+          setValue({
+            isReady: true,
+            value: res.data.settings,
+          });
+        } else {
+          console.warn(res.data.message);
+        }
       })
       .catch((err) => {
         console.error(`Failed to get user OF settings`, err);

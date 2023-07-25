@@ -67,6 +67,7 @@ export const handleGetOFDynamicParamsMessage: Handler<GetOFDynamicParamsMessage>
   const cachedDynamicParams = await getCachedOFDynamicParams();
 
   if (cachedDynamicParams) {
+    console.log(`Found cached dynamic params!`, cachedDynamicParams);
     return {
       kind: "GET_OF_DYNAMIC_PARAMS",
       data: {
@@ -78,6 +79,7 @@ export const handleGetOFDynamicParamsMessage: Handler<GetOFDynamicParamsMessage>
 
   try {
     const res = await updateOFParams(context);
+    console.log(`Updated dynamic params!`, cachedDynamicParams);
     return {
       kind: "GET_OF_DYNAMIC_PARAMS",
       data: {
@@ -86,6 +88,7 @@ export const handleGetOFDynamicParamsMessage: Handler<GetOFDynamicParamsMessage>
       },
     };
   } catch (err) {
+    console.error(`Failed to get OF dynamic params`, err);
     return {
       kind: "GET_OF_DYNAMIC_PARAMS",
       data: {

@@ -11,7 +11,8 @@ app.use(express.json());
 app.use("/", parseHeaders, apiRouter);
 
 app.use((_req, res, _next) => {
-  res.status(404).json({ error: "Not found" });
+  console.log(`Not found ${_req.url}`);
+  res.sendStatus(404);
 });
 
 app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {

@@ -1,8 +1,6 @@
-import { Request, Response } from "express";
-
 import { config } from "@/backend/config";
-import { AuthLocals } from "@/backend/controllers/user-auth";
-import { userSettingsModel } from "@/backend/models/only-fans/user-settings";
+import { PostRequest, UserSiteAuthResponse } from "@/backend/controllers/types";
+import { getSettings } from "@/backend/lib/settings/of";
 import * as OpenAI from "@/lib/open-ai";
 import { getClient } from "@/sites/common/client";
 
@@ -10,16 +8,18 @@ import { transformRequest } from "./transform-request";
 import { GenerateChatRequestBody, GenerateChatResponseBody } from "./types";
 
 export const post = async (
-  req: Request<{}, {}, GenerateChatRequestBody, {}>,
-  res: Response<GenerateChatResponseBody, AuthLocals>
+  req: PostRequest<GenerateChatRequestBody>,
+  res: UserSiteAuthResponse<GenerateChatResponseBody>
 ) => {
-  const { userId } = res.locals;
+  const { userId, siteUserId } = res.locals;
   const { user, chat } = req.body;
   if (userId !== user.id) {
     return res.sendStatus(400);
   }
 
   try {
+    const { settings } = await getSettings(userId, siteUserId);
+
     const client = getClient({
       throwHttpErrors: false,
       responseType: "json",
@@ -27,17 +27,14 @@ export const post = async (
 
     const apiKey = config.openAI.apiKey;
 
-    // TODO update settings
-    const settings = await userSettingsModel.findOne({ userId: user.id });
-
     const chatCompletionRequest = transformRequest(
       {
         user,
         chat,
       },
       {
-        customScript: settings?.scripts ?? "",
-        emojis: settings?.favoriteEmojis ?? "",
+        customScript: settings.generativeMessaging.script,
+        emojis: settings.generativeMessaging.emojis,
       },
       {
         model: "gpt-3.5-turbo",

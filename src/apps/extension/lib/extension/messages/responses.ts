@@ -52,7 +52,7 @@ export interface GetVaultItemsResponse extends BaseResponse {
 
 export interface GetOFSettingsResponse extends BaseResponse {
   kind: "GET_OF_SETTINGS";
-  data: OFSettings;
+  data: { success: true; settings: OFSettings } | { success: false; message: string };
 }
 
 export interface SaveOFSettingsResponse extends BaseResponse {

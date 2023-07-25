@@ -1,3 +1,5 @@
+import PQueue from "p-queue";
+
 import { Context } from "@/extension/lib/api/context";
 
 import { onMessage } from "../../messages/index";
@@ -23,10 +25,23 @@ export const MessageHandlers = {
   GET_OF_DYNAMIC_PARAMS: handleGetOFDynamicParamsMessage,
 };
 
+const queues = Object.fromEntries(
+  Object.keys(MessageHandlers).map((key) => [
+    key,
+    new PQueue({ concurrency: 1, intervalCap: 1, interval: 1000 }),
+  ])
+);
+
 export const registerMessageHandler = (context: Context) => {
   onMessage(async (message, sender, sendResponse) => {
     const handler = MessageHandlers[message.kind] as Handler<typeof message>;
-    const response = await handler(message, context);
-    sendResponse(response);
+    await queues[message.kind].add(async () => {
+      try {
+        const response = await handler(message, context);
+        sendResponse(response);
+      } catch (err) {
+        console.error(err);
+      }
+    });
   });
 };

@@ -1,19 +1,16 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "allowJs": true,
+    "noEmit": false,
+    "module": "ESNext",
     "esModuleInterop": true,
-    "module": "esnext"
+    "outDir": "./ext-tmp"
   },
-  "include": [
-    "next-env.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
+  "include": ["src/**/*.ts"],
   "exclude": [
     "./src/sites/common/client/got-adapter.ts",
     "./src/sites/common/client/ky-adapter.ts",
-    "src/creds/",
+    "./src/creds",
     "jest.config.ts",
     "**.spec.ts"
   ]

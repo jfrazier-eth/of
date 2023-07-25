@@ -36,7 +36,6 @@ export class BrowserOFParamsHandler implements ParamsHandler {
   constructor(revision: string | null) {
     this._revision = revision;
     this._dynamicParams = null;
-    console.log("BrowserOFParamsHandler initializing");
     this.isReady = this._init();
   }
 

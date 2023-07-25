@@ -20,7 +20,8 @@ export class Context {
     return new URL(this._baseUrl.toString());
   }
 
-  public isReady: Promise<void>;
+  public _isInitialized: Promise<void>;
+  public isReady: Promise<unknown>;
 
   public get user() {
     return this._user;
@@ -45,7 +46,8 @@ export class Context {
     this._user = null;
     this._ofAuth = null;
     this.ofParams = new BrowserOFParamsHandler(null);
-    this.isReady = this._init();
+    this._isInitialized = this._init();
+    this.isReady = Promise.all([this._isInitialized, this.ofParams.isReady]);
   }
 
   protected async _init() {
@@ -60,7 +62,6 @@ export class Context {
           this.ofAuth = response.data.of.auth;
         }
       }
-      await this.ofParams.isReady;
       console.warn("No active user");
     } catch (err) {
       console.error(err);

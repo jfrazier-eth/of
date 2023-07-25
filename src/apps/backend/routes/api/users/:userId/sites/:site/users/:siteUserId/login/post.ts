@@ -39,8 +39,7 @@ export const post: PostLogin<Site> = async (req, res) => {
         );
         try {
           // ensure the creds are valid
-          // await OF.Routes.V2.Users.me.get(sess);
-          await OF.Routes.V2.Chats.List.Get.get(sess, {});
+          const user = await OF.Routes.V2.Users.me.get(sess);
           await OFLogins.saveLogin({
             xbc: body.params.xbc,
             sess: body.params.sess,

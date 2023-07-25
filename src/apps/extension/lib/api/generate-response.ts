@@ -2,14 +2,16 @@ import { Site } from "@/backend/lib/accounts/types";
 import {
   GenerateChatRequestBody,
   GenerateChatResponseBody,
-} from "@/backend/routes/api/chat/response/types";
+} from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/chat/response/types";
 import { OF_BASE_URL } from "@/sites/of";
 import { SessionContext } from "@/sites/of/context";
 import { getMessages } from "@/sites/of/sdk/get-messages";
 
 import { Context } from "./context";
 
-const path = "/api/chat/response";
+const getPath = (userId: string, siteUserId: string) => {
+  return `/api/chat/users/${userId}/sites/${Site.OF}/users/${siteUserId}/chat/response`;
+};
 export async function generateResponse(
   context: Context,
   params: {
@@ -26,7 +28,7 @@ export async function generateResponse(
     } else if (!ofAuth) {
       throw new Error("Missing auth id");
     }
-
+    const path = getPath(userId, ofAuth.authId);
     const url = context.getUrl(path);
 
     const ofContext = new SessionContext(

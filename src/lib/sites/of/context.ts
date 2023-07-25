@@ -42,19 +42,23 @@ export class SessionContext extends Context {
       Time: `${time}`,
       "X-Bc": this._userParams.xbc,
       "App-Token": appToken,
-      Cookie: `sess=${this._userParams.sess}`,
+      Cookie: `sess=${this._userParams.sess}; auth_id=${this._userParams.authId}`,
     };
   }
 
   protected async getDynamicHeaders(url: URL) {
     const time = new Date().getTime();
-
     const dynamicParams = await this.ofParams.getParams();
 
     if (!dynamicParams) {
       throw new Error("Dynamic params are not ready");
     }
-    const { sign } = await signReq(url, time, dynamicParams, this._userParams.authId);
+
+    let userId = this._userParams.authId;
+    if (url.pathname === "/api2/v2/users/me") {
+      userId = "0";
+    }
+    const { sign } = await signReq(url, time, dynamicParams, userId);
 
     return {
       sign,

@@ -9,6 +9,7 @@
   "engines": {
     "node": "20.4.0"
   },
+  "type": "commonjs",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
     "build": "pnpm clean && tsc -p ./tsconfig.backend.json",
@@ -22,11 +23,12 @@
     "ext:clean": "rimraf ./ext-dist",
     "ext:build": "pnpm ext:clean && concurrently \"pnpm ext:build:popup\" \"pnpm ext:build:background\" \"pnpm ext:build:content\"",
     "ext:build:popup": "next build --experimental-turbo && concurrently \"pnpm ext:mv:ui:out\" \"pnpm ext:cp:manifest\" && rm -r out",
-    "ext:build:background": "tsup ./src/apps/extension/scripts/background.ts --outDir ./ext-dist --tsconfig ./tsconfig.json",
-    "ext:build:content": "tsup ./src/apps/extension/content/content.ts --outDir ./ext-dist --tsconfig ./tsconfig.extension.json && pnpm ext:cp:content:css && pnpm ext:cp:images",
+    "ext:build:background": "BUILD=background tsup ./src/apps/extension/scripts/background.ts",
+    "ext:build:content": "BUILD=content tsup ./src/apps/extension/content/content.ts --outDir ./ext-dist --tsconfig ./tsconfig.extension.json && pnpm ext:cp:content:css && pnpm ext:cp:images",
     "ext:cp:content:css": "cp ./src/apps/extension/content/inject.css ./ext-dist/inject.css",
     "ext:cp:images": "cp ./src/apps/extension/images/* ./ext-dist/",
     "ext:cp:manifest": "cp manifest.json ./ext-dist/manifest.json",
+    "p-queue": "tsup ./node_modules/p-queue/dist/index.js --format cjs --outDir ./p-queue",
     "ext:mv:ui:out": "mv out/_next out/next && sed -i '' -e 's/\\/_next/\\.\\/next/g' out/**.html && mv out/index.html ./ext-dist && rsync -va --delete-after out/next/ ./ext-dist/next/",
     "ext:mv:ui:assets": "rsync -va --delete-after public/next-assets ./ext-dist/"
   },
@@ -64,11 +66,13 @@
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
     "@tanstack/react-virtual": "3.0.0-beta.54",
+    "async-mutex": "^0.4.0",
     "ky": "^0.33.3",
     "ky-universal": "^0.11.0",
     "module-alias": "^2.2.3",
     "nanoid": "3.3.6",
     "next": "13.4.10",
+    "p-queue": "6.6.2",
     "postcss": "8.4.25",
     "react": "18.2.0",
     "react-dom": "18.2.0",
