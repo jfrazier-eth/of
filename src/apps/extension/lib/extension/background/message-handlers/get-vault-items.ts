@@ -7,6 +7,7 @@ import { Handler } from "./types";
 
 export const handleGetVaultItemsMessage: Handler<GetVaultItemsMessage> = async (msg, context) => {
   try {
+    await context.isReady;
     const userId = context.user?.userId;
     const ofAuth = context.ofAuth;
     if (!userId) {

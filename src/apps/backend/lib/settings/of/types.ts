@@ -8,14 +8,14 @@ export interface PGOFSettings {
   generative_messaging_script: string;
   generative_messaging_emojis: string;
   auto_messaging_enabled: boolean;
-  auto_messaging_spending_threshold: number;
+  auto_messaging_spending_threshold: string;
   primary_ppv_media_id: string | null;
-  primary_ppv_price: number;
+  primary_ppv_price: string;
   secondary_ppv_media_id: string | null;
-  secondary_ppv_price: number;
+  secondary_ppv_price: string;
   welcome_enabled: boolean;
   welcome_message: string;
-  welcome_price: number;
+  welcome_price: string;
   welcome_media_id: string | null;
 }
 

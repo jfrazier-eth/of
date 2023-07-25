@@ -22,20 +22,20 @@ export const transformPGOFSettings = (
       },
       autoMessaging: {
         enabled: pgSettings.auto_messaging_enabled,
-        spendingThreshold: pgSettings.auto_messaging_spending_threshold,
+        spendingThreshold: parseFloat(pgSettings.auto_messaging_spending_threshold),
         primaryPPV: {
           media: media.primaryPPV,
-          price: pgSettings.primary_ppv_price,
+          price: parseFloat(pgSettings.primary_ppv_price),
         },
         secondaryPPV: {
           media: media.secondaryPPV,
-          price: pgSettings.secondary_ppv_price,
+          price: parseFloat(pgSettings.secondary_ppv_price),
         },
       },
       welcome: {
         enabled: pgSettings.welcome_enabled,
         message: pgSettings.welcome_message,
-        price: pgSettings.welcome_price,
+        price: parseFloat(pgSettings.welcome_price),
         media: media.welcome,
       },
     },
@@ -62,14 +62,14 @@ export const transformOFSettings = (
     generative_messaging_script: params.settings.generativeMessaging.script,
     generative_messaging_emojis: params.settings.generativeMessaging.emojis,
     auto_messaging_enabled: params.settings.autoMessaging.enabled,
-    auto_messaging_spending_threshold: params.settings.autoMessaging.spendingThreshold,
+    auto_messaging_spending_threshold: params.settings.autoMessaging.spendingThreshold.toString(),
     primary_ppv_media_id: params.settings.autoMessaging.primaryPPV.media?.id ?? null,
-    primary_ppv_price: params.settings.autoMessaging.primaryPPV.price,
+    primary_ppv_price: params.settings.autoMessaging.primaryPPV.price.toString(),
     secondary_ppv_media_id: params.settings.autoMessaging.secondaryPPV.media?.id ?? null,
-    secondary_ppv_price: params.settings.autoMessaging.secondaryPPV.price,
+    secondary_ppv_price: params.settings.autoMessaging.secondaryPPV.price.toString(),
     welcome_enabled: params.settings.welcome.enabled,
     welcome_message: params.settings.welcome.message,
-    welcome_price: params.settings.welcome.price,
+    welcome_price: params.settings.welcome.price.toString(),
     welcome_media_id: params.settings.welcome.media?.id ?? null,
   };
 

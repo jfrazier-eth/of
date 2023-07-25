@@ -32,6 +32,9 @@ export class Context {
   }
 
   public set user(value: { apiKey: string; userId: string } | null) {
+    if (!this._user) {
+      this.ofParams.refresh();
+    }
     this._user = clone(value);
   }
 

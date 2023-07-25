@@ -1,7 +1,7 @@
 import { HttpsProxyAgent } from "https-proxy-agent";
 
 export type HTTPMethod = "GET" | "POST" | "PUT" | "PATCH" | "HEAD" | "DELETE";
-export type ResponseType = "text" | 'json';
+export type ResponseType = "text" | "json";
 export type ClientOptions = {
   throwHttpErrors?: boolean;
   responseType?: ResponseType;
@@ -22,7 +22,10 @@ export type Response<Body = unknown> = {
   headers: Record<string, undefined | string | string[]>;
 };
 
-export const getDefaultClientOptions = (): { throwHttpErrors: boolean, responseType: ResponseType } => {
+export const getDefaultClientOptions = (): {
+  throwHttpErrors: boolean;
+  responseType: ResponseType;
+} => {
   return {
     throwHttpErrors: false,
     responseType: "json",

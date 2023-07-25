@@ -50,4 +50,25 @@ export class BrowserOFParamsHandler implements ParamsHandler {
       console.error(response.data.message);
     }
   }
+
+  public async refresh() {
+    if (this._dynamicParams === null) {
+      console.log(`Refreshing dynamic params`);
+      try {
+        const response = await sendMessage({
+          kind: "GET_OF_DYNAMIC_PARAMS",
+        });
+
+        if (response.data.success) {
+          this.params = response.data.params;
+        } else {
+          console.error(response.data.message);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      console.log(`Skipping refreshing dynamic params`);
+    }
+  }
 }

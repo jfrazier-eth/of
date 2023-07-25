@@ -10,7 +10,7 @@ import { getMessages } from "@/sites/of/sdk/get-messages";
 import { Context } from "./context";
 
 const getPath = (userId: string, siteUserId: string) => {
-  return `/api/chat/users/${userId}/sites/${Site.OF}/users/${siteUserId}/chat/response`;
+  return `/api/users/${userId}/sites/${Site.OF}/users/${siteUserId}/chat/response`;
 };
 export async function generateResponse(
   context: Context,

@@ -79,7 +79,7 @@ export const handleGetOFDynamicParamsMessage: Handler<GetOFDynamicParamsMessage>
 
   try {
     const res = await updateOFParams(context);
-    console.log(`Updated dynamic params!`, cachedDynamicParams);
+    console.log(`Updated dynamic params!`, res);
     return {
       kind: "GET_OF_DYNAMIC_PARAMS",
       data: {

@@ -23,7 +23,7 @@ export async function* getRecentChats(
         order: "recent",
       });
 
-      hasNextPage = response.hasMore;
+      hasNextPage = response.hasMore && response.list.length > 0;
       offset = response.nextOffset;
 
       for (const chat of response.list) {

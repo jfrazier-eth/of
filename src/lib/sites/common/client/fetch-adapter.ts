@@ -1,6 +1,10 @@
 import { mergeOptions } from "./merge-options";
-import { RequestAdapter, Response as ClientResponse, ResponseType, getDefaultClientOptions } from "./types";
-
+import {
+  Response as ClientResponse,
+  RequestAdapter,
+  ResponseType,
+  getDefaultClientOptions,
+} from "./types";
 
 const parseHeaders = (response: Response) => {
   let headers: Record<string, string | string[]> = {};
@@ -22,7 +26,7 @@ const parseHeaders = (response: Response) => {
     }
   });
   return headers;
-}
+};
 
 export const parseBody = async (response: Response, responseType: ResponseType) => {
   switch (responseType) {
@@ -33,7 +37,7 @@ export const parseBody = async (response: Response, responseType: ResponseType) 
       return await response.json();
     }
   }
-}
+};
 
 export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
   const url = request.url.toString();

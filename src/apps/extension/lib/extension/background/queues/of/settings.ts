@@ -33,19 +33,25 @@ export const init = (config: Config) => {
       console.error("Failed to get settings", res.data.message);
     }
   };
-  const timeout = setTimeout(() => {
+
+  const add = () => {
+    queue.add(task).catch((err) => {
+      console.error("Settings queue failed", err);
+    });
+  };
+  const interval = setInterval(() => {
     if (queue.size > 5) {
       return;
     }
 
-    queue.add(task).catch((err) => {
-      console.error("Settings queue failed", err);
-    });
+    add();
   }, config.interval);
 
+  add();
+
   const stop = () => {
-    if (timeout) {
-      clearTimeout(timeout);
+    if (interval) {
+      clearInterval(interval);
     }
     queue.pause();
     queue.clear();

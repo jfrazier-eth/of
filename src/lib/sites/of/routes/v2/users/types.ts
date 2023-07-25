@@ -36,7 +36,7 @@ export interface SubscribedOnData {
 export interface FanBase {
   id: number;
   name: string;
-  subscribedOnData: SubscribedOnData;
+  subscribedOnData?: SubscribedOnData;
 }
 
 export interface FanStatsResponseBody extends FanBase {
