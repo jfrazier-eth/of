@@ -1,8 +1,8 @@
-import { adapter as fetchAdapter } from "./fetch-adapter";
+import { adapter as defaultAdapter } from "./fetch-adapter";
 import { mergeOptions } from "./merge-options";
 import { ClientOptions, RequestAdapter, RequestOptions, Response } from "./types";
 
-export let adapter = fetchAdapter;
+export let adapter = defaultAdapter;
 
 export const setAdapter = (newAdapter: RequestAdapter<unknown, unknown>) => {
   adapter = newAdapter;
