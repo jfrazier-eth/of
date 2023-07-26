@@ -11,8 +11,10 @@ export const get = async (_req: GetRequest, res: UserSiteAuthResponse<OFSettings
         break;
       }
     }
-
-    return res.status(200).json(settings);
+    if (settings.isErr()) {
+      return res.sendStatus(500);
+    }
+    return res.status(200).json(settings.value);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

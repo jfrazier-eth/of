@@ -1,3 +1,7 @@
+import { Result } from "neverthrow";
+
+import { PGError } from "@/backend/db/postgres";
+
 import { Site } from "../accounts/types";
 import { OFLogin, getLogin as getOFLogin } from "./of-logins/index";
 
@@ -17,8 +21,8 @@ export type LoginParamsBySite = {
 
 export const getLogin = async <S extends Site>(
   params: GetLoginParams
-): Promise<LoginParamsBySite[S] | null> => {
+): Promise<Result<LoginParamsBySite[S] | null, PGError>> => {
   const handler = getLoginBySite[params.site];
-  const login = (await handler(params)) as LoginParamsBySite[S] | null;
+  const login = (await handler(params)) as Result<LoginParamsBySite[S] | null, PGError>;
   return login;
 };

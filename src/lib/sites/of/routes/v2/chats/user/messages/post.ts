@@ -8,6 +8,7 @@ const getHeaders = (userId: string, toUserId: string) => {
   const headers = {
     Host: "onlyfans.com",
     "User-Id": userId,
+    "Content-Type": "application/json",
     Origin: "https://onlyfans.com",
     Referer: `https://onlyfans.com/my/chats/chat/${toUserId}/`,
     Accept: "application/json, text/plain, */*",

@@ -12,11 +12,13 @@
     "scripting",
     "storage",
     "webRequest",
-    "http://onlyfans.com/*",
-    "https://onlyfans.com/*"
+    "webRequestBlocking",
+    "*://onlyfans.com/*"
   ],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "background.js"
+    ],
     "persistent": true
   },
   "browser_action": {
@@ -24,11 +26,20 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://onlyfans.com/*", "https://onlyfans.com/*"],
-      "js": ["content.js"],
-      "css": ["inject.css"]
+      "matches": [
+        "http://onlyfans.com/*",
+        "https://onlyfans.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "inject.css"
+      ]
     }
   ],
   "content_security_policy": "script-src 'self' https://www.gstatic.com/; object-src 'self'",
-  "web_accessible_resources": ["generate.svg"]
+  "web_accessible_resources": [
+    "generate.svg"
+  ]
 }

@@ -23,6 +23,7 @@ export const config = {
     connectionUrl: getEnvVariable("MONGO_URL"),
   },
   server: {
+    enabled: Boolean(Number(getEnvVariable("API_ENABLED"))),
     port: Number(getOptionalEnvVariable("PORT", "7777")),
     apiKey: getEnvVariable("API_KEY"),
   },
@@ -38,4 +39,23 @@ export const config = {
   ofApi: {
     apiKey: getEnvVariable("OF_API_API_KEY"),
   },
+  queues: {
+    of: {
+      newMessages: {
+        enabled: Boolean(Number(getEnvVariable("OF_NEW_MESSAGE_QUEUE"))),
+        concurrency: Number(getEnvVariable("OF_NEW_MESSAGE_CONCURRENCY")),
+      },
+      pollSettings: {
+        enabled: Boolean(Number(getEnvVariable("OF_POLL_SETTINGS_QUEUE"))),
+        concurrency: Number(getEnvVariable("OF_POLL_SETTINGS_CONCURRENCY")),
+        schedule: getEnvVariable("OF_POLL_SETTINGS_SCHEDULE"),
+      },
+      respond: {
+        enabled: Boolean(Number(getEnvVariable("OF_RESPOND_QUEUE"))),
+        concurrency: Number(getEnvVariable("OF_RESPOND_CONCURRENCY")),
+      },
+    },
+  },
 };
+
+console.log(JSON.stringify(config, null, 2));

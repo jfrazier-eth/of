@@ -3,6 +3,7 @@ import {
   GenerateChatRequestBody,
   GenerateChatResponseBody,
 } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/chat/response/types";
+import { Browsers } from "@/sites/common";
 import { OF_BASE_URL } from "@/sites/of";
 import { SessionContext } from "@/sites/of/context";
 import { getMessages } from "@/sites/of/sdk/get-messages";
@@ -40,6 +41,7 @@ export async function generateResponse(
       },
       {
         baseUrl: OF_BASE_URL,
+        browser: Browsers.brave
       },
       context.ofParams
     );

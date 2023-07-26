@@ -18,12 +18,15 @@ export const checkSiteAuth = async (
       siteUserId: res.locals.siteUserId,
       userId: res.locals.userId,
     });
+    if (login.isErr()) {
+      return res.sendStatus(500);
+    }
 
-    if (!login) {
+    if (!login.value) {
       return res.sendStatus(404);
     }
 
-    res.locals.siteLogin = login;
+    res.locals.siteLogin = login.value;
     next();
   } catch (err) {
     console.error(`Unexpected error while authenticating login`, err);

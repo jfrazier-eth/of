@@ -1,21 +1,20 @@
-import { pg } from "@/backend/db/postgres";
+import { Result } from "neverthrow";
+
+import { PGError, pgQueryOneOrNone } from "@/backend/db/postgres";
 
 import { transformPGUserMedia } from "./pg-transformer";
 import { PGUserMedia, UserMedia } from "./types";
 
-export const getUserMedia = async (mediaId: string): Promise<UserMedia | null> => {
+export const getUserMedia = async (mediaId: string): Promise<Result<UserMedia | null, PGError>> => {
   const query = "SELECT * FROM user_media WHERE id = $1";
   const values = [mediaId];
 
-  const result = await pg.query<PGUserMedia[]>(query, values);
+  const result = await pgQueryOneOrNone<PGUserMedia>(query, values);
 
-  console.assert(
-    result.length <= 1,
-    `Received multiple settings with the same site_user_id! Query ${query} Values ${values}`
-  );
-
-  if (result.length === 1) {
-    return transformPGUserMedia(result[0]);
-  }
-  return null;
+  return result.map((media) => {
+    if (media == null) {
+      return null;
+    }
+    return transformPGUserMedia(media);
+  });
 };

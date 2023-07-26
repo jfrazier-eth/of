@@ -12,7 +12,11 @@ export const post = async (
     await saveSettings({ userId: res.locals.userId, siteUserId: res.locals.siteUserId }, req.body);
     const settings = await getSettings(res.locals.userId, res.locals.siteUserId);
 
-    return res.status(200).json(settings);
+    if (settings.isErr()) {
+      return res.sendStatus(500);
+    }
+
+    return res.status(200).json(settings.value);
   } catch (error) {
     console.log(error);
     return res.status(500);

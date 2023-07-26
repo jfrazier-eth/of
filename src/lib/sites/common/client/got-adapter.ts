@@ -19,6 +19,7 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
       responseType: request.responseType,
       headers: request.headers,
       body: request.json ? JSON.stringify(request.json) : undefined,
+      http2: false,
       agent: {
         https: agent,
       },
