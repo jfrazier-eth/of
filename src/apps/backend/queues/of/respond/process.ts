@@ -1,8 +1,8 @@
 import { Processor } from "bullmq";
-import { ResultAsync, ok } from "neverthrow";
+import { ResultAsync, ok, err } from "neverthrow";
 
 import { Site } from "@/backend/lib/accounts/types";
-import { saveChatMostRecentMessageId } from "@/backend/lib/chats/of";
+import { getChatMostRecentMessageId, saveChatMostRecentMessageId } from "@/backend/lib/chats/of";
 import { serverOFParamsHandler } from "@/backend/lib/of-params-handler";
 import { generateResponse } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/chat/response/post";
 import { GenerateChatRequestBody } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/chat/response/types";
@@ -90,15 +90,39 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     },
   };
 
+  const mostRecentMessageResponse = await getChatMostRecentMessageId({
+    siteUserId: session.userId,
+    withUserId: withUser.id,
+  });
+
+  if (mostRecentMessageResponse.isErr()) {
+    return err(mostRecentMessageResponse.error);
+  }
+
+  const currentMesssageHasBeenProcessed = mostRecentMessageResponse.value === messages[0].id.toString();
+  const mostRecentMessageWasSentByUser = messages[0].fromUser.id.toString() === settings.siteUserId;
+  if (currentMesssageHasBeenProcessed) {
+    return ok({
+      sent: false,
+      reason: "Skipped. Most recent message has already been processed."
+    });
+  } else if (mostRecentMessageWasSentByUser) {
+    return ok({
+      sent: false,
+      reason: "Skipped. Most recent message was sent by user."
+    });
+  }
+
   const response = await ResultAsync.fromPromise(generateResponse(settings, data), (err) => {
     return new Error(`Failed to generate response ${err}`);
   });
 
   if (response.isErr()) {
     console.error(`Failed to generate response`, response.error)
-    return response;
+    return err(response.error);
   }
 
+  console.log(`Sending message to ${withUser.username}`);
   try {
     const message = response.value.message;
     const res = await OF.Routes.V2.Chats.User.Messages.Post.post(session, {
@@ -121,8 +145,9 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
       console.error(`Failed to save most recent message id`, saveMessageRes.error);
     }
 
-    return ok({ id });
+    return ok({ id, sent: true });
   } catch (e) {
+    console.log(`Failed to send message to ${withUser.username}`, e);
     return parseError(e);
   }
 };

@@ -2,6 +2,7 @@ import { Result } from "neverthrow";
 
 import { OFLogin } from "@/backend/lib/logins/of-logins/types";
 import { OFSettings } from "@/backend/lib/settings/of/types";
+import { RedisError } from "@/backend/db/redis";
 
 export interface JobData {
   settings: OFSettings;
@@ -15,6 +16,6 @@ export interface JobData {
   };
 }
 
-export type Errors = Error;
+export type Errors = Error | RedisError;
 
-export type JobResult = Result<{}, Errors>;
+export type JobResult = Result<{ sent: true, id: string } | { sent: false, reason: string }, Errors>;
