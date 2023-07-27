@@ -12,7 +12,7 @@ export const savePGUserMedia = async (pgMedia: PGUserMedia | null) => {
 
     const insert = pgp.helpers.insert(pgMedia, columnSet);
     const excludedColumns = columns.map((col) => `${col} = EXCLUDED.${col}`).join(", ");
-    const query = `${insert} ON CONFLICT (id) of DO UPDATE SET ${excludedColumns}`;
+    const query = `${insert} ON CONFLICT (id) DO UPDATE SET ${excludedColumns}`;
     try {
       await pg.query(query);
     } catch (err) {

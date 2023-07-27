@@ -172,12 +172,26 @@ const OFSettings: React.FC<{
                     alert("Script must be less than 700 characters.");
                     return {
                       ...prev,
-                      scripts: e.target.value.substring(0, 700),
+                      settings: {
+                        ...prev.settings,
+                        generativeMessaging: {
+
+                          ...prev.settings.generativeMessaging,
+                          script: e.target.value.substring(0, 700),
+                        }
+                      }
                     };
                   }
                   return {
                     ...prev,
-                    scripts: e.target.value,
+                    settings: {
+                      ...prev.settings,
+                      generativeMessaging: {
+
+                        ...prev.settings.generativeMessaging,
+                        script: e.target.value,
+                      }
+                    }
                   };
                 })
               }
@@ -186,8 +200,8 @@ const OFSettings: React.FC<{
               placeholder="Paste your sample scripts here. The AI will use these to influence it's messaging style. (Max 700 words)"
             ></textarea>
             <div className="mt-4">
-              <div className="flex">
-                <label className={labelClass}>
+              {/* <div className="flex"> */}
+              {/*  <label className={labelClass}>
                   <span className="mr-2">Welcome Message default</span>
                 </label>
                 <Toggle
@@ -247,7 +261,7 @@ const OFSettings: React.FC<{
                   onClick={() => setMediaGridContext({ isOpen: true, section: "WELCOME" })}
                   label="Select welcome message media"
                 />
-              </label>
+              </label> */}
 
               <label className={`flex flex-col ${labelClass}`}>
                 <span className="mr-2">PPV default 1</span>
@@ -338,7 +352,7 @@ const OFSettings: React.FC<{
           </div>
         </div>
       </div>
-    </form>
+    </form >
   );
 };
 

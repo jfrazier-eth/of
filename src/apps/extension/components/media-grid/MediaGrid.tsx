@@ -73,7 +73,11 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ open, onClose, onSelect, t
             return (
               <div
                 key={item.id}
-                onClick={() => handleSelection(item)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleSelection(item);
+                }}
                 className="cursor-pointer transition-colors duration-200 hover:bg-gray-200 rounded h-fit w-fit"
               >
                 <Media media={item} />
