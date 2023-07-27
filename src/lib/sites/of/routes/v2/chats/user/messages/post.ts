@@ -19,7 +19,7 @@ const getHeaders = (userId: string, toUserId: string) => {
 export interface PostMessageBody {
   text: string;
   lockedText?: boolean;
-  mediaFiles?: unknown[];
+  mediaFiles?: number[];
   price?: number;
   previews?: unknown[];
   isCouplePeopleMedia?: boolean;

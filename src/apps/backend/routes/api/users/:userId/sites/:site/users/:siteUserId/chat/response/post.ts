@@ -20,6 +20,7 @@ export const generateResponse = async (settings: OFSettings, data: GenerateChatR
     {
       user: data.user,
       chat: data.chat,
+      isPPV: data.isPPV
     },
     {
       customScript: settings.settings.generativeMessaging.script,

@@ -13,6 +13,8 @@ import { SessionContext } from "@/sites/of/context";
 
 import { JobData, JobResult } from "./types";
 import { Browsers } from "@/sites/common";
+import { flipCoin, selectRandom } from "@/utils/random";
+import { UserMedia } from "@/backend/lib/user-media/types";
 
 export const processJob: Processor<JobData, JobResult> = async (job) => {
   const session = new SessionContext(
@@ -31,9 +33,20 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
   );
   const withUser = job.data.chat.withUser;
   const settings = job.data.settings;
+  const primaryPPV = job.data.settings.settings.autoMessaging.primaryPPV;
+  const secondaryPPV = job.data.settings.settings.autoMessaging.secondaryPPV;
+
+
   const messages = await OF.Sdk.getMessages(session, withUser.id, {
     maxNumMessages: 10,
   });
+
+  const ppvs = [primaryPPV, secondaryPPV].filter((item) => item.media) as {
+    media: UserMedia;
+    price: number;
+  }[];
+  const isPPV = ppvs.length > 0 && messages.length > 3 && flipCoin();
+  const ppv = isPPV ? selectRandom(ppvs) : null;
   const data: GenerateChatRequestBody = {
     user: {
       id: settings.userId,
@@ -88,6 +101,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
         };
       }),
     },
+    isPPV: ppv !== null
   };
 
   const mostRecentMessageResponse = await getChatMostRecentMessageId({
@@ -125,7 +139,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
   console.log(`Sending message to ${withUser.username}`);
   try {
     const message = response.value.message;
-    const res = await OF.Routes.V2.Chats.User.Messages.Post.post(session, {
+    const messageData = ppv === null ? {
       toUserId: withUser.id,
       text: message,
       lockedText: false,
@@ -134,7 +148,17 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
       previews: [],
       isCouplePeopleMedia: false,
       isForward: false,
-    });
+    } : {
+      toUserId: withUser.id,
+      text: message,
+      lockedText: false,
+      mediaFiles: [parseInt(ppv.media.siteMediaId, 10)],
+      price: ppv.price,
+      previews: [],
+      isCouplePeopleMedia: false,
+      isForward: false,
+    }
+    const res = await OF.Routes.V2.Chats.User.Messages.Post.post(session, messageData);
     const id = res.id.toString();
     const saveMessageRes = await saveChatMostRecentMessageId({
       siteUserId: session.userId,

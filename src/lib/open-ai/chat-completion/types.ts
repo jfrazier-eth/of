@@ -1,10 +1,13 @@
 import { ChatMessage, Message } from "../messages";
+import { Function } from "../functions";
 import { Model } from "../model";
 
 // TODO support functions
 export interface ChatCompletionRequest {
   model: Model;
   messages: Message[];
+
+  functions?: Function[];
 
   /**
    * defaults to 1

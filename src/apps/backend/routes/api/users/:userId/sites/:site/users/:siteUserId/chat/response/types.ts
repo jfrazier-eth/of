@@ -55,6 +55,7 @@ export interface GenerateChatRequestBody {
     };
     messages: Message[];
   };
+  isPPV?: boolean;
 }
 
 export interface GenerateChatResponseBody {

@@ -2,6 +2,7 @@ import * as OpenAI from "@/lib/open-ai";
 
 import { GenerateChatRequestBody } from "./types";
 
+
 export const transformRequest = (
   request: GenerateChatRequestBody,
   settings: {
@@ -60,10 +61,19 @@ export const transformRequest = (
     content: `I understand the task. I will follow all the 4 rules you mentioned without fail. I looked at the old script you gave and will use that along with the message history to imitate your style while responding. Give me the conversation history, using which I will understand the context of conversation and will continue it. And give me the format of response, I will stick to that while responding.`,
   };
 
-  const userObj2: OpenAI.Messages.Message = {
-    role: "user",
-    content: `Excellent! Remember, the script I gave earlier is not related to this fan. I gave it so that you understand my style of conversation. Here is my conversation with the current fan:\n\`\`\`\n${chat}\n\`\`\`\nNow continue this conversation naturally, DO NOT START IT AGAIN WITH A SALUTATION like 'Hey there!'. We are already in the middle of the conversation. Respond in json like this - { role: \"creator\", content: \"the actual response\"}. The name of the fan is ${request.chat.withUser.name}. Go ahead with a response now.\n`,
-  };
+  let userObj2: OpenAI.Messages.Message;
+  if (request.isPPV) {
+    userObj2 = {
+      role: "user",
+      content: `Excellent! Remember, the script I gave earlier is not related to this fan. I gave it so that you understand my style of conversation. Here is my conversation with the current fan:\n\`\`\`\n${chat}\n\`\`\`\nNow continue this conversation naturally and respond in a way that attempts to get the user to purchase the erotic pay per view media that will be attached to your message. You should continue the conversation naturally, DO NOT START IT AGAIN WITH A SALUTATION like 'Hey there!'. We are already in the middle of the conversation. Respond in json like this - { role: \"creator\", content: \"the actual response\"}. The name of the fan is ${request.chat.withUser.name}. Go ahead with a response now.\n`,
+    };
+  } else {
+    userObj2 = {
+      role: "user",
+      content: `Excellent! Remember, the script I gave earlier is not related to this fan. I gave it so that you understand my style of conversation. Here is my conversation with the current fan:\n\`\`\`\n${chat}\n\`\`\`\nNow continue this conversation naturally, DO NOT START IT AGAIN WITH A SALUTATION like 'Hey there!'. We are already in the middle of the conversation. Respond in json like this - { role: \"creator\", content: \"the actual response\"}. The name of the fan is ${request.chat.withUser.name}. Go ahead with a response now.\n`,
+    };
+  }
+
 
   const messages = [systemObj, userObj, assistantObj, userObj2];
 
