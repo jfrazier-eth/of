@@ -1,6 +1,7 @@
 
+import { ApiError } from "@/sites/common/errors";
 import { SessionContext } from "@/sites/of/context";
-import { OFApiError } from "@/sites/of/errors";
+
 import { parseError } from "@/utils/parse-error";
 import { err, ok, Result } from "neverthrow";
 
@@ -16,7 +17,7 @@ const headers = {
   Accept: "application/json, text/plain, */*",
 };
 
-export const get = async (context: SessionContext): Promise<Result<GetInitResponseBody, OFApiError>> => {
+export const get = async (context: SessionContext): Promise<Result<GetInitResponseBody, ApiError>> => {
   const url = context.getUrl(path);
 
   try {

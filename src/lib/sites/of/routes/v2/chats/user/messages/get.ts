@@ -1,6 +1,7 @@
 
+import { ApiError } from "@/sites/common/errors";
 import { SessionContext } from "@/sites/of";
-import { OFApiError } from "@/sites/of/errors";
+
 import { parseError } from "@/utils/parse-error";
 import { err, ok, Result } from "neverthrow";
 
@@ -33,7 +34,7 @@ export interface GetMessagesResponseBody {
   hasMore: boolean;
 }
 
-export const get = async (context: SessionContext, options: GetMessagesOptions): Promise<Result<GetMessagesResponseBody, OFApiError> => {
+export const get = async (context: SessionContext, options: GetMessagesOptions): Promise<Result<GetMessagesResponseBody, ApiError>> => {
   try {
     const path = getPath(options.otherUserId);
     const searchParams = new URLSearchParams({

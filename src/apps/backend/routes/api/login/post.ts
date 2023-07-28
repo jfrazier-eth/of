@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { getAuth } from "firebase-admin/auth";
 
 import { getApp } from "@/backend/db/firebase";

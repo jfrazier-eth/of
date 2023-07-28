@@ -6,7 +6,6 @@ import { getChatMostRecentMessageId, saveChatMostRecentMessageId } from "@/backe
 import { serverOFParamsHandler } from "@/backend/lib/of-params-handler";
 import { generateResponse } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/chat/response/post";
 import { GenerateChatRequestBody } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/chat/response/types";
-import { parseError } from "@/sites/common/errors/parse-error";
 import { OF } from "@/sites/index";
 import { OF_BASE_URL } from "@/sites/of";
 import { SessionContext } from "@/sites/of/context";
@@ -15,6 +14,7 @@ import { JobData, JobResult } from "./types";
 import { Browsers } from "@/sites/common";
 import { flipCoin, selectRandom } from "@/utils/random";
 import { UserMedia } from "@/backend/lib/user-media/types";
+import { parseError } from "@/utils/parse-error";
 
 export const processJob: Processor<JobData, JobResult> = async (job) => {
   const session = new SessionContext(
@@ -36,9 +36,15 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
   const primaryPPV = job.data.settings.settings.autoMessaging.primaryPPV;
   const secondaryPPV = job.data.settings.settings.autoMessaging.secondaryPPV;
 
-  const messages = await OF.Sdk.getMessages(session, withUser.id, {
+  const messagesResponse = await OF.Sdk.getMessages(session, withUser.id, {
     maxNumMessages: 10,
   });
+
+  if (messagesResponse.isErr()) {
+    return err(messagesResponse.error)
+  }
+
+  const messages = messagesResponse.value;
 
   let lastMessageId = typeof messages[0]?.id === 'number' ? messages[0].id.toString() : null;
 
@@ -135,10 +141,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     });
   }
 
-  const response = await ResultAsync.fromPromise(generateResponse(settings, data), (err) => {
-    return new Error(`Failed to generate response ${err}`);
-  });
-
+  const response = await generateResponse(settings, data);
   if (response.isErr()) {
     console.error(`Failed to generate response`, response.error)
     return err(response.error);
@@ -167,7 +170,10 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
       isForward: false,
     }
     const res = await OF.Routes.V2.Chats.User.Messages.Post.post(session, messageData);
-    const id = res.id.toString();
+    if (res.isErr()) {
+      return err(res.error);
+    }
+    const id = res.value.id.toString();
     const saveMessageRes = await saveChatMostRecentMessageId({
       siteUserId: session.userId,
       withUserId: withUser.id,

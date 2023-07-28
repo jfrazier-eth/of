@@ -1,16 +1,16 @@
+import { ApiError } from "@/sites/common/errors";
 import { parseError } from "@/utils/parse-error";
 import { Result, err, ok } from "neverthrow";
 
 
 import { Routes } from "..";
 import { SessionContext } from "../context";
-import { OFApiError } from "../errors";
 import { MessageListItem } from "../routes/v2/chats/list/types";
 
 export async function* getRecentChats(
   context: SessionContext
 ): AsyncGenerator<
-  Result<MessageListItem, { e: OFApiError; attempts: number }>
+  Result<MessageListItem, { e: ApiError; attempts: number }>
 > {
   let attempts = 0;
   try {

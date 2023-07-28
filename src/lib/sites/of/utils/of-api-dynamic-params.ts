@@ -1,7 +1,9 @@
 import { config } from "@/backend/config";
 import { redis } from "@/backend/db/redis";
 import { Context } from "@/sites/common";
-import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
+import { ApiError } from "@/sites/common/errors";
+import { parseError } from "@/utils/parse-error";
+import { err, ok, Result } from "neverthrow";
 
 import { OFDynamicParams } from ".";
 import { OFDynamicParamsResponse } from "./types";
@@ -35,7 +37,12 @@ export const getOFDynamicParams = async (
     }
 
     console.log(`CACHE MISS - OF params revision: ${version.revision}`);
-    const params = await fetchOFDynamicParams(context);
+    const response = await fetchOFDynamicParams(context);
+    if (response.isErr()) {
+      console.error(response.error);
+      return null;
+    }
+    const params = response.value;
 
     if (params.revision !== version.revision) {
       console.warn(`OF params revision mismatch: ${params.revision} !== ${version.revision}`);
@@ -51,7 +58,7 @@ export const getOFDynamicParams = async (
 
 // TODO add a mutex
 const path = "/rules";
-async function fetchOFDynamicParams(context: Context): Promise<OFDynamicParams> {
+async function fetchOFDynamicParams(context: Context): Promise<Result<OFDynamicParams, ApiError>> {
   const url = new URL(path, OF_API_BASE_URL);
   try {
     const response = await context.client.get<OFDynamicParamsResponse>(url, {
@@ -59,10 +66,9 @@ async function fetchOFDynamicParams(context: Context): Promise<OFDynamicParams> 
         "api-key": config.ofApi.apiKey,
       },
     });
-
-    if (response.status === 200) {
-      const body = response.body;
-      return {
+    if (response.isOk()) {
+      const body = response.value.body;
+      return ok({
         staticParam: body.static_param,
         start: body.start,
         end: body.end,
@@ -73,13 +79,10 @@ async function fetchOFDynamicParams(context: Context): Promise<OFDynamicParams> 
         isCurrent: body.is_current,
         newBalance: body.new_balance,
         updatedAt: Date.now(),
-      };
+      });
     }
-    throw new UnexpectedStatusCodeError(url, context, response.status);
+    return err(response.error);
   } catch (err) {
-    if (err instanceof UnexpectedStatusCodeError) {
-      throw err;
-    }
-    throw RequestError.create(err, url, context);
+    return parseError(err);
   }
 }

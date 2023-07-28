@@ -1,6 +1,6 @@
 
+import { ApiError } from "@/sites/common/errors";
 import { SessionContext } from "@/sites/of/context";
-import { OFApiError } from "@/sites/of/errors";
 import { parseError } from "@/utils/parse-error";
 import { err, ok, Result, ResultAsync } from "neverthrow";
 
@@ -16,7 +16,7 @@ const getHeaders = (userId: string) => {
 
   return headers;
 };
-export const get = async (context: SessionContext, options: GetMessageListOptions): Promise<Result<GetMessageListResponseBody, OFApiError>> => {
+export const get = async (context: SessionContext, options: GetMessageListOptions): Promise<Result<GetMessageListResponseBody, ApiError>> => {
   try {
     const searchParams = new URLSearchParams({
       limit: `${options.limit ?? 10}`,

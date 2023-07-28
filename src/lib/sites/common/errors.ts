@@ -1,4 +1,4 @@
 import { ClientErrors } from "../common/client";
 
 
-export type OFApiError = ClientErrors | Error;
+export type ApiError = ClientErrors | Error;
