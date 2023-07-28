@@ -1,8 +1,9 @@
+import { Result, err, ok } from "neverthrow";
+
 import { Site } from "@/backend/lib/accounts/types";
 import { OFSettings } from "@/backend/lib/settings/of/types";
 import { ClientOFSettings } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/settings/types";
 import { parseError } from "@/utils/parse-error";
-import { err, ok, Result } from "neverthrow";
 
 import { Context } from "./context";
 
@@ -42,8 +43,6 @@ export async function postOFSettings(
   context: Context
 ): Promise<Result<void, Error>> {
   try {
-
-
     if (!context.user) {
       return err(new Error("User not logged in"));
     } else if (!context.ofAuth) {

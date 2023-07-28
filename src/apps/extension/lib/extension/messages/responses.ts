@@ -45,8 +45,7 @@ export interface GetVaultItemsResponse extends BaseResponse {
     items: VaultMediaItem[];
     hasNextPage: boolean;
     offset: number;
-  }
-
+  };
 }
 
 export interface GetOFSettingsResponse extends BaseResponse {
@@ -61,15 +60,15 @@ export interface SaveOFSettingsResponse extends BaseResponse {
 export interface UpdateOFRevisionResponse extends BaseResponse {
   kind: "UPDATE_OF_REVISION";
   data: {
-    revision: string
-  }
+    revision: string;
+  };
 }
 
 export interface GetOFDynamicParamsResponse extends BaseResponse {
   kind: "GET_OF_DYNAMIC_PARAMS";
   data: {
-    params: ClientOFDynamicParams
-  }
+    params: ClientOFDynamicParams;
+  };
 }
 
 export type Response =

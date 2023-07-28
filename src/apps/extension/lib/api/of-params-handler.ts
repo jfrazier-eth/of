@@ -48,9 +48,7 @@ export class BrowserOFParamsHandler implements ParamsHandler {
       return;
     }
 
-
     this.params = response.value.data.params;
-
   }
 
   public async refresh() {
@@ -65,7 +63,6 @@ export class BrowserOFParamsHandler implements ParamsHandler {
         }
 
         this.params = response.value.data.params;
-
       } catch (e) {
         console.error(e);
       }

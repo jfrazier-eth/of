@@ -1,8 +1,9 @@
+import { Result, err, ok } from "neverthrow";
+
 import { ClientOFDynamicParams } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/sign/params/types";
 import { Context } from "@/extension/lib/api/context";
 import { getOFDynamicParams } from "@/extension/lib/api/get-of-dynamic-params";
 import { parseError } from "@/utils/parse-error";
-import { err, ok, Result } from "neverthrow";
 
 import { GetOFDynamicParamsMessage, UpdateOFRevisionMessage } from "../../messages";
 import { Storage } from "../../storage";
@@ -13,8 +14,6 @@ const updateOFParams = async (
   revision?: string
 ): Promise<Result<ClientOFDynamicParams, Error>> => {
   try {
-
-
     const params = await getOFDynamicParams(context, revision);
     context.ofParams.params = params;
     await setCachedOFDynamicParams(params);

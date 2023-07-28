@@ -1,9 +1,12 @@
 import { Result } from "neverthrow";
+
 import { HandlerError } from "../background/message-handlers/types";
 import { ResponsesByKind } from "./mappings";
 import { Message } from "./messages";
 
-type SendResponse<T extends Message> = (response: Result<ResponsesByKind[T["kind"]], HandlerError>) => void;
+type SendResponse<T extends Message> = (
+  response: Result<ResponsesByKind[T["kind"]], HandlerError>
+) => void;
 
 export const onMessage = <T extends Message>(
   listener: (

@@ -1,6 +1,7 @@
+import { err, ok } from "neverthrow";
+
 import { getOFSettings, postOFSettings } from "@/extension/lib/api/settings";
 import { parseError } from "@/utils/parse-error";
-import { err, ok } from "neverthrow";
 
 import { GetOFSettingsMessage, SaveOFSettingsMessage } from "../../messages/index";
 import { Handler } from "./types";

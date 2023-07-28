@@ -1,6 +1,7 @@
+import { Result } from "neverthrow";
+
 import { Context } from "@/extension/lib/api/context";
 import { ClientErrors } from "@/sites/common/client";
-import { Result } from "neverthrow";
 
 import { Message } from "../../messages/index";
 import { MessagesByKind, ResponsesByKind } from "../../messages/mappings";

@@ -1,14 +1,15 @@
+import { err, ok } from "neverthrow";
+
 import { Site } from "@/backend/lib/accounts/types";
 import {
   GenerateChatRequestBody,
-  GenerateChatResponseBody
+  GenerateChatResponseBody,
 } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/chat/response/types";
 import { Browsers } from "@/sites/common";
 import { OF_BASE_URL } from "@/sites/of";
 import { SessionContext } from "@/sites/of/context";
 import { getMessages } from "@/sites/of/sdk/get-messages";
 import { parseError } from "@/utils/parse-error";
-import { err, ok } from "neverthrow";
 
 import { Context } from "./context";
 

@@ -1,8 +1,9 @@
+import { err, ok } from "neverthrow";
+
 import { OF } from "@/sites/index";
 import { OF_BASE_URL } from "@/sites/of";
 import { SessionContext } from "@/sites/of/context";
 import { parseError } from "@/utils/parse-error";
-import { err, ok } from "neverthrow";
 
 import { GetVaultItemsMessage } from "../../messages";
 import { Handler } from "./types";
@@ -36,7 +37,7 @@ export const handleGetVaultItemsMessage: Handler<GetVaultItemsMessage> = async (
     });
 
     if (response.isErr()) {
-      return err(response.error)
+      return err(response.error);
     }
     return ok({
       kind: "GET_VAULT_ITEMS",

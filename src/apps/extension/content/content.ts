@@ -32,9 +32,9 @@ const handleMutations = (settings: UserSettings["incognito"]): MutationCallback 
   if (settings.text.blur) {
     walk(document.body, settings.text);
   }
-  mutations.forEach(function(mutation) {
+  mutations.forEach(function (mutation) {
     if (mutation.addedNodes && mutation.addedNodes.length > 0) {
-      mutation.addedNodes.forEach(function(node) {
+      mutation.addedNodes.forEach(function (node) {
         if (node.nodeName === "IMG" && settings.images.blur) {
           blurImages([node as HTMLImageElement], settings.images.blurRadiusRem);
         } else if (node.nodeName === "VIDEO" && settings.videos.blur) {

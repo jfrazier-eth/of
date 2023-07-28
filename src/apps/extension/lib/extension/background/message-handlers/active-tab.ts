@@ -1,4 +1,5 @@
 import { ok } from "neverthrow";
+
 import { ActiveTabMessage } from "../../messages/index";
 import { Handler } from "./types";
 

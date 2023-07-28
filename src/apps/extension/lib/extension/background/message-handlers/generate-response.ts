@@ -1,5 +1,6 @@
-import { generateResponse } from "@/extension/lib/api/generate-response";
 import { err, ok } from "neverthrow";
+
+import { generateResponse } from "@/extension/lib/api/generate-response";
 
 import { GenerateResponseMessage } from "../../messages/index";
 import { Handler } from "./types";

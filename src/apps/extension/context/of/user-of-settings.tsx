@@ -14,8 +14,8 @@ interface UserOFSettingsContextValue {
 
 export const UserOFSettingsContext = createContext<UserOFSettingsContextValue>({
   settings: { isReady: false },
-  setSettings: () => { },
-  saveSettings: async () => { },
+  setSettings: () => {},
+  saveSettings: async () => {},
 });
 
 export const UserOFSettingsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {

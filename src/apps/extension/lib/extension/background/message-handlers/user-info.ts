@@ -1,7 +1,8 @@
+import { ok } from "neverthrow";
+
 import { postLogin } from "@/extension/lib/api/login";
 import { getActiveAuth } from "@/extension/lib/auth";
 import { parseError } from "@/utils/parse-error";
-import { ok } from "neverthrow";
 
 import { ActiveUserInfoMessage, UserInfoMessage } from "../../messages/index";
 import { Storage } from "../../storage";
