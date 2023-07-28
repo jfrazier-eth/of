@@ -67,6 +67,7 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request, expecte
 
     return parseClientError(options, response);
   } catch (err) {
+    console.error("Fetch request error", err);
     return parseClientError(options, err);
   }
 };

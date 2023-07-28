@@ -31,7 +31,7 @@ export const generateResponse = async (settings: OFSettings, data: GenerateChatR
       {
         model: "gpt-3.5-turbo",
         temperature: 0.9,
-        max_tokens: 200,
+        max_tokens: 400,
       }
     );
 
@@ -60,7 +60,10 @@ export const generateResponse = async (settings: OFSettings, data: GenerateChatR
       message = JSON.parse(responseMessage.content).content;
     } catch (err) {
       console.error(`Failed to parse response message: ${err}`);
-      message = responseMessage.content;
+      message = responseMessage.content.split("content\": \"")[1];
+    }
+    if (!message) {
+      return err(new Error("Failed to parse response message"));
     }
     return ok({
       cost: {

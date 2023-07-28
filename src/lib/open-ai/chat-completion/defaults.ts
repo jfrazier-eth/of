@@ -6,7 +6,7 @@ export const defaultChatCompletionRequestOptions: Omit<ChatCompletionRequest, "m
   top_p: 1,
   n: 1,
   stream: false,
-  max_tokens: 200,
+  max_tokens: 400,
   presence_penalty: 0,
   frequency_penalty: 0,
   logit_bias: {},
