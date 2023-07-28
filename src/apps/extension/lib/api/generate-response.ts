@@ -1,12 +1,14 @@
 import { Site } from "@/backend/lib/accounts/types";
 import {
   GenerateChatRequestBody,
-  GenerateChatResponseBody,
+  GenerateChatResponseBody
 } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/chat/response/types";
 import { Browsers } from "@/sites/common";
 import { OF_BASE_URL } from "@/sites/of";
 import { SessionContext } from "@/sites/of/context";
 import { getMessages } from "@/sites/of/sdk/get-messages";
+import { parseError } from "@/utils/parse-error";
+import { err, ok } from "neverthrow";
 
 import { Context } from "./context";
 
@@ -46,10 +48,15 @@ export async function generateResponse(
       context.ofParams
     );
 
-    const messages = await getMessages(ofContext, params.withUser.id, {
+    const messagesResponse = await getMessages(ofContext, params.withUser.id, {
       maxNumMessages: 10,
     });
 
+    if (messagesResponse.isErr()) {
+      return err(messagesResponse.error);
+    }
+
+    const messages = messagesResponse.value;
     const body: GenerateChatRequestBody = {
       user: {
         id: userId,
@@ -117,11 +124,10 @@ export async function generateResponse(
 
     if (response.status === 200) {
       const body = (await response.json()) as GenerateChatResponseBody;
-      return body;
+      return ok(body);
     }
-    throw new Error(`Failed to generate response. Status code: ${response.status}`);
-  } catch (err) {
-    console.error(err);
-    throw new Error("Failed to generate response");
+    return err(new Error(`Failed to generate response. Status code: ${response.status}`));
+  } catch (error) {
+    return parseError(error);
   }
 }

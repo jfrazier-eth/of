@@ -1,6 +1,8 @@
 import { OF } from "@/sites/index";
 import { OF_BASE_URL } from "@/sites/of";
 import { SessionContext } from "@/sites/of/context";
+import { parseError } from "@/utils/parse-error";
+import { err, ok } from "neverthrow";
 
 import { GetVaultItemsMessage } from "../../messages";
 import { Handler } from "./types";
@@ -11,9 +13,9 @@ export const handleGetVaultItemsMessage: Handler<GetVaultItemsMessage> = async (
     const userId = context.user?.userId;
     const ofAuth = context.ofAuth;
     if (!userId) {
-      throw new Error("Missing user id");
+      return err(new Error("Missing user id"));
     } else if (!ofAuth) {
-      throw new Error("Missing auth id");
+      return err(new Error("Missing auth id"));
     }
 
     const ofContext = new SessionContext(
@@ -32,22 +34,19 @@ export const handleGetVaultItemsMessage: Handler<GetVaultItemsMessage> = async (
     const response = await OF.Sdk.getVault(ofContext, {
       offset: msg.data.offset,
     });
+    if (response.isErr()) {
+      return err(response.error)
+    }
 
-    return {
+    return ok({
       kind: "GET_VAULT_ITEMS",
       data: {
-        items: response.items,
-        hasNextPage: response.hasNextPage,
-        offset: response.offset,
+        items: response.value.items,
+        hasNextPage: response.value.hasNextPage,
+        offset: response.value.offset,
       },
-    };
+    });
   } catch (err) {
-    console.error(`Failed to load vault`, err);
-    return {
-      kind: "GET_VAULT_ITEMS",
-      data: {
-        error: "Failed to load vault, please try again later.",
-      },
-    };
+    return parseError(err);
   }
 };

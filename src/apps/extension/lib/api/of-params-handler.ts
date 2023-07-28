@@ -43,12 +43,14 @@ export class BrowserOFParamsHandler implements ParamsHandler {
     const response = await sendMessage({
       kind: "GET_OF_DYNAMIC_PARAMS",
     });
-
-    if (response.data.success) {
-      this.params = response.data.params;
-    } else {
-      console.error(response.data.message);
+    if (response.isErr()) {
+      console.error(response.error);
+      return;
     }
+
+
+    this.params = response.value.data.params;
+
   }
 
   public async refresh() {
@@ -58,12 +60,12 @@ export class BrowserOFParamsHandler implements ParamsHandler {
         const response = await sendMessage({
           kind: "GET_OF_DYNAMIC_PARAMS",
         });
-
-        if (response.data.success) {
-          this.params = response.data.params;
-        } else {
-          console.error(response.data.message);
+        if (response.isErr()) {
+          throw response.error;
         }
+
+        this.params = response.value.data.params;
+
       } catch (e) {
         console.error(e);
       }

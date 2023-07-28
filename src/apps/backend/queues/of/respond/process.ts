@@ -42,7 +42,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
 
   if (messagesResponse.isErr()) {
     console.error(`Failed to get messages for user`, messagesResponse.error);
-    return err(messagesResponse.error);
+    return err(messagesResponse.error) as JobResult;
   }
 
   const messages = messagesResponse.value;
@@ -53,7 +53,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     return ok({
       sent: false,
       reason: "Skipped. Most recent message is not the expected message.",
-    });
+    }) as JobResult;
   }
 
   const ppvs = [primaryPPV, secondaryPPV].filter((item) => item.media) as {
@@ -126,7 +126,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
 
   if (mostRecentMessageResponse.isErr()) {
     console.error(`Failed to get most recent message id`, mostRecentMessageResponse.error);
-    return err(mostRecentMessageResponse.error);
+    return err(mostRecentMessageResponse.error) as JobResult;
   }
 
   const currentMesssageHasBeenProcessed =
@@ -136,18 +136,18 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     return ok({
       sent: false,
       reason: "Skipped. Most recent message has already been processed.",
-    });
+    }) as JobResult;
   } else if (mostRecentMessageWasSentByUser) {
     return ok({
       sent: false,
       reason: "Skipped. Most recent message was sent by user.",
-    });
+    }) as JobResult;
   }
 
   const response = await generateResponse(settings, data);
   if (response.isErr()) {
     console.error(`Failed to generate response`, response.error);
-    return err(response.error);
+    return err(response.error) as JobResult;
   }
 
   console.log(`Sending message to ${withUser.username}...`);
@@ -156,29 +156,29 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     const messageData =
       ppv === null
         ? {
-            toUserId: withUser.id,
-            text: message,
-            lockedText: false,
-            mediaFiles: [],
-            price: 0,
-            previews: [],
-            isCouplePeopleMedia: false,
-            isForward: false,
-          }
+          toUserId: withUser.id,
+          text: message,
+          lockedText: false,
+          mediaFiles: [],
+          price: 0,
+          previews: [],
+          isCouplePeopleMedia: false,
+          isForward: false,
+        }
         : {
-            toUserId: withUser.id,
-            text: message,
-            lockedText: false,
-            mediaFiles: [parseInt(ppv.media.siteMediaId, 10)],
-            price: ppv.price,
-            previews: [],
-            isCouplePeopleMedia: false,
-            isForward: false,
-          };
+          toUserId: withUser.id,
+          text: message,
+          lockedText: false,
+          mediaFiles: [parseInt(ppv.media.siteMediaId, 10)],
+          price: ppv.price,
+          previews: [],
+          isCouplePeopleMedia: false,
+          isForward: false,
+        };
     const res = await OF.Routes.V2.Chats.User.Messages.Post.post(session, messageData);
     if (res.isErr()) {
       console.error(`Failed to send message`, res.error);
-      return err(res.error);
+      return err(res.error) as JobResult;
     }
     const id = res.value.id.toString();
     const saveMessageRes = await saveChatMostRecentMessageId({
@@ -191,10 +191,10 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
       // don't return here since the message was sent successfully
     }
 
-    return ok({ id, sent: true });
+    return ok({ id, sent: true }) as JobResult;
   } catch (e) {
     const error = parseError(e);
     console.log(`Failed to send message to ${withUser.username}`, error.error);
-    return error;
+    return error as JobResult;
   }
 };

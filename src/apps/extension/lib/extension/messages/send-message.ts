@@ -1,5 +1,6 @@
+import { Result } from "neverthrow";
 import { MessageHandlers } from "../background/message-handlers";
-import { Handler } from "../background/message-handlers/types";
+import { Handler, HandlerError } from "../background/message-handlers/types";
 import { isBackground } from "../utils/is-background";
 import { Message } from "./index";
 import { MessagesByKind, ResponsesByKind } from "./mappings";
@@ -16,7 +17,7 @@ export const sendMessage = async <T extends Message>(msg: T) => {
     const response = await handler((msg as unknown) as MessagesByKind[Msg["kind"]], context);
     return response;
   } else {
-    return await new Promise<ResponsesByKind[T["kind"]]>((resolve, reject) => {
+    return await new Promise<Result<ResponsesByKind[T["kind"]], HandlerError>>((resolve, reject) => {
       chrome.runtime.sendMessage(msg, (response) => {
         resolve(response);
       });

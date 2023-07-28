@@ -30,8 +30,11 @@ const UserInfoProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       };
       sendMessage(userInfoRequest)
         .then((response) => {
+          if (response.isErr()) {
+            throw response.error;
+          }
           if (isMounted) {
-            setValue({ isReady: true, value: response.data });
+            setValue({ isReady: true, value: response.value.data });
           }
         })
         .catch((err) => {

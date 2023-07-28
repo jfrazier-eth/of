@@ -1,6 +1,8 @@
 import { ClientOFDynamicParams } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/sign/params/types";
 import { Context } from "@/extension/lib/api/context";
 import { getOFDynamicParams } from "@/extension/lib/api/get-of-dynamic-params";
+import { parseError } from "@/utils/parse-error";
+import { err, ok, Result } from "neverthrow";
 
 import { GetOFDynamicParamsMessage, UpdateOFRevisionMessage } from "../../messages";
 import { Storage } from "../../storage";
@@ -9,12 +11,18 @@ import { Handler } from "./types";
 const updateOFParams = async (
   context: Context,
   revision?: string
-): Promise<ClientOFDynamicParams> => {
-  const params = await getOFDynamicParams(context, revision);
-  context.ofParams.params = params;
-  await setCachedOFDynamicParams(params);
+): Promise<Result<ClientOFDynamicParams, Error>> => {
+  try {
 
-  return params;
+
+    const params = await getOFDynamicParams(context, revision);
+    context.ofParams.params = params;
+    await setCachedOFDynamicParams(params);
+
+    return ok(params);
+  } catch (err) {
+    return parseError(err);
+  }
 };
 
 export const handleUpdateOFRevisionMessage: Handler<UpdateOFRevisionMessage> = async (
@@ -25,25 +33,22 @@ export const handleUpdateOFRevisionMessage: Handler<UpdateOFRevisionMessage> = a
   const prevRevision = context.ofParams.params?.revision;
 
   if (prevRevision === currRev) {
-    return {
+    return ok({
       kind: "UPDATE_OF_REVISION",
-      data: { success: true, revision: currRev },
-    };
+      data: { revision: currRev },
+    });
   }
   try {
-    const params = await updateOFParams(context, currRev);
-    return {
+    const paramsResponse = await updateOFParams(context, currRev);
+    if (paramsResponse.isErr()) {
+      return err(paramsResponse.error);
+    }
+    return ok({
       kind: "UPDATE_OF_REVISION",
-      data: { revision: params.revision, success: true },
-    };
+      data: { revision: paramsResponse.value.revision },
+    });
   } catch (err) {
-    return {
-      kind: "UPDATE_OF_REVISION",
-      data: {
-        success: false,
-        message: "Failed to update revision",
-      },
-    };
+    return parseError(err);
   }
 };
 
@@ -64,37 +69,30 @@ export const handleGetOFDynamicParamsMessage: Handler<GetOFDynamicParamsMessage>
   message,
   context
 ) => {
-  const cachedDynamicParams = await getCachedOFDynamicParams();
-
-  if (cachedDynamicParams) {
-    console.log(`Found cached dynamic params!`, cachedDynamicParams);
-    return {
-      kind: "GET_OF_DYNAMIC_PARAMS",
-      data: {
-        success: true,
-        params: cachedDynamicParams,
-      },
-    };
-  }
-
   try {
+    const cachedDynamicParams = await getCachedOFDynamicParams();
+    if (cachedDynamicParams) {
+      return ok({
+        kind: "GET_OF_DYNAMIC_PARAMS",
+        data: {
+          params: cachedDynamicParams,
+        },
+      });
+    }
+
     const res = await updateOFParams(context);
+    if (res.isErr()) {
+      return err(res.error);
+    }
     console.log(`Updated dynamic params!`, res);
-    return {
+    return ok({
       kind: "GET_OF_DYNAMIC_PARAMS",
       data: {
-        success: true,
-        params: res,
+        params: res.value,
       },
-    };
+    });
   } catch (err) {
     console.error(`Failed to get OF dynamic params`, err);
-    return {
-      kind: "GET_OF_DYNAMIC_PARAMS",
-      data: {
-        success: false,
-        message: "Failed to get OF dynamic params",
-      },
-    };
+    return parseError(err);
   }
 };

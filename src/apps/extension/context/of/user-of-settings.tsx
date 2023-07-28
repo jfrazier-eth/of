@@ -1,4 +1,4 @@
-import { ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 
 import { ClientOFSettings } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/settings/types";
 
@@ -14,8 +14,8 @@ interface UserOFSettingsContextValue {
 
 export const UserOFSettingsContext = createContext<UserOFSettingsContextValue>({
   settings: { isReady: false },
-  setSettings: () => {},
-  saveSettings: async () => {},
+  setSettings: () => { },
+  saveSettings: async () => { },
 });
 
 export const UserOFSettingsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -34,15 +34,15 @@ export const UserOFSettingsProvider: React.FC<{ children: ReactNode }> = ({ chil
     })
       .then((res) => {
         if (!isMounted) return;
-
-        if (res.data.success) {
-          setValue({
-            isReady: true,
-            value: res.data.settings,
-          });
-        } else {
-          console.warn(res.data.message);
+        if (res.isErr()) {
+          console.error(res.error);
+          return;
         }
+
+        setValue({
+          isReady: true,
+          value: res.value.data.settings,
+        });
       })
       .catch((err) => {
         console.error(`Failed to get user OF settings`, err);

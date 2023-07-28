@@ -32,9 +32,9 @@ const handleMutations = (settings: UserSettings["incognito"]): MutationCallback 
   if (settings.text.blur) {
     walk(document.body, settings.text);
   }
-  mutations.forEach(function (mutation) {
+  mutations.forEach(function(mutation) {
     if (mutation.addedNodes && mutation.addedNodes.length > 0) {
-      mutation.addedNodes.forEach(function (node) {
+      mutation.addedNodes.forEach(function(node) {
         if (node.nodeName === "IMG" && settings.images.blur) {
           blurImages([node as HTMLImageElement], settings.images.blurRadiusRem);
         } else if (node.nodeName === "VIDEO" && settings.videos.blur) {
@@ -116,7 +116,12 @@ function walk(node: any, textSettings: UserSettings["incognito"]["text"]) {
 sendMessage({
   kind: "USER_SETTINGS",
 })
-  .then((settingsResponse) => {
+  .then((res) => {
+    if (res.isErr()) {
+      console.error(`Failed to get user settings`, res.error);
+      return;
+    }
+    const settingsResponse = res.value;
     if (settingsResponse.data.incognito.images.blur) {
       const initialImages = document.getElementsByTagName("img");
       blurImages(initialImages, settingsResponse.data.incognito.images.blurRadiusRem);
@@ -181,9 +186,13 @@ function addButton(uid: string) {
       },
     })
       .then((response) => {
+        if (response.isErr()) {
+          console.error(`Failed to generate response`, response.error);
+          return;
+        }
         const textarea = document.querySelector("#new_post_text_input");
         if (textarea) {
-          setNativeValue(textarea, response.data.message);
+          setNativeValue(textarea, response.value.data.message);
         } else {
           console.error("Failed to find textarea");
         }

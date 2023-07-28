@@ -1,3 +1,4 @@
+import { ok } from "neverthrow";
 import { ActiveTabMessage } from "../../messages/index";
 import { Handler } from "./types";
 
@@ -21,15 +22,15 @@ export const handleActiveTabMessage: Handler<ActiveTabMessage> = async (message)
   const activeTab = await getActiveTab();
 
   if (activeTab.id) {
-    return {
+    return ok({
       kind: "ACTIVE_TAB",
       data: {
         id: activeTab.id,
       },
-    };
+    });
   }
-  return {
+  return ok({
     kind: "ACTIVE_TAB",
     data: null,
-  };
+  });
 };
