@@ -6,9 +6,14 @@ export type HeaderLocals = {
 };
 
 export const parseHeaders = (req: Request, res: Response, next: NextFunction) => {
-  const apiKey = req.headers["x-api-key"];
-  const userId = req.headers["x-user-id"];
-  res.locals.apiKey = apiKey || "";
-  res.locals.userId = userId || "";
-  next();
+  try {
+    const apiKey = req.headers["x-api-key"];
+    const userId = req.headers["x-user-id"];
+    res.locals.apiKey = apiKey || "";
+    res.locals.userId = userId || "";
+    next();
+  } catch (err) {
+    console.error(err);
+    return res.sendStatus(500);
+  }
 };

@@ -7,14 +7,16 @@
   "license": "MIT",
   "packageManager": "pnpm@8.6.9",
   "engines": {
-    "node": "20.4.0"
+    "node": "16.18.1"
   },
   "type": "commonjs",
   "scripts": {
+    "deploy:server": "pnpm run build && gcloud app deploy -q --appyaml=./app.yaml --project=seductive-394121",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
     "build": "pnpm clean && tsc -p ./tsconfig.backend.json",
     "clean": "rimraf ./dist",
-    "start": "pnpm build && pnpm migrate up && node -r dotenv/config -r module-alias/register ./dist/apps/backend/index.js",
+    "dev": "pnpm build && pnpm migrate up && node -r dotenv/config -r module-alias/register ./dist/apps/backend/index.js",
+    "start": "node -r dotenv/config -r module-alias/register ./dist/apps/backend/index.js",
     "test": "node node_modules/jest/bin/jest.js",
     "migrate": "ts-node --project tsconfig.migrations.json node_modules/node-pg-migrate/bin/node-pg-migrate",
     "start:script": "pnpm build && node -r dotenv/config -r module-alias/register ./dist/index.js",
@@ -50,7 +52,6 @@
     "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "10.4.14",
     "concurrently": "^8.2.0",
-    "dotenv": "^16.3.1",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
     "jest": "28.1.0",
@@ -58,15 +59,13 @@
     "rimraf": "^5.0.1",
     "supertest": "^6.3.3",
     "ts-jest": "28.0.8",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.2.0",
-    "tsup": "^7.1.0",
-    "typescript": "4.9.5"
+    "tsup": "^7.1.0"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
     "@tanstack/react-virtual": "3.0.0-beta.54",
+    "dotenv": "^16.3.1",
     "module-alias": "^2.2.3",
     "nanoid": "3.3.6",
     "neverthrow": "^6.0.0",
@@ -91,7 +90,10 @@
     "mongoose": "^7.3.3",
     "node-pg-migrate": "^6.2.2",
     "pg": "^8.11.1",
-    "pg-promise": "^11.5.0"
+    "pg-promise": "^11.5.0",
+    "tsconfig-paths": "^4.2.0",
+    "ts-node": "^10.9.1",
+    "typescript": "4.9.5"
   },
   "_moduleAliases": {
     "@/backend": "dist/apps/backend",

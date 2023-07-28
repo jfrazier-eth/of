@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { getAuth } from "firebase-admin/auth";
 
 import { getApp } from "@/backend/db/firebase";
@@ -9,10 +9,11 @@ export const post = async (
   req: Request<{}, {}, { token: string }>,
   res: Response<{ apiKey: string; userId: string }>
 ) => {
-  const app = getApp();
-  const idToken = req.body.token;
-
   try {
+    const app = getApp();
+    const idToken = req.body.token;
+
+
     const payload = await getAuth(app).verifyIdToken(idToken, true);
     const uid = payload.uid;
 

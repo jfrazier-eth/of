@@ -18,7 +18,7 @@ export const post = async (
 
     return res.status(200).json(settings.value);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500);
   }
 };

@@ -50,6 +50,7 @@ export const get = async (context: SessionContext, options: GetVaultMediaOptions
     if (response.status === 200) {
       return response.body;
     }
+    console.log(`Failed to load vault ${response.status}`, response.body);
     throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
     if (err instanceof UnexpectedStatusCodeError) {

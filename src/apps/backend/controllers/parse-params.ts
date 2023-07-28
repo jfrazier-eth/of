@@ -12,12 +12,19 @@ export const parseParams: (
   res: Response<unknown, SiteParamLocals<Site>>,
   next: NextFunction
 ) => void = (req, res, next) => {
-  const userIdParam = req.params.userId;
-  const site = req.params.site;
-  const siteUserId = req.params.siteUserId;
+  try {
 
-  res.locals.userIdParam = userIdParam;
-  res.locals.site = site;
-  res.locals.siteUserId = siteUserId;
-  next();
+
+    const userIdParam = req.params.userId;
+    const site = req.params.site;
+    const siteUserId = req.params.siteUserId;
+
+    res.locals.userIdParam = userIdParam;
+    res.locals.site = site;
+    res.locals.siteUserId = siteUserId;
+    next();
+  } catch (err) {
+    console.error(err);
+    return res.sendStatus(500);
+  }
 };

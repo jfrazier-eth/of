@@ -68,13 +68,14 @@ export const post = async (
   req: PostRequest<GenerateChatRequestBody>,
   res: UserSiteAuthResponse<GenerateChatResponseBody>
 ) => {
-  const { userId, siteUserId } = res.locals;
-  const { user, chat } = req.body;
-  if (userId !== user.id) {
-    return res.sendStatus(400);
-  }
-
   try {
+    const { userId, siteUserId } = res.locals;
+    const { user, chat } = req.body;
+    if (userId !== user.id) {
+      return res.sendStatus(400);
+    }
+
+
     const settings = await getSettings(userId, siteUserId);
     if (settings.isErr()) {
       return res.sendStatus(500);

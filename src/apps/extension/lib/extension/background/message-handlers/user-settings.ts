@@ -21,16 +21,16 @@ export interface UserSettings {
 export const DEFAULT_USER_SETTINGS: UserSettings = {
   incognito: {
     images: {
-      blur: true,
+      blur: false,
       blurRadiusRem: 20,
     },
     videos: {
-      blur: true,
+      blur: false,
       blurRadiusRem: 50,
     },
     text: {
-      blur: true,
-      unBlurOnHover: true,
+      blur: false,
+      unBlurOnHover: false,
     },
   },
 };
