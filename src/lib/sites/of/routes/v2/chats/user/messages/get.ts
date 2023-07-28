@@ -1,5 +1,8 @@
-import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
+
 import { SessionContext } from "@/sites/of";
+import { OFApiError } from "@/sites/of/errors";
+import { parseError } from "@/utils/parse-error";
+import { err, ok, Result } from "neverthrow";
 
 import { ReceivedMessage } from "./types";
 
@@ -30,19 +33,20 @@ export interface GetMessagesResponseBody {
   hasMore: boolean;
 }
 
-export const get = async (context: SessionContext, options: GetMessagesOptions) => {
-  const path = getPath(options.otherUserId);
-  const searchParams = new URLSearchParams({
-    limit: `10`, // has to be 10
-    order: options.order ?? "desc",
-    skip_users: "all",
-  });
-  if (options.startAfterMessageId) {
-    searchParams.append("id", options.startAfterMessageId);
-  }
-
-  const url = context.getUrl(path, searchParams);
+export const get = async (context: SessionContext, options: GetMessagesOptions): Promise<Result<GetMessagesResponseBody, OFApiError> => {
   try {
+    const path = getPath(options.otherUserId);
+    const searchParams = new URLSearchParams({
+      limit: `10`, // has to be 10
+      order: options.order ?? "desc",
+      skip_users: "all",
+    });
+    if (options.startAfterMessageId) {
+      searchParams.append("id", options.startAfterMessageId);
+    }
+
+    const url = context.getUrl(path, searchParams);
+
     const contextHeaders = await context.getHeaders(url);
     const reqHeaders = {
       ...getHeaders(context.userParams.authId, options.otherUserId),
@@ -53,15 +57,12 @@ export const get = async (context: SessionContext, options: GetMessagesOptions) 
       headers: reqHeaders,
     });
 
-    if (response.status === 200) {
-      return response.body;
+    if (response.isOk()) {
+      return ok(response.value.body);
     }
 
-    throw new UnexpectedStatusCodeError(url, context, response.status);
+    return err(response.error);
   } catch (err) {
-    if (err instanceof UnexpectedStatusCodeError) {
-      throw err;
-    }
-    throw RequestError.create(err, url, context);
+    return parseError(err);
   }
 };

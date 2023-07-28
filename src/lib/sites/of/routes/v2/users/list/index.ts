@@ -1,5 +1,7 @@
-import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
+
 import { SessionContext } from "@/sites/of/context";
+import { parseError } from "@/utils/parse-error";
+import { err, ok } from "neverthrow";
 
 import { GetUsersResponseBody } from "./types";
 
@@ -27,14 +29,12 @@ export const getUsers = async (context: SessionContext, userIds: string[]) => {
     const response = await context.client.get<GetUsersResponseBody>(url, {
       headers: reqHeaders,
     });
-    if (response.status === 200) {
-      return response.body;
+
+    if (response.isOk()) {
+      return ok(response.value.body);
     }
-    throw new UnexpectedStatusCodeError(url, context, response.status);
+    return err(response.error);
   } catch (err) {
-    if (err instanceof UnexpectedStatusCodeError) {
-      throw err;
-    }
-    throw RequestError.create(err, url, context);
+    return parseError(err);
   }
 };

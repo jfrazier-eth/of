@@ -1,5 +1,7 @@
-import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
+
 import { SessionContext } from "@/sites/of/context";
+import { parseError } from "@/utils/parse-error";
+import { err, ok } from "neverthrow";
 
 import { GetMeResponseBody } from "./types";
 
@@ -24,20 +26,19 @@ export const get = async (context: SessionContext) => {
       headers: reqHeaders,
     });
 
-    if (response.status === 200) {
-      return {
-        id: response.body.id,
-        name: response.body.name,
-        username: response.body.username,
-        email: response.body.email,
-        wsAuthToken: response.body.wsAuthToken,
-      };
+
+    if (response.isOk()) {
+      return ok({
+        id: response.value.body.id,
+        name: response.value.body.name,
+        username: response.value.body.username,
+        email: response.value.body.email,
+        wsAuthToken: response.value.body.wsAuthToken,
+      })
     }
-    throw new UnexpectedStatusCodeError(url, context, response.status);
+
+    return err(response.error);
   } catch (err) {
-    if (err instanceof UnexpectedStatusCodeError) {
-      throw err;
-    }
-    throw RequestError.create(err, url, context);
+    return parseError(err);
   }
 };

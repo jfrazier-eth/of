@@ -15,7 +15,6 @@ export const generateResponse = async (settings: OFSettings, data: GenerateChatR
   });
 
   const apiKey = config.openAI.apiKey;
-
   const chatCompletionRequest = transformRequest(
     {
       user: data.user,

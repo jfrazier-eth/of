@@ -1,5 +1,8 @@
-import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
+
 import { SessionContext } from "@/sites/of/context";
+import { OFApiError } from "@/sites/of/errors";
+import { parseError } from "@/utils/parse-error";
+import { err, ok, Result } from "neverthrow";
 
 import { GetInitResponseBody } from "./types";
 
@@ -13,7 +16,7 @@ const headers = {
   Accept: "application/json, text/plain, */*",
 };
 
-export const get = async (context: SessionContext): Promise<void> => {
+export const get = async (context: SessionContext): Promise<Result<GetInitResponseBody, OFApiError>> => {
   const url = context.getUrl(path);
 
   try {
@@ -27,14 +30,12 @@ export const get = async (context: SessionContext): Promise<void> => {
       headers: reqHeaders,
     });
 
-    if (response.status === 200) {
-      return;
+    if (response.isOk()) {
+      return ok(response.value.body);
     }
-    throw new UnexpectedStatusCodeError(url, context, response.status);
+
+    return err(response.error);
   } catch (err) {
-    if (err instanceof UnexpectedStatusCodeError) {
-      throw err;
-    }
-    throw RequestError.create(err, url, context);
+    return parseError(err);
   }
 };

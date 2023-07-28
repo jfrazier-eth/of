@@ -1,3 +1,5 @@
+import { ok } from "neverthrow";
+import { parseClientError } from "./errors";
 import { mergeOptions } from "./merge-options";
 import {
   Response as ClientResponse,
@@ -39,14 +41,13 @@ export const parseBody = async (response: Response, responseType: ResponseType) 
   }
 };
 
-export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
+export const adapter: RequestAdapter<unknown, unknown> = async (request, expectedStatus) => {
   const url = request.url.toString();
   const defaults = getDefaultClientOptions();
   const options = mergeOptions(defaults, request);
+  let reqHeaders = options.headers ?? {}
 
   try {
-    let reqHeaders = options.headers ?? {};
-
     const response = await fetch(url.toString(), {
       method: request.method,
       headers: reqHeaders,
@@ -59,12 +60,12 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
       headers: parseHeaders(response),
     };
 
-    if (options.throwHttpErrors && res.status > 299) {
-      throw new Error(`Unexpected status code ${response.status}`);
+    if (res.status === expectedStatus) {
+      return ok(res);
     }
 
-    return res;
-  } catch (e) {
-    throw e;
+    return parseClientError(options, response);
+  } catch (err) {
+    return parseClientError(options, err)
   }
 };

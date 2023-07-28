@@ -1,30 +1,34 @@
 import got from "got";
 import { HttpsProxyAgent } from "https-proxy-agent";
+import { ok } from "neverthrow";
+import { parseClientError } from "./errors";
+import { mergeOptions } from "./merge-options";
 
-import { RequestAdapter, Response } from "./types";
+import { getDefaultClientOptions, RequestAdapter, Response } from "./types";
 
-export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
+export const adapter: RequestAdapter<unknown, unknown> = async (request, expectedStatus) => {
   const url = request.url.toString();
+  const defaults = getDefaultClientOptions();
+  const options = mergeOptions(defaults, request);
 
-  const proxy = process.env.HTTPS_PROXY;
   let agent;
-  if (proxy) {
-    agent = new HttpsProxyAgent(proxy);
+  if (options.proxy) {
+    agent = new HttpsProxyAgent(options.proxy);
   }
 
   try {
     const response = await got(url, {
-      method: request.method,
-      throwHttpErrors: request.throwHttpErrors,
-      responseType: request.responseType,
-      headers: request.headers,
-      body: request.json ? JSON.stringify(request.json) : undefined,
+      method: options.method,
+      throwHttpErrors: false,
+      responseType: options.responseType,
+      headers: options.headers,
+      body: options.json ? JSON.stringify(options.json) : undefined,
       http2: false,
       agent: {
         https: agent,
       },
       https: {
-        rejectUnauthorized: !proxy?.includes("127.0.0.1"),
+        rejectUnauthorized: !options.proxy?.includes("127.0.0.1"),
       },
     });
 
@@ -34,8 +38,12 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
       headers: response.headers,
     };
 
-    return res;
+    if (res.status === expectedStatus) {
+      return ok(res);
+    }
+
+    return parseClientError(options, response);
   } catch (err) {
-    throw err;
+    return parseClientError(options, err)
   }
 };

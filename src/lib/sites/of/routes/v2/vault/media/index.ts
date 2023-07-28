@@ -1,5 +1,6 @@
-import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
 import { SessionContext } from "@/sites/of/context";
+import { parseError } from "@/utils/parse-error";
+import { err, ok } from "neverthrow";
 
 import { VaultMediaItem } from "./types";
 
@@ -27,17 +28,18 @@ export interface GetVaultMediaResponseBody {
 export const defaultPageSize = 24;
 
 export const get = async (context: SessionContext, options: GetVaultMediaOptions) => {
-  const searchParams = new URLSearchParams({
-    limit: `${defaultPageSize}`,
-    sort: "desc",
-    list: "all",
-    field: "recent",
-    offset: `${options.offset}` || "0",
-  });
-
-  const url = context.getUrl(path, searchParams);
-
   try {
+    const searchParams = new URLSearchParams({
+      limit: `${defaultPageSize}`,
+      sort: "desc",
+      list: "all",
+      field: "recent",
+      offset: `${options.offset}` || "0",
+    });
+
+    const url = context.getUrl(path, searchParams);
+
+
     const contextHeaders = await context.getHeaders(url);
     const reqHeaders = {
       ...getHeaders(context.userId),
@@ -47,16 +49,14 @@ export const get = async (context: SessionContext, options: GetVaultMediaOptions
     const response = await context.client.get<GetVaultMediaResponseBody>(url, {
       headers: reqHeaders,
     });
-    if (response.status === 200) {
-      return response.body;
+
+    if (response.isOk()) {
+      return ok(response.value.body);
     }
-    console.log(`Failed to load vault ${response.status}`, response.body);
-    throw new UnexpectedStatusCodeError(url, context, response.status);
+
+    return err(response.error);
   } catch (err) {
-    if (err instanceof UnexpectedStatusCodeError) {
-      throw err;
-    }
-    throw RequestError.create(err, url, context);
+    return parseError(err);
   }
 };
 
