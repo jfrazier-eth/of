@@ -1,38 +1,43 @@
+import { parseError } from "@/utils/parse-error";
 import { Result, err, ok } from "neverthrow";
 
-import { parseError } from "@/sites/common/errors/parse-error";
-import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
 
 import { Routes } from "..";
 import { SessionContext } from "../context";
+import { OFApiError } from "../errors";
 import { MessageListItem } from "../routes/v2/chats/list/types";
 
 export async function* getRecentChats(
   context: SessionContext
 ): AsyncGenerator<
-  Result<MessageListItem, { e: UnexpectedStatusCodeError | RequestError | Error; attempts: number }>
+  Result<MessageListItem, { e: OFApiError; attempts: number }>
 > {
-  let hasNextPage = true;
-  let offset = 0;
   let attempts = 0;
-  while (hasNextPage) {
-    try {
+  try {
+    let hasNextPage = true;
+    let offset = 0;
+    while (hasNextPage) {
       const response = await Routes.V2.Chats.List.Get.get(context, {
         limit: 10,
         offset,
         order: "recent",
       });
+      if (response.isErr()) {
+        attempts += 1;
+        yield err({ e: response.error, attempts });
+      } else {
+        const data = response.value;
+        hasNextPage = data.hasMore && data.list.length > 0;
+        offset = data.nextOffset;
 
-      hasNextPage = response.hasMore && response.list.length > 0;
-      offset = response.nextOffset;
-
-      for (const chat of response.list) {
-        yield ok(chat);
+        for (const chat of data.list) {
+          yield ok(chat);
+        }
+        attempts = 0;
       }
-      attempts = 0;
-    } catch (e) {
-      attempts += 1;
-      yield err({ e: parseError(e).error, attempts });
     }
+  }
+  catch (err) {
+    return parseError(err);
   }
 }
