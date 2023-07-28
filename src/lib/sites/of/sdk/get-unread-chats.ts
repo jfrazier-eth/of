@@ -1,5 +1,7 @@
-import { parseError } from "@/utils/parse-error";
 import { err, ok } from "neverthrow";
+
+import { parseError } from "@/utils/parse-error";
+
 import { Routes, SessionContext } from "../index";
 
 export async function getUnreadChats(

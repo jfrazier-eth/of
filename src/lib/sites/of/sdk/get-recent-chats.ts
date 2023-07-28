@@ -1,7 +1,7 @@
-import { ApiError } from "@/sites/common/errors";
-import { parseError } from "@/utils/parse-error";
 import { Result, err, ok } from "neverthrow";
 
+import { ApiError } from "@/sites/common/errors";
+import { parseError } from "@/utils/parse-error";
 
 import { Routes } from "..";
 import { SessionContext } from "../context";
@@ -9,9 +9,7 @@ import { MessageListItem } from "../routes/v2/chats/list/types";
 
 export async function* getRecentChats(
   context: SessionContext
-): AsyncGenerator<
-  Result<MessageListItem, { e: ApiError; attempts: number }>
-> {
+): AsyncGenerator<Result<MessageListItem, { e: ApiError; attempts: number }>> {
   let attempts = 0;
   try {
     let hasNextPage = true;
@@ -36,8 +34,7 @@ export async function* getRecentChats(
         attempts = 0;
       }
     }
-  }
-  catch (err) {
+  } catch (err) {
     return parseError(err);
   }
 }

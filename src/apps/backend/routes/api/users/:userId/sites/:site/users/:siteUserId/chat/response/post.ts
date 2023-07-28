@@ -1,3 +1,5 @@
+import { err, ok } from "neverthrow";
+
 import { config } from "@/backend/config";
 import { PostRequest, UserSiteAuthResponse } from "@/backend/controllers/types";
 import { getSettings } from "@/backend/lib/settings/of";
@@ -5,7 +7,6 @@ import { OFSettings } from "@/backend/lib/settings/of/types";
 import * as OpenAI from "@/lib/open-ai";
 import { getClient } from "@/sites/common/client";
 import { parseError } from "@/utils/parse-error";
-import { err, ok } from "neverthrow";
 
 import { transformRequest } from "./transform-request";
 import { GenerateChatRequestBody, GenerateChatResponseBody } from "./types";
@@ -91,7 +92,7 @@ export const post = async (
     }
     const response = await generateResponse(settings.value, req.body);
     if (response.isErr()) {
-      console.error('Failed to generate response', response.error);
+      console.error("Failed to generate response", response.error);
       return res.sendStatus(500);
     }
 

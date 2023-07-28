@@ -1,7 +1,7 @@
+import { err, ok } from "neverthrow";
 
 import { SessionContext } from "@/sites/of/context";
 import { parseError } from "@/utils/parse-error";
-import { err, ok } from "neverthrow";
 
 import { getPath } from "./path";
 import { SentMessage } from "./types";
@@ -38,7 +38,6 @@ export const post = async (context: SessionContext, options: PostMessagesOptions
   try {
     const path = getPath(options.toUserId);
     const url = context.getUrl(path);
-
 
     const contextHeaders = await context.getHeaders(url);
     const reqHeaders = {

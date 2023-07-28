@@ -1,5 +1,6 @@
-import { parseError } from "@/utils/parse-error";
 import { err, ok } from "neverthrow";
+
+import { parseError } from "@/utils/parse-error";
 
 import { Routes } from "..";
 import { OF } from "../..";
@@ -44,7 +45,6 @@ export async function* getUserInfo(session: SessionContext, userIds: string[]) {
           total: totalSpendResult.value.total,
         });
       }
-
     }
   } catch (e) {
     yield parseError(e);

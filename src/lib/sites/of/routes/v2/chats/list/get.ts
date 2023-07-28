@@ -1,8 +1,8 @@
+import { Result, ResultAsync, err, ok } from "neverthrow";
 
 import { ApiError } from "@/sites/common/errors";
 import { SessionContext } from "@/sites/of/context";
 import { parseError } from "@/utils/parse-error";
-import { err, ok, Result, ResultAsync } from "neverthrow";
 
 import { GetMessageListOptions, GetMessageListResponseBody } from "./types";
 
@@ -16,7 +16,10 @@ const getHeaders = (userId: string) => {
 
   return headers;
 };
-export const get = async (context: SessionContext, options: GetMessageListOptions): Promise<Result<GetMessageListResponseBody, ApiError>> => {
+export const get = async (
+  context: SessionContext,
+  options: GetMessageListOptions
+): Promise<Result<GetMessageListResponseBody, ApiError>> => {
   try {
     const searchParams = new URLSearchParams({
       limit: `${options.limit ?? 10}`,
@@ -30,15 +33,19 @@ export const get = async (context: SessionContext, options: GetMessageListOption
 
     const url = context.getUrl("/api2/v2/chats", searchParams);
 
-    const contextHeaders = ResultAsync.fromPromise(context.getHeaders(url), (parseError));
+    const contextHeaders = ResultAsync.fromPromise(context.getHeaders(url), parseError);
     const reqHeaders = {
       ...getHeaders(context.userParams.authId),
       ...contextHeaders,
     };
 
-    const response = await context.client.get<GetMessageListResponseBody>(url, {
-      headers: reqHeaders,
-    }, 200);
+    const response = await context.client.get<GetMessageListResponseBody>(
+      url,
+      {
+        headers: reqHeaders,
+      },
+      200
+    );
 
     if (response.isOk()) {
       return ok(response.value.body);

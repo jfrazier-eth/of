@@ -1,5 +1,7 @@
-import { parseError } from "@/utils/parse-error";
 import { err, ok } from "neverthrow";
+
+import { parseError } from "@/utils/parse-error";
+
 import { Routes, SessionContext } from "../index";
 import { ReceivedMessage } from "../routes/v2/chats/user/messages/types";
 

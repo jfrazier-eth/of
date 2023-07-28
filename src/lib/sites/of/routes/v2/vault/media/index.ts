@@ -1,6 +1,7 @@
+import { err, ok } from "neverthrow";
+
 import { SessionContext } from "@/sites/of/context";
 import { parseError } from "@/utils/parse-error";
-import { err, ok } from "neverthrow";
 
 import { VaultMediaItem } from "./types";
 
@@ -38,7 +39,6 @@ export const get = async (context: SessionContext, options: GetVaultMediaOptions
     });
 
     const url = context.getUrl(path, searchParams);
-
 
     const contextHeaders = await context.getHeaders(url);
     const reqHeaders = {

@@ -1,20 +1,20 @@
 import { Processor } from "bullmq";
-import { ResultAsync, ok, err } from "neverthrow";
+import { ResultAsync, err, ok } from "neverthrow";
 
 import { Site } from "@/backend/lib/accounts/types";
 import { getChatMostRecentMessageId, saveChatMostRecentMessageId } from "@/backend/lib/chats/of";
 import { serverOFParamsHandler } from "@/backend/lib/of-params-handler";
+import { UserMedia } from "@/backend/lib/user-media/types";
 import { generateResponse } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/chat/response/post";
 import { GenerateChatRequestBody } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/chat/response/types";
+import { Browsers } from "@/sites/common";
 import { OF } from "@/sites/index";
 import { OF_BASE_URL } from "@/sites/of";
 import { SessionContext } from "@/sites/of/context";
+import { parseError } from "@/utils/parse-error";
+import { flipCoin, selectRandom } from "@/utils/random";
 
 import { JobData, JobResult } from "./types";
-import { Browsers } from "@/sites/common";
-import { flipCoin, selectRandom } from "@/utils/random";
-import { UserMedia } from "@/backend/lib/user-media/types";
-import { parseError } from "@/utils/parse-error";
 
 export const processJob: Processor<JobData, JobResult> = async (job) => {
   const session = new SessionContext(
@@ -26,7 +26,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     },
     {
       baseUrl: OF_BASE_URL,
-      browser: Browsers.brave
+      browser: Browsers.brave,
       // proxy: undefined  // TODO get proxy?
     },
     serverOFParamsHandler
@@ -41,17 +41,17 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
   });
 
   if (messagesResponse.isErr()) {
-    return err(messagesResponse.error)
+    return err(messagesResponse.error);
   }
 
   const messages = messagesResponse.value;
 
-  let lastMessageId = typeof messages[0]?.id === 'number' ? messages[0].id.toString() : null;
+  let lastMessageId = typeof messages[0]?.id === "number" ? messages[0].id.toString() : null;
 
   if (job.data.chat.lastMessageId !== lastMessageId) {
     return ok({
       sent: false,
-      reason: "Skipped. Most recent message is not the expected message."
+      reason: "Skipped. Most recent message is not the expected message.",
     });
   }
 
@@ -115,7 +115,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
         };
       }),
     },
-    isPPV: ppv !== null
+    isPPV: ppv !== null,
   };
 
   const mostRecentMessageResponse = await getChatMostRecentMessageId({
@@ -127,48 +127,52 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     return err(mostRecentMessageResponse.error);
   }
 
-  const currentMesssageHasBeenProcessed = mostRecentMessageResponse.value === messages[0].id.toString();
+  const currentMesssageHasBeenProcessed =
+    mostRecentMessageResponse.value === messages[0].id.toString();
   const mostRecentMessageWasSentByUser = messages[0].fromUser.id.toString() === settings.siteUserId;
   if (currentMesssageHasBeenProcessed) {
     return ok({
       sent: false,
-      reason: "Skipped. Most recent message has already been processed."
+      reason: "Skipped. Most recent message has already been processed.",
     });
   } else if (mostRecentMessageWasSentByUser) {
     return ok({
       sent: false,
-      reason: "Skipped. Most recent message was sent by user."
+      reason: "Skipped. Most recent message was sent by user.",
     });
   }
 
   const response = await generateResponse(settings, data);
   if (response.isErr()) {
-    console.error(`Failed to generate response`, response.error)
+    console.error(`Failed to generate response`, response.error);
     return err(response.error);
   }
 
   console.log(`Sending message to ${withUser.username}`);
   try {
     const message = response.value.message;
-    const messageData = ppv === null ? {
-      toUserId: withUser.id,
-      text: message,
-      lockedText: false,
-      mediaFiles: [],
-      price: 0,
-      previews: [],
-      isCouplePeopleMedia: false,
-      isForward: false,
-    } : {
-      toUserId: withUser.id,
-      text: message,
-      lockedText: false,
-      mediaFiles: [parseInt(ppv.media.siteMediaId, 10)],
-      price: ppv.price,
-      previews: [],
-      isCouplePeopleMedia: false,
-      isForward: false,
-    }
+    const messageData =
+      ppv === null
+        ? {
+            toUserId: withUser.id,
+            text: message,
+            lockedText: false,
+            mediaFiles: [],
+            price: 0,
+            previews: [],
+            isCouplePeopleMedia: false,
+            isForward: false,
+          }
+        : {
+            toUserId: withUser.id,
+            text: message,
+            lockedText: false,
+            mediaFiles: [parseInt(ppv.media.siteMediaId, 10)],
+            price: ppv.price,
+            previews: [],
+            isCouplePeopleMedia: false,
+            isForward: false,
+          };
     const res = await OF.Routes.V2.Chats.User.Messages.Post.post(session, messageData);
     if (res.isErr()) {
       return err(res.error);

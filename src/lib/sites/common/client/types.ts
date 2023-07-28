@@ -1,5 +1,6 @@
 import { HttpsProxyAgent } from "https-proxy-agent";
 import { Result } from "neverthrow";
+
 import { ClientErrors } from "./errors";
 
 export type HTTPMethod = "GET" | "POST" | "PUT" | "PATCH" | "HEAD" | "DELETE";
@@ -34,5 +35,5 @@ export const getDefaultClientOptions = (): {
 
 export type RequestAdapter<ReqBody, ResBody> = (
   request: RequestOptions<ReqBody>,
-  expectedStatusCode: number,
+  expectedStatusCode: number
 ) => Promise<Result<Response<ResBody>, ClientErrors>>;

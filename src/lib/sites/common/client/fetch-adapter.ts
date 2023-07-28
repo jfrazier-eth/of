@@ -1,4 +1,5 @@
 import { ok } from "neverthrow";
+
 import { parseClientError } from "./errors";
 import { mergeOptions } from "./merge-options";
 import {
@@ -45,7 +46,7 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request, expecte
   const url = request.url.toString();
   const defaults = getDefaultClientOptions();
   const options = mergeOptions(defaults, request);
-  let reqHeaders = options.headers ?? {}
+  let reqHeaders = options.headers ?? {};
 
   try {
     const response = await fetch(url.toString(), {
@@ -66,6 +67,6 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request, expecte
 
     return parseClientError(options, response);
   } catch (err) {
-    return parseClientError(options, err)
+    return parseClientError(options, err);
   }
 };

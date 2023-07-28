@@ -1,7 +1,7 @@
+import { err, ok } from "neverthrow";
 
 import { SessionContext } from "@/sites/of/context";
 import { parseError } from "@/utils/parse-error";
-import { err, ok } from "neverthrow";
 
 import { FanStatsResponseBody } from "./types";
 
@@ -20,7 +20,6 @@ export const get = async (context: SessionContext, username: string) => {
   try {
     const path = getPath(username);
     const url = context.getUrl(path);
-
 
     const headers = getHeaders(context.userId, username);
     const contextHeaders = await context.getHeaders(url);

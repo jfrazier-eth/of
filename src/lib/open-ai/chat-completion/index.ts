@@ -1,8 +1,8 @@
+import { Result, err, ok } from "neverthrow";
+
 import { Client } from "@/sites/common/client";
 import { ApiError } from "@/sites/common/errors";
 import { parseError } from "@/utils/parse-error";
-import { err, ok, Result } from "neverthrow";
-
 
 import { ChatCompletionRequest, ChatCompletionResponse } from "./types";
 

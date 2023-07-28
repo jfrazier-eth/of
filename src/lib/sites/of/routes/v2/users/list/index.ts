@@ -1,7 +1,7 @@
+import { err, ok } from "neverthrow";
 
 import { SessionContext } from "@/sites/of/context";
 import { parseError } from "@/utils/parse-error";
-import { err, ok } from "neverthrow";
 
 import { GetUsersResponseBody } from "./types";
 

@@ -1,14 +1,15 @@
-import { RequestOptions, Response } from "./types";
-import { Browser } from "../browsers";
 import { err as resultErr } from "neverthrow";
+
+import { Browser } from "../browsers";
+import { RequestOptions, Response } from "./types";
 
 const formatProxy = (proxy?: URL | string | null) => {
   return proxy ? `PROXY: ${proxy.toString()}` : "";
-}
+};
 
 const formatBrowser = (browser?: Browser) => {
-  return `Browser:${browser ? browser.kind : 'NONE'}`;
-}
+  return `Browser:${browser ? browser.kind : "NONE"}`;
+};
 
 const formatURL = (_url: string | URL, isBadRequest: boolean) => {
   const url = typeof _url === "string" ? new URL(_url) : _url;
@@ -17,18 +18,23 @@ const formatURL = (_url: string | URL, isBadRequest: boolean) => {
     return `${base} Query: ${url.search}`;
   }
   return base;
-}
+};
 
 const formatStatus = (status: number) => {
   return `STATUS: ${status}`;
 };
 
 const formatBody = (isRequest: boolean, body?: object | unknown) => {
-  return `${isRequest ? 'REQ' : "RES"}BODY: ${body ? JSON.stringify(body, null, 2) : "NONE"}`;
-}
+  return `${isRequest ? "REQ" : "RES"}BODY: ${body ? JSON.stringify(body, null, 2) : "NONE"}`;
+};
 
-const formatHeaders = (isRequest: boolean, headers?: Record<string, string | string[] | undefined>) => {
-  return `${isRequest ? 'REQ' : "RES"} HEADERS: ${headers ? JSON.stringify(headers, null, 2) : 'NONE'}`;
+const formatHeaders = (
+  isRequest: boolean,
+  headers?: Record<string, string | string[] | undefined>
+) => {
+  return `${isRequest ? "REQ" : "RES"} HEADERS: ${
+    headers ? JSON.stringify(headers, null, 2) : "NONE"
+  }`;
 };
 
 export class RequestError extends Error {
@@ -58,33 +64,51 @@ export class ResponseError extends Error {
   public kind: ResponseErrorKind;
   constructor(public request: RequestOptions, public response: Response<unknown>) {
     let message;
-    let kind: ResponseErrorKind
+    let kind: ResponseErrorKind;
     switch (response.status) {
       case 400:
         kind = ResponseErrorKind.BadRequest;
-        message = `${formatStatus(response.status)} ${formatURL(request.url, true)} ${formatBody(true, request.json)} ${formatHeaders(true, request.headers)} ${formatBody(false, response.body)}`;
+        message = `${formatStatus(response.status)} ${formatURL(request.url, true)} ${formatBody(
+          true,
+          request.json
+        )} ${formatHeaders(true, request.headers)} ${formatBody(false, response.body)}`;
         break;
       case 401:
       case 403:
         kind = ResponseErrorKind.Unauthorized;
-        message = `${formatStatus(response.status)} ${formatURL(request.url, false)} ${formatHeaders(true, request.headers)} ${formatBody(false, response.body)}`;
+        message = `${formatStatus(response.status)} ${formatURL(
+          request.url,
+          false
+        )} ${formatHeaders(true, request.headers)} ${formatBody(false, response.body)}`;
         break;
       case 404:
         kind = ResponseErrorKind.NotFound;
-        message = `${formatStatus(response.status)} ${formatURL(request.url, true)} ${formatHeaders(true, request.headers)}`;
+        message = `${formatStatus(response.status)} ${formatURL(request.url, true)} ${formatHeaders(
+          true,
+          request.headers
+        )}`;
         break;
       case 429:
         kind = ResponseErrorKind.RateLimited;
-        message = `${formatStatus(response.status)} ${formatURL(request.url, false)} ${formatHeaders(true, request.headers)} ${formatHeaders(false, response.headers)}`;
+        message = `${formatStatus(response.status)} ${formatURL(
+          request.url,
+          false
+        )} ${formatHeaders(true, request.headers)} ${formatHeaders(false, response.headers)}`;
         break;
 
       case 500:
         kind = ResponseErrorKind.InternalServerError;
-        message = `${formatStatus(response.status)} ${formatURL(request.url, false)} ${formatHeaders(true, request.headers)} ${formatHeaders(false, response.headers)}`;
+        message = `${formatStatus(response.status)} ${formatURL(
+          request.url,
+          false
+        )} ${formatHeaders(true, request.headers)} ${formatHeaders(false, response.headers)}`;
         break;
       default:
         kind = ResponseErrorKind.UnknownError;
-        message = `${formatStatus(response.status)} ${formatURL(request.url, false)} ${formatHeaders(true, request.headers)} ${formatHeaders(false, response.headers)}`;
+        message = `${formatStatus(response.status)} ${formatURL(
+          request.url,
+          false
+        )} ${formatHeaders(true, request.headers)} ${formatHeaders(false, response.headers)}`;
         break;
     }
     super(`ResponseError ${kind}: ${message} `);
@@ -94,9 +118,13 @@ export class ResponseError extends Error {
 
 export type ClientErrors = RequestError | ResponseError;
 
-export const parseClientError = (request: RequestOptions, err: unknown, response?: Response<unknown>) => {
+export const parseClientError = (
+  request: RequestOptions,
+  err: unknown,
+  response?: Response<unknown>
+) => {
   if (response) {
     return resultErr(new ResponseError(request, response));
   }
   return resultErr(new RequestError(request, err));
-}
+};

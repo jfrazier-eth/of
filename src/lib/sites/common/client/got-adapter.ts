@@ -1,10 +1,10 @@
 import got from "got";
 import { HttpsProxyAgent } from "https-proxy-agent";
 import { ok } from "neverthrow";
+
 import { parseClientError } from "./errors";
 import { mergeOptions } from "./merge-options";
-
-import { getDefaultClientOptions, RequestAdapter, Response } from "./types";
+import { RequestAdapter, Response, getDefaultClientOptions } from "./types";
 
 export const adapter: RequestAdapter<unknown, unknown> = async (request, expectedStatus) => {
   const url = request.url.toString();
@@ -44,6 +44,6 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request, expecte
 
     return parseClientError(options, response);
   } catch (err) {
-    return parseClientError(options, err)
+    return parseClientError(options, err);
   }
 };

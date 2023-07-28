@@ -1,7 +1,7 @@
+import { err, ok } from "neverthrow";
 
 import { SessionContext } from "@/sites/of/context";
 import { parseError } from "@/utils/parse-error";
-import { err, ok } from "neverthrow";
 
 import { GetMeResponseBody } from "./types";
 
@@ -26,7 +26,6 @@ export const get = async (context: SessionContext) => {
       headers: reqHeaders,
     });
 
-
     if (response.isOk()) {
       return ok({
         id: response.value.body.id,
@@ -34,7 +33,7 @@ export const get = async (context: SessionContext) => {
         username: response.value.body.username,
         email: response.value.body.email,
         wsAuthToken: response.value.body.wsAuthToken,
-      })
+      });
     }
 
     return err(response.error);

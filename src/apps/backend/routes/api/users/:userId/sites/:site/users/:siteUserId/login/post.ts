@@ -41,7 +41,10 @@ export const post: PostLogin<Site> = async (req, res) => {
             // ensure the creds are valid
             const result = await OF.Routes.V2.Users.me.get(sess);
             if (result.isErr()) {
-              console.warn(`Invalid creds for user ${res.locals.userId} on account ${body.params.authId}`, result.error);
+              console.warn(
+                `Invalid creds for user ${res.locals.userId} on account ${body.params.authId}`,
+                result.error
+              );
               return res.sendStatus(401);
             }
             await OFLogins.saveLogin({
