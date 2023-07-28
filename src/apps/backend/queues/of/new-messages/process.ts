@@ -23,11 +23,18 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
   });
 
   if (loginResult.isErr()) {
+    console.warn(
+      `Failed to get login for user ${settings.userId} Site ${Site.OF} SiteUserId ${settings.siteUserId}`,
+      loginResult.error
+    );
     return err(loginResult.error);
   }
   const login = loginResult.value;
 
   if (!login) {
+    console.warn(
+      `Login not found for user ${settings.userId} Site ${Site.OF} SiteUserId ${settings.siteUserId}`
+    );
     return err(
       new NotFoundError(
         `Login not found for user ${settings.userId} Site ${Site.OF} SiteUserId ${settings.siteUserId}`

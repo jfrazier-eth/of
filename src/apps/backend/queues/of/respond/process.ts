@@ -1,5 +1,5 @@
 import { Processor } from "bullmq";
-import { ResultAsync, err, ok } from "neverthrow";
+import { err, ok } from "neverthrow";
 
 import { Site } from "@/backend/lib/accounts/types";
 import { getChatMostRecentMessageId, saveChatMostRecentMessageId } from "@/backend/lib/chats/of";
@@ -41,6 +41,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
   });
 
   if (messagesResponse.isErr()) {
+    console.error(`Failed to get messages for user`, messagesResponse.error);
     return err(messagesResponse.error);
   }
 
@@ -124,6 +125,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
   });
 
   if (mostRecentMessageResponse.isErr()) {
+    console.error(`Failed to get most recent message id`, mostRecentMessageResponse.error);
     return err(mostRecentMessageResponse.error);
   }
 
@@ -148,7 +150,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     return err(response.error);
   }
 
-  console.log(`Sending message to ${withUser.username}`);
+  console.log(`Sending message to ${withUser.username}...`);
   try {
     const message = response.value.message;
     const messageData =
@@ -175,6 +177,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
           };
     const res = await OF.Routes.V2.Chats.User.Messages.Post.post(session, messageData);
     if (res.isErr()) {
+      console.error(`Failed to send message`, res.error);
       return err(res.error);
     }
     const id = res.value.id.toString();
@@ -185,11 +188,13 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     });
     if (saveMessageRes.isErr()) {
       console.error(`Failed to save most recent message id`, saveMessageRes.error);
+      // don't return here since the message was sent successfully
     }
 
     return ok({ id, sent: true });
   } catch (e) {
-    console.log(`Failed to send message to ${withUser.username}`, e);
-    return parseError(e);
+    const error = parseError(e);
+    console.log(`Failed to send message to ${withUser.username}`, error.error);
+    return error;
   }
 };
