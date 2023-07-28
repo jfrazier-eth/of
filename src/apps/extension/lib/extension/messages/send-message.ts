@@ -1,4 +1,4 @@
-import { Result } from "neverthrow";
+import { err, ok, Result } from "neverthrow";
 import { MessageHandlers } from "../background/message-handlers";
 import { Handler, HandlerError } from "../background/message-handlers/types";
 import { isBackground } from "../utils/is-background";
@@ -19,7 +19,13 @@ export const sendMessage = async <T extends Message>(msg: T) => {
   } else {
     return await new Promise<Result<ResponsesByKind[T["kind"]], HandlerError>>((resolve, reject) => {
       chrome.runtime.sendMessage(msg, (response) => {
-        resolve(response);
+        // we need to map these back to results or else they
+        // won't have methods attached to them
+        if (!response.isOk) {
+          resolve(err(new Error(`BACKGROUND ERROR ${response.error}`)));
+        } else {
+          resolve(ok(response.value));
+        }
       });
     });
   }

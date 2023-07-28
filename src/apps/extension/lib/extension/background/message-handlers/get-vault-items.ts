@@ -34,10 +34,10 @@ export const handleGetVaultItemsMessage: Handler<GetVaultItemsMessage> = async (
     const response = await OF.Sdk.getVault(ofContext, {
       offset: msg.data.offset,
     });
+
     if (response.isErr()) {
       return err(response.error)
     }
-
     return ok({
       kind: "GET_VAULT_ITEMS",
       data: {

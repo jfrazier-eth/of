@@ -29,7 +29,6 @@ export async function getVault(
       const body = response.value;
 
       hasNextPage = body.hasMore;
-
       items = [...items, ...body.list];
       offset = options.offset + items.length;
     }

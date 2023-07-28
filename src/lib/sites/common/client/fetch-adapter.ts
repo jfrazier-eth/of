@@ -50,14 +50,14 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request, expecte
 
   try {
     const response = await fetch(url.toString(), {
-      method: request.method,
+      method: options.method,
       headers: reqHeaders,
       body: options.json ? JSON.stringify(options.json) : null,
     });
 
     const res: ClientResponse = {
       status: response.status,
-      body: parseBody(response, options.responseType),
+      body: await parseBody(response, options.responseType),
       headers: parseHeaders(response),
     };
 
