@@ -41,7 +41,7 @@ export async function generateResponse(
       },
       {
         baseUrl: OF_BASE_URL,
-        browser: Browsers.brave
+        browser: Browsers.brave,
       },
       context.ofParams
     );

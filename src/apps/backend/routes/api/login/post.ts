@@ -13,7 +13,6 @@ export const post = async (
     const app = getApp();
     const idToken = req.body.token;
 
-
     const payload = await getAuth(app).verifyIdToken(idToken, true);
     const uid = payload.uid;
 

@@ -1,8 +1,9 @@
+import { config as loadEnv } from "dotenv";
 import { ServiceAccount } from "firebase-admin";
-import { config as loadEnv } from "dotenv"
+
 import prodServiceAccount from "../../creds/firebase-prod.json";
 
-if (process.env.DEPLOY_ENV === 'prod') {
+if (process.env.DEPLOY_ENV === "prod") {
   loadEnv({ path: ".env.production", override: true });
   console.log(`Loaded prod env`);
 }

@@ -20,7 +20,7 @@ export const generateResponse = async (settings: OFSettings, data: GenerateChatR
     {
       user: data.user,
       chat: data.chat,
-      isPPV: data.isPPV
+      isPPV: data.isPPV,
     },
     {
       customScript: settings.settings.generativeMessaging.script,
@@ -74,7 +74,6 @@ export const post = async (
     if (userId !== user.id) {
       return res.sendStatus(400);
     }
-
 
     const settings = await getSettings(userId, siteUserId);
     if (settings.isErr()) {

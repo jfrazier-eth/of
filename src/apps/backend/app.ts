@@ -1,12 +1,12 @@
 import cors from "cors";
 import express, { Express, NextFunction, Request, Response } from "express";
+
 import { config } from "./config";
 import { parseHeaders } from "./controllers/parse-headers";
 import { router as apiRouter } from "./routes/api";
 
 const startApp = () => {
   if (config.server.enabled) {
-
     const app: Express = express();
     app.use(cors());
     app.use(express.json());
@@ -24,7 +24,7 @@ const startApp = () => {
     });
     return app;
   }
-}
+};
 
 const app = startApp();
 export { app };

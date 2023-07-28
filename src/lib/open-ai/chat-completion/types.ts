@@ -1,5 +1,5 @@
-import { ChatMessage, Message } from "../messages";
 import { Function } from "../functions";
+import { ChatMessage, Message } from "../messages";
 import { Model } from "../model";
 
 // TODO support functions

@@ -24,8 +24,6 @@ export const get = async (
   res: UserAuthResponseWithUnsafeParams<ClientOFDynamicParams>
 ) => {
   try {
-
-
     const site = res.locals.site;
 
     switch (site) {

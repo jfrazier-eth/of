@@ -175,11 +175,10 @@ const OFSettings: React.FC<{
                       settings: {
                         ...prev.settings,
                         generativeMessaging: {
-
                           ...prev.settings.generativeMessaging,
                           script: e.target.value.substring(0, 700),
-                        }
-                      }
+                        },
+                      },
                     };
                   }
                   return {
@@ -187,11 +186,10 @@ const OFSettings: React.FC<{
                     settings: {
                       ...prev.settings,
                       generativeMessaging: {
-
                         ...prev.settings.generativeMessaging,
                         script: e.target.value,
-                      }
-                    }
+                      },
+                    },
                   };
                 })
               }
@@ -352,7 +350,7 @@ const OFSettings: React.FC<{
           </div>
         </div>
       </div>
-    </form >
+    </form>
   );
 };
 

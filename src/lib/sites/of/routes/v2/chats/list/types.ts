@@ -21,7 +21,7 @@ export interface MessageListItem {
     id: number;
     _view: string;
   };
-  lastMessage: ReceivedMessage;
+  lastMessage?: ReceivedMessage;
 }
 
 export interface GetMessageListResponseBody {

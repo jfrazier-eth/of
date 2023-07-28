@@ -31,7 +31,6 @@ export const getOFDynamicParams = async (
     const cachedParams = await getCachedOFDynamicParams(version.revision);
 
     if (cachedParams) {
-
       return cachedParams;
     }
 

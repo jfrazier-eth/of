@@ -36,10 +36,18 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
   const primaryPPV = job.data.settings.settings.autoMessaging.primaryPPV;
   const secondaryPPV = job.data.settings.settings.autoMessaging.secondaryPPV;
 
-
   const messages = await OF.Sdk.getMessages(session, withUser.id, {
     maxNumMessages: 10,
   });
+
+  let lastMessageId = typeof messages[0]?.id === 'number' ? messages[0].id.toString() : null;
+
+  if (job.data.chat.lastMessageId !== lastMessageId) {
+    return ok({
+      sent: false,
+      reason: "Skipped. Most recent message is not the expected message."
+    });
+  }
 
   const ppvs = [primaryPPV, secondaryPPV].filter((item) => item.media) as {
     media: UserMedia;
@@ -62,8 +70,8 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
         handle: withUser.username,
       },
       messages: messages.map((item) => {
-        const fromUserId = `${item.fromUser.id}`;
-        const toUserId = fromUserId === settings.siteUserId ? withUser.id : settings.siteUserId;
+        const fromUserId = item.fromUser.id.toString();
+        const toUserId = fromUserId === withUser.id ? settings.siteUserId : withUser.id;
         const id = `${item.id}`;
         return {
           id,

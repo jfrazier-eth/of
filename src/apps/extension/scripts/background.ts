@@ -4,7 +4,6 @@ import { context } from "../lib/extension/background/context";
 import { registerMessageHandler } from "../lib/extension/background/message-handlers/index";
 
 registerMessageHandler(context);
-// registerQueues(context);
 
 /**
  * attempt to update auth when a request is made

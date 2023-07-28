@@ -9,8 +9,6 @@ export const checkSiteAuth = async (
   next: NextFunction
 ) => {
   try {
-
-
     if (res.locals.userIdParam !== res.locals.userId) {
       return res.sendStatus(400);
     }

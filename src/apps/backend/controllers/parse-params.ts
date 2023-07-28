@@ -13,8 +13,6 @@ export const parseParams: (
   next: NextFunction
 ) => void = (req, res, next) => {
   try {
-
-
     const userIdParam = req.params.userId;
     const site = req.params.site;
     const siteUserId = req.params.siteUserId;

@@ -5,6 +5,7 @@ import { Site } from "@/backend/lib/accounts";
 import { getChatMostRecentMessageId, saveChatMostRecentMessageId } from "@/backend/lib/chats/of";
 import { getLogin } from "@/backend/lib/logins/of-logins/get-login";
 import { serverOFParamsHandler } from "@/backend/lib/of-params-handler";
+import { Browsers } from "@/sites/common";
 import { OF } from "@/sites/index";
 import { OF_BASE_URL } from "@/sites/of";
 import { SessionContext } from "@/sites/of/context";
@@ -12,7 +13,6 @@ import { NotFoundError } from "@/utils/errors";
 
 import { OFRespondQueue } from "..";
 import { JobData, JobResult } from "./types";
-import { Browsers } from "@/sites/common";
 
 export const processJob: Processor<JobData, JobResult> = async (job) => {
   const { settings } = job.data;
@@ -44,7 +44,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     },
     {
       baseUrl: OF_BASE_URL,
-      browser: Browsers.brave
+      browser: Browsers.brave,
       // proxy: undefined  // TODO get proxy?
     },
     serverOFParamsHandler
@@ -60,7 +60,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
 
     const chat = result.value;
     const withUser = chat.withUser.id.toString();
-    const lastMessageId = chat.lastMessage.id.toString();
+    const lastMessageId = chat.lastMessage?.id.toString() ?? null;
 
     const mostRecentMessageRes = await getChatMostRecentMessageId({
       siteUserId: session.userId,
@@ -76,19 +76,23 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     }
     if (!chat.canSendMessage) {
       console.log(`Cannot send message to user ${withUser} ${chat.canNotSendReason}`);
-      const saveMessageRes = await saveChatMostRecentMessageId({
-        siteUserId: session.userId,
-        withUserId: withUser,
-        messageId: lastMessageId,
-      });
-      if (saveMessageRes.isErr()) {
-        console.error(`Failed to save message id ${lastMessageId} for user ${withUser}`, saveMessageRes.error);
+      if (lastMessageId) {
+        const saveMessageRes = await saveChatMostRecentMessageId({
+          siteUserId: session.userId,
+          withUserId: withUser,
+          messageId: lastMessageId,
+        });
+        if (saveMessageRes.isErr()) {
+          console.error(
+            `Failed to save message id ${lastMessageId} for user ${withUser}`,
+            saveMessageRes.error
+          );
+        }
       }
       continue;
     }
 
-
-    if (mostRecentMessageId && chat.lastMessage.fromUser.id.toString() === session.userId) {
+    if (mostRecentMessageId && chat?.lastMessage?.fromUser.id.toString() === session.userId) {
       // update chats that the user has already responded to
       const saveMessageRes = await saveChatMostRecentMessageId({
         siteUserId: session.userId,
@@ -102,7 +106,6 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     } else {
       chatsToProcess.push(chat);
     }
-
   }
 
   let numChatsTriggered = 0;
@@ -122,6 +125,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
 
     const userInfo = userResult.value;
     const chat = chatsByUserId[userInfo.userId];
+    const lastMessageId = chat?.lastMessage?.id?.toString() ?? null;
     if (!chat) {
       console.error(`Missing chat by user id for user ${userInfo.userId}`);
       continue;
@@ -130,19 +134,24 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     const totalSpend = userInfo.total;
     if (totalSpend >= settings.settings.autoMessaging.spendingThreshold) {
       console.log(`User ${userInfo.username} is above the spending threshold.Skipping...`);
-      const saveMessageRes = await saveChatMostRecentMessageId({
-        siteUserId: session.userId,
-        withUserId: userInfo.userId,
-        messageId: chat.lastMessage.id.toString(),
-      });
-      if (saveMessageRes.isErr()) {
-        console.error(
-          `Failed to save most recent message id ${session.userId} with ${userInfo.userId} message ${chat.lastMessage.id} `,
-          saveMessageRes.error
-        );
+      if (lastMessageId) {
+        const saveMessageRes = await saveChatMostRecentMessageId({
+          siteUserId: session.userId,
+          withUserId: userInfo.userId,
+          messageId: lastMessageId,
+        });
+        if (saveMessageRes.isErr()) {
+          console.error(
+            `Failed to save most recent message id ${session.userId} with ${userInfo.userId} message ${lastMessageId} `,
+            saveMessageRes.error
+          );
+        }
       }
     } else {
-      console.log(`User ${userInfo.username} is below the spending threshold`, console.log(JSON.stringify(userInfo)));
+      console.log(
+        `User ${userInfo.username} is below the spending threshold`,
+        console.log(JSON.stringify(userInfo))
+      );
       await OFRespondQueue.add({
         settings,
         login,
@@ -152,6 +161,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
             username: userInfo.username,
             name: userInfo.name,
           },
+          lastMessageId,
         },
       });
       numChatsTriggered += 1;

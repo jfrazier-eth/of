@@ -12,8 +12,6 @@ export const checkUserAuth = async (
   next: NextFunction
 ) => {
   try {
-
-
     const userId = res.locals.userId;
     const apiKey = res.locals.apiKey;
 

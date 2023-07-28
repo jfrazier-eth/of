@@ -15,8 +15,6 @@ type PostLogin<S extends Site> = (
 
 export const post: PostLogin<Site> = async (req, res) => {
   try {
-
-
     switch (res.locals.site) {
       case Site.OF: {
         const body = req.body as PostLoginRequestBody<Site.OF>;
