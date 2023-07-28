@@ -42,7 +42,6 @@ export class Context {
     this._browser = options.browser ?? null;
 
     const clientOptions: ClientOptions = {
-      throwHttpErrors: false,
       responseType: "json",
     };
 

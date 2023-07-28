@@ -1,4 +1,8 @@
+import { Result, err, ok } from "neverthrow";
+
 import { Client } from "@/sites/common/client";
+import { ApiError } from "@/sites/common/errors";
+import { parseError } from "@/utils/parse-error";
 
 import { ChatCompletionRequest, ChatCompletionResponse } from "./types";
 
@@ -7,7 +11,7 @@ export const generateCompletion = async (
   client: Client,
   apiKey: string,
   request: ChatCompletionRequest
-): Promise<ChatCompletionResponse> => {
+): Promise<Result<ChatCompletionResponse, ApiError>> => {
   const url = new URL(path, "https://api.openai.com");
 
   try {
@@ -19,13 +23,13 @@ export const generateCompletion = async (
       },
     });
 
-    if (response.status === 200) {
-      return response.body;
+    if (response.isOk()) {
+      return ok(response.value.body);
     }
-    throw new Error(`Failed to generate completion: ${response.status}`);
+
+    return err(response.error);
   } catch (err) {
-    console.error(err);
-    throw new Error("Failed to generate completion");
+    return parseError(err);
   }
 };
 

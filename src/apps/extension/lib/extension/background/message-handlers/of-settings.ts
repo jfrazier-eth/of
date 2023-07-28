@@ -1,4 +1,7 @@
+import { err, ok } from "neverthrow";
+
 import { getOFSettings, postOFSettings } from "@/extension/lib/api/settings";
+import { parseError } from "@/utils/parse-error";
 
 import { GetOFSettingsMessage, SaveOFSettingsMessage } from "../../messages/index";
 import { Handler } from "./types";
@@ -9,21 +12,19 @@ export const handleGetOFSettingsMessage: Handler<GetOFSettingsMessage> = async (
 ) => {
   try {
     const response = await getOFSettings(context);
-    return {
+    if (response.isErr()) {
+      return err(response.error);
+    }
+
+    const settings = response.value;
+    return ok({
       kind: "GET_OF_SETTINGS",
       data: {
-        success: true,
-        settings: response,
+        settings: settings,
       },
-    };
+    });
   } catch (err) {
-    return {
-      kind: "GET_OF_SETTINGS",
-      data: {
-        success: false,
-        message: err instanceof Error ? err.message : "Failed to get settings",
-      },
-    };
+    return parseError(err);
   }
 };
 
@@ -32,8 +33,10 @@ export const handleSaveOFSettingsMessage: Handler<SaveOFSettingsMessage> = async
   context
 ) => {
   const response = await postOFSettings(message.data, context);
-  return {
+  if (response.isErr()) {
+    return err(response.error);
+  }
+  return ok({
     kind: "SAVE_OF_SETTINGS",
-    data: response,
-  };
+  });
 };

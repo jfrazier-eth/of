@@ -1,6 +1,7 @@
 import PQueue from "p-queue";
 
 import { Context } from "@/extension/lib/api/context";
+import { parseError } from "@/utils/parse-error";
 
 import { onMessage } from "../../messages/index";
 import { handleActiveTabMessage } from "./active-tab";
@@ -38,9 +39,25 @@ export const registerMessageHandler = (context: Context) => {
     await queues[message.kind].add(async () => {
       try {
         const response = await handler(message, context);
-        sendResponse(response);
+        if (response.isOk()) {
+          sendResponse(({
+            isOk: true,
+            value: response.value,
+          } as unknown) as any);
+        } else {
+          console.error(`Failed to handle ${message.kind}`, response.error);
+          sendResponse(({
+            isOk: false,
+            error: response.error?.message,
+          } as unknown) as any);
+        }
       } catch (err) {
-        console.error(err);
+        console.error(`Failed to handle ${message.kind}`, err);
+        const e = parseError(err);
+        sendResponse(({
+          isOk: false,
+          error: e.error?.message,
+        } as unknown) as any);
       }
     });
   });

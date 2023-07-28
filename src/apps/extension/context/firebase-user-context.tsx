@@ -35,16 +35,20 @@ export const FirebaseUserProvider = ({ children }: { children: ReactNode }) => {
               tokenId: idToken,
             },
           });
+          if (res.isErr()) {
+            console.error(res.error);
+            return;
+          }
 
           if (!isMounted) {
             return;
           }
 
-          if (res.data.isLoggedIn) {
+          if (res.value.data.isLoggedIn) {
             const firebaseUser: FirebaseUser = {
               uid,
               tokenId: idToken,
-              apiKey: res.data.apiKey,
+              apiKey: res.value.data.apiKey,
             };
             setUser({ isReady: true, value: { user: firebaseUser } });
           } else {

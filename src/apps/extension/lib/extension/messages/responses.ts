@@ -41,56 +41,34 @@ export interface GenerateResponseResponse extends BaseResponse {
 
 export interface GetVaultItemsResponse extends BaseResponse {
   kind: "GET_VAULT_ITEMS";
-  data:
-    | {
-        items: VaultMediaItem[];
-        hasNextPage: boolean;
-        offset: number;
-      }
-    | { error: string };
+  data: {
+    items: VaultMediaItem[];
+    hasNextPage: boolean;
+    offset: number;
+  };
 }
 
 export interface GetOFSettingsResponse extends BaseResponse {
   kind: "GET_OF_SETTINGS";
-  data: { success: true; settings: OFSettings } | { success: false; message: string };
+  data: { settings: OFSettings };
 }
 
 export interface SaveOFSettingsResponse extends BaseResponse {
   kind: "SAVE_OF_SETTINGS";
-  data:
-    | {
-        success: true;
-      }
-    | {
-        success: false;
-        error: string;
-      };
 }
 
 export interface UpdateOFRevisionResponse extends BaseResponse {
   kind: "UPDATE_OF_REVISION";
-  data:
-    | {
-        success: true;
-        revision: string;
-      }
-    | {
-        success: false;
-        message: string;
-      };
+  data: {
+    revision: string;
+  };
 }
 
 export interface GetOFDynamicParamsResponse extends BaseResponse {
   kind: "GET_OF_DYNAMIC_PARAMS";
-  data:
-    | {
-        success: true;
-        params: ClientOFDynamicParams;
-      }
-    | {
-        success: false;
-        message: string;
-      };
+  data: {
+    params: ClientOFDynamicParams;
+  };
 }
 
 export type Response =

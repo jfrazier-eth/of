@@ -2,13 +2,20 @@ import { Processor } from "bullmq";
 import { ok } from "neverthrow";
 
 import { getUsersWithAutoMessagingEnabled } from "@/backend/lib/settings/of/get-settings";
+import { ONE_MIN } from "@/utils/constants";
 
 import { OFNewMessagesQueue } from "..";
 import { JobData, JobResult } from "./types";
 
 export const processJob: Processor<JobData, JobResult> = async (job) => {
   let numTriggered = 0;
-  console.log(`[${job.queueName}] Processing job ${job.id}`);
+
+  if (job.timestamp < Date.now() - ONE_MIN * 5) {
+    return ok({
+      skipped: true,
+      reason: "Job too old",
+    });
+  }
 
   for await (const user of getUsersWithAutoMessagingEnabled()) {
     if (user.isErr()) {

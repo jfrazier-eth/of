@@ -1,5 +1,8 @@
-import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
+import { Result, ResultAsync, err, ok } from "neverthrow";
+
+import { ApiError } from "@/sites/common/errors";
 import { SessionContext } from "@/sites/of/context";
+import { parseError } from "@/utils/parse-error";
 
 import { GetMessageListOptions, GetMessageListResponseBody } from "./types";
 
@@ -13,38 +16,43 @@ const getHeaders = (userId: string) => {
 
   return headers;
 };
-export const get = async (context: SessionContext, options: GetMessageListOptions) => {
-  const searchParams = new URLSearchParams({
-    limit: `${options.limit ?? 10}`,
-    offset: `${options.offset ?? 0}`,
-    skip_users: "all",
-    order: options.order ?? "recent",
-  });
-  if (options.filter) {
-    searchParams.append("filter", options.filter);
-  }
-
-  const url = context.getUrl("/api2/v2/chats", searchParams);
+export const get = async (
+  context: SessionContext,
+  options: GetMessageListOptions
+): Promise<Result<GetMessageListResponseBody, ApiError>> => {
   try {
-    const contextHeaders = await context.getHeaders(url);
+    const searchParams = new URLSearchParams({
+      limit: `${options.limit ?? 10}`,
+      offset: `${options.offset ?? 0}`,
+      skip_users: "all",
+      order: options.order ?? "recent",
+    });
+    if (options.filter) {
+      searchParams.append("filter", options.filter);
+    }
+
+    const url = context.getUrl("/api2/v2/chats", searchParams);
+
+    const contextHeaders = ResultAsync.fromPromise(context.getHeaders(url), parseError);
     const reqHeaders = {
       ...getHeaders(context.userParams.authId),
       ...contextHeaders,
     };
 
-    const response = await context.client.get<GetMessageListResponseBody>(url, {
-      headers: reqHeaders,
-    });
+    const response = await context.client.get<GetMessageListResponseBody>(
+      url,
+      {
+        headers: reqHeaders,
+      },
+      200
+    );
 
-    if (response.status === 200) {
-      return response.body;
+    if (response.isOk()) {
+      return ok(response.value.body);
     }
 
-    throw new UnexpectedStatusCodeError(url, context, response.status);
-  } catch (err) {
-    if (err instanceof UnexpectedStatusCodeError) {
-      throw err;
-    }
-    throw RequestError.create(err, url, context);
+    return err(response.error);
+  } catch (e) {
+    return parseError(e);
   }
 };

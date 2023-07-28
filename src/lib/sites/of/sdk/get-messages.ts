@@ -1,3 +1,7 @@
+import { err, ok } from "neverthrow";
+
+import { parseError } from "@/utils/parse-error";
+
 import { Routes, SessionContext } from "../index";
 import { ReceivedMessage } from "../routes/v2/chats/user/messages/types";
 
@@ -9,27 +13,34 @@ export async function getMessages(
     startAfterMessageId?: string;
   }
 ) {
-  let maxNumMessages = options.maxNumMessages;
-  let startAfterMessageId = options.startAfterMessageId ?? null;
-  let hasNextPage = true;
+  try {
+    let maxNumMessages = options.maxNumMessages;
+    let startAfterMessageId = options.startAfterMessageId ?? null;
+    let hasNextPage = true;
 
-  let messages: ReceivedMessage[] = [];
+    let messages: ReceivedMessage[] = [];
 
-  while (hasNextPage && messages.length < maxNumMessages) {
-    const response = await Routes.V2.Chats.User.Messages.Get.get(context, {
-      otherUserId,
-      startAfterMessageId: startAfterMessageId,
-    });
+    while (hasNextPage && messages.length < maxNumMessages) {
+      const response = await Routes.V2.Chats.User.Messages.Get.get(context, {
+        otherUserId,
+        startAfterMessageId: startAfterMessageId,
+      });
+      if (response.isErr()) {
+        return err(response.error);
+      }
+      const body = response.value;
+      hasNextPage = body.hasMore;
+      if (hasNextPage) {
+        startAfterMessageId = body.list[body.list.length - 1].id.toString();
+      }
 
-    hasNextPage = response.hasMore;
-    if (hasNextPage) {
-      startAfterMessageId = response.list[response.list.length - 1].id.toString();
+      messages = [...messages, ...body.list];
     }
 
-    messages = [...messages, ...response.list];
+    return ok(messages.slice(0, maxNumMessages));
+  } catch (err) {
+    return parseError(err);
   }
-
-  return messages.slice(0, maxNumMessages);
 }
 
 export const transformMessages = (creatorId: string, messages: ReceivedMessage[]) => {

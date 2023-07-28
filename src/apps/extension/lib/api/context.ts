@@ -56,13 +56,16 @@ export class Context {
   protected async _init() {
     try {
       const response = await sendMessage({ kind: "ACTIVE_USER_INFO" });
-      if (response.data.isLoggedIn) {
+      if (response.isErr()) {
+        throw response.error;
+      }
+      if (response.value.data.isLoggedIn) {
         this.user = {
-          userId: response.data.userId,
-          apiKey: response.data.apiKey,
+          userId: response.value.data.userId,
+          apiKey: response.value.data.apiKey,
         };
-        if (response.data.of.auth) {
-          this.ofAuth = response.data.of.auth;
+        if (response.value.data.of.auth) {
+          this.ofAuth = response.value.data.of.auth;
         }
       }
       console.warn("No active user");

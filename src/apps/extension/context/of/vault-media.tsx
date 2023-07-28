@@ -27,15 +27,16 @@ export const useVaultMedia = () => {
   const fetchNextPage = async () => {
     setIsFetchingNextPage(true);
     try {
-      const { data } = await sendMessage({
+      const response = await sendMessage({
         kind: "GET_VAULT_ITEMS",
         data: {
           offset: items.length,
         },
       });
-      if ("error" in data) {
-        throw new Error(data.error);
+      if (response.isErr()) {
+        throw response.error;
       }
+      const { data } = response.value;
 
       const userMediaItems = data.items.map(transformVaultMediaItem);
 

@@ -1,3 +1,5 @@
+import { ok } from "neverthrow";
+
 import { UserSettingsMessage } from "../../messages/index";
 import { Handler } from "./types";
 
@@ -36,8 +38,10 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
 };
 
 export const handleUserSettingsMessage: Handler<UserSettingsMessage> = async (message) => {
-  return Promise.resolve({
-    kind: "USER_SETTINGS",
-    data: DEFAULT_USER_SETTINGS,
-  });
+  return Promise.resolve(
+    ok({
+      kind: "USER_SETTINGS",
+      data: DEFAULT_USER_SETTINGS,
+    })
+  );
 };

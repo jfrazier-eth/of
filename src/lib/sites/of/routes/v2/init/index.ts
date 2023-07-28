@@ -1,5 +1,8 @@
-import { RequestError, UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
+import { Result, err, ok } from "neverthrow";
+
+import { ApiError } from "@/sites/common/errors";
 import { SessionContext } from "@/sites/of/context";
+import { parseError } from "@/utils/parse-error";
 
 import { GetInitResponseBody } from "./types";
 
@@ -13,7 +16,9 @@ const headers = {
   Accept: "application/json, text/plain, */*",
 };
 
-export const get = async (context: SessionContext): Promise<void> => {
+export const get = async (
+  context: SessionContext
+): Promise<Result<GetInitResponseBody, ApiError>> => {
   const url = context.getUrl(path);
 
   try {
@@ -27,14 +32,12 @@ export const get = async (context: SessionContext): Promise<void> => {
       headers: reqHeaders,
     });
 
-    if (response.status === 200) {
-      return;
+    if (response.isOk()) {
+      return ok(response.value.body);
     }
-    throw new UnexpectedStatusCodeError(url, context, response.status);
+
+    return err(response.error);
   } catch (err) {
-    if (err instanceof UnexpectedStatusCodeError) {
-      throw err;
-    }
-    throw RequestError.create(err, url, context);
+    return parseError(err);
   }
 };

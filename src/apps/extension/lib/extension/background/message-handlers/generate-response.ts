@@ -1,3 +1,5 @@
+import { err, ok } from "neverthrow";
+
 import { generateResponse } from "@/extension/lib/api/generate-response";
 
 import { GenerateResponseMessage } from "../../messages/index";
@@ -13,10 +15,14 @@ export const handleGenerateResponseMessage: Handler<GenerateResponseMessage> = a
     },
   });
 
-  return {
+  if (response.isErr()) {
+    return err(response.error);
+  }
+
+  return ok({
     kind: "GENERATE_RESPONSE",
     data: {
-      message: response.message.text,
+      message: response.value.message.text,
     },
-  };
+  });
 };

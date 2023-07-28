@@ -3,7 +3,6 @@ import { Site } from "@/backend/lib/accounts";
 import { OFLogins } from "@/backend/lib/logins/index";
 import { serverOFParamsHandler } from "@/backend/lib/of-params-handler";
 import { Browsers } from "@/sites/common";
-import { UnexpectedStatusCodeError } from "@/sites/common/errors/request-errors";
 import { OF } from "@/sites/index";
 
 import { GetLoginResponseBody, PostLoginRequestBody } from "./types";
@@ -40,7 +39,14 @@ export const post: PostLogin<Site> = async (req, res) => {
           );
           try {
             // ensure the creds are valid
-            const user = await OF.Routes.V2.Users.me.get(sess);
+            const result = await OF.Routes.V2.Users.me.get(sess);
+            if (result.isErr()) {
+              console.warn(
+                `Invalid creds for user ${res.locals.userId} on account ${body.params.authId}`,
+                result.error
+              );
+              return res.sendStatus(401);
+            }
             await OFLogins.saveLogin({
               xbc: body.params.xbc,
               sess: body.params.sess,
@@ -49,10 +55,6 @@ export const post: PostLogin<Site> = async (req, res) => {
             });
             return res.sendStatus(200);
           } catch (err) {
-            if (err instanceof UnexpectedStatusCodeError && err.statusCode === 401) {
-              console.warn(`Attempt to save invalid creds on account ${body.params.authId}`);
-              return res.sendStatus(401);
-            }
             console.error(`Unknown error occurred while saving creds`, err);
             return res.sendStatus(500);
           }

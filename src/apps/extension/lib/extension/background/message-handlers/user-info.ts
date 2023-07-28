@@ -1,5 +1,8 @@
+import { ok } from "neverthrow";
+
 import { postLogin } from "@/extension/lib/api/login";
 import { getActiveAuth } from "@/extension/lib/auth";
+import { parseError } from "@/utils/parse-error";
 
 import { ActiveUserInfoMessage, UserInfoMessage } from "../../messages/index";
 import { Storage } from "../../storage";
@@ -54,130 +57,136 @@ export const handleActiveUserInfoMessage: Handler<ActiveUserInfoMessage> = async
   message,
   context
 ) => {
-  const user = await getActiveUser();
-  console.log(`Active user`, user);
+  try {
+    const user = await getActiveUser();
+    if (user?.api) {
+      const cachedOfAuth = await getActiveAuth();
+      return ok({
+        kind: "ACTIVE_USER_INFO",
+        data: {
+          isLoggedIn: true,
+          userId: user.api.userId,
+          apiKey: user.api.apiKey,
+          of: {
+            auth: cachedOfAuth,
+          },
+        },
+      });
+    }
 
-  if (user?.api) {
-    const cachedOfAuth = await getActiveAuth();
-    return {
+    return ok({
       kind: "ACTIVE_USER_INFO",
       data: {
-        isLoggedIn: true,
-        userId: user.api.userId,
-        apiKey: user.api.apiKey,
-        of: {
-          auth: cachedOfAuth,
-        },
+        isLoggedIn: false,
       },
-    };
+    });
+  } catch (err) {
+    return parseError(err);
   }
-
-  return {
-    kind: "ACTIVE_USER_INFO",
-    data: {
-      isLoggedIn: false,
-    },
-  };
 };
 
 export const handleUserInfoMessage: Handler<UserInfoMessage> = async (message, context) => {
-  let user = await getCachedUser(message.data.uid);
+  try {
+    let user = await getCachedUser(message.data.uid);
 
-  if (!user) {
-    if (message.data.tokenId) {
-      // attempt to login
-      try {
-        const result = await postLogin(message.data.tokenId, context);
-        user = {
-          firebase: {
-            uid: message.data.uid,
-            tokenId: message.data.tokenId,
-          },
-          api: {
-            apiKey: result.apiKey,
-            userId: result.userId,
-          },
-        };
-        await setCachedUser(user);
-        context.user = {
-          userId: result.userId,
-          apiKey: result.apiKey,
-        };
-        return {
-          kind: "USER_INFO",
-          data: {
-            isLoggedIn: true,
+    if (!user) {
+      if (message.data.tokenId) {
+        // attempt to login
+        try {
+          const result = await postLogin(message.data.tokenId, context);
+          user = {
+            firebase: {
+              uid: message.data.uid,
+              tokenId: message.data.tokenId,
+            },
+            api: {
+              apiKey: result.apiKey,
+              userId: result.userId,
+            },
+          };
+          await setCachedUser(user);
+          context.user = {
             userId: result.userId,
             apiKey: result.apiKey,
-          },
-        };
-      } catch (err) {
-        return {
+          };
+          return ok({
+            kind: "USER_INFO",
+            data: {
+              isLoggedIn: true,
+              userId: result.userId,
+              apiKey: result.apiKey,
+            },
+          });
+        } catch (err) {
+          return ok({
+            kind: "USER_INFO",
+            data: {
+              isLoggedIn: false,
+            },
+          });
+        }
+      } else {
+        return ok({
           kind: "USER_INFO",
           data: {
             isLoggedIn: false,
           },
-        };
+        });
       }
-    } else {
-      return {
+    }
+
+    // return the api key
+    if (user.api) {
+      context.user = {
+        userId: user.api.userId,
+        apiKey: user.api.apiKey,
+      };
+      return ok({
+        kind: "USER_INFO",
+        data: {
+          apiKey: user.api.apiKey,
+          userId: user.api.userId,
+          isLoggedIn: true,
+        },
+      });
+    }
+
+    try {
+      const result = await postLogin(user.firebase.tokenId, context);
+
+      user = {
+        firebase: {
+          uid: message.data.uid,
+          tokenId: user.firebase.tokenId,
+        },
+        api: {
+          apiKey: result.apiKey,
+          userId: result.userId,
+        },
+      };
+      context.user = {
+        userId: result.userId,
+        apiKey: result.apiKey,
+      };
+      await setCachedUser(user);
+
+      return ok({
+        kind: "USER_INFO",
+        data: {
+          isLoggedIn: true,
+          userId: result.userId,
+          apiKey: result.apiKey,
+        },
+      });
+    } catch (err) {
+      return ok({
         kind: "USER_INFO",
         data: {
           isLoggedIn: false,
         },
-      };
+      });
     }
-  }
-
-  // return the api key
-  if (user.api) {
-    context.user = {
-      userId: user.api.userId,
-      apiKey: user.api.apiKey,
-    };
-    return {
-      kind: "USER_INFO",
-      data: {
-        apiKey: user.api.apiKey,
-        userId: user.api.userId,
-        isLoggedIn: true,
-      },
-    };
-  }
-
-  try {
-    const result = await postLogin(user.firebase.tokenId, context);
-
-    user = {
-      firebase: {
-        uid: message.data.uid,
-        tokenId: user.firebase.tokenId,
-      },
-      api: {
-        apiKey: result.apiKey,
-        userId: result.userId,
-      },
-    };
-    context.user = {
-      userId: result.userId,
-      apiKey: result.apiKey,
-    };
-    await setCachedUser(user);
-
-    return {
-      kind: "USER_INFO",
-      data: {
-        isLoggedIn: true,
-        userId: result.userId,
-        apiKey: result.apiKey,
-      },
-    };
   } catch (err) {
-    return {
-      kind: "USER_INFO",
-      data: {
-        isLoggedIn: false,
-      },
-    };
+    return parseError(err);
   }
 };
