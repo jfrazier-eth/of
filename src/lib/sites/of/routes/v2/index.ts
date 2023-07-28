@@ -1,3 +1,4 @@
-export * as Init from "./init/index";
-export * as Users from "./users/index";
-export * as Chats from "./chats/index";
+export * as Init from "./init";
+export * as Users from "./users";
+export * as Chats from "./chats";
+export * as Vault from "./vault";

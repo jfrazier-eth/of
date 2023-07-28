@@ -1,4 +1,4 @@
-import { UserOFSettings } from "./responses";
+import { ClientOFSettings } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/settings/types";
 
 interface BaseMessage {
   kind: string;
@@ -41,7 +41,25 @@ export interface GetOFSettingsMessage extends BaseMessage {
 
 export interface SaveOFSettingsMessage extends BaseMessage {
   kind: "SAVE_OF_SETTINGS";
-  data: UserOFSettings;
+  data: ClientOFSettings;
+}
+
+export interface GetVaultItemsMessage extends BaseMessage {
+  kind: "GET_VAULT_ITEMS";
+  data: {
+    offset: number;
+  };
+}
+
+export interface UpdateOFRevisionMessage extends BaseMessage {
+  kind: "UPDATE_OF_REVISION";
+  data: {
+    revision: string;
+  };
+}
+
+export interface GetOFDynamicParamsMessage extends BaseMessage {
+  kind: "GET_OF_DYNAMIC_PARAMS";
 }
 
 export type Message =
@@ -51,4 +69,7 @@ export type Message =
   | ActiveTabMessage
   | GenerateResponseMessage
   | GetOFSettingsMessage
-  | SaveOFSettingsMessage;
+  | SaveOFSettingsMessage
+  | GetVaultItemsMessage
+  | UpdateOFRevisionMessage
+  | GetOFDynamicParamsMessage;

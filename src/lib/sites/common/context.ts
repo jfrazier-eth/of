@@ -61,7 +61,7 @@ export class Context {
     const url = this.baseUrl;
     url.pathname = path;
     searchParams?.forEach((value, key) => {
-      url.searchParams.set(key, value);
+      url.searchParams.append(key, value);
     });
     return url;
   }

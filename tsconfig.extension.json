@@ -1,12 +1,16 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "allowJs": true
+    "allowJs": true,
+    "esModuleInterop": true
   },
-  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
   "exclude": [
     "./src/sites/common/client/got-adapter.ts",
-    "./src/sites/common/client/ky-adapter.ts",
     "src/creds/",
     "jest.config.ts",
     "**.spec.ts"

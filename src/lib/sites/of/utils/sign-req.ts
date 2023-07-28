@@ -1,4 +1,5 @@
-import { OFDynamicParams } from "./of-dynamic-params";
+import { ClientOFDynamicParams } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/sign/params/types";
+
 import { sha1 } from "./sha1";
 
 /**
@@ -11,7 +12,7 @@ import { sha1 } from "./sha1";
 export const signReq = async (
   url: URL,
   time: number,
-  dynamicParams: OFDynamicParams,
+  dynamicParams: ClientOFDynamicParams,
   authId = "0"
 ) => {
   let urlPart = url.searchParams.size === 0 ? url.pathname : `${url.pathname}${url.search}`;
@@ -32,9 +33,13 @@ export const signReq = async (
   let encoder = new TextEncoder();
   let asciiHash = encoder.encode(hexHash);
 
-  let checksum = dynamicParams.checksumIndexes.reduce(function (sum, checksumIndex) {
+  let checksum = dynamicParams.checksumIndexes.reduce(function (
+    sum: number,
+    checksumIndex: number
+  ) {
     return sum + asciiHash[checksumIndex];
-  }, dynamicParams.checksumConstant);
+  },
+  dynamicParams.checksumConstant);
 
   const sign = [
     dynamicParams.start,

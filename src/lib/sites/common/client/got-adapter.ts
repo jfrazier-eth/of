@@ -1,23 +1,30 @@
 import got from "got";
+import { HttpsProxyAgent } from "https-proxy-agent";
 
 import { RequestAdapter, Response } from "./types";
 
 export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
   const url = request.url.toString();
 
+  const proxy = process.env.HTTPS_PROXY;
+  let agent;
+  if (proxy) {
+    agent = new HttpsProxyAgent(proxy);
+  }
+
   try {
     const response = await got(url, {
       method: request.method,
       throwHttpErrors: request.throwHttpErrors,
       responseType: request.responseType,
-      // cookieJar: request.cookieJar,
       headers: request.headers,
       body: request.json ? JSON.stringify(request.json) : undefined,
+      http2: false,
       agent: {
-        https: request.httpsAgent,
+        https: agent,
       },
       https: {
-        rejectUnauthorized: request.rejectUnauthorized ?? true,
+        rejectUnauthorized: !proxy?.includes("127.0.0.1"),
       },
     });
 

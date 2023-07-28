@@ -7,6 +7,7 @@ import { Message } from "../extension/messages";
 import { MessagesByKind, ResponsesByKind } from "../extension/messages/mappings";
 import { sendMessage } from "../extension/messages/send-message";
 import { isBackground } from "../extension/utils/is-background";
+import { BrowserOFParamsHandler } from "./of-params-handler";
 
 export class Context {
   protected _baseUrl: URL;
@@ -19,7 +20,8 @@ export class Context {
     return new URL(this._baseUrl.toString());
   }
 
-  public isReady: Promise<void>;
+  public _isInitialized: Promise<void>;
+  public isReady: Promise<unknown>;
 
   public get user() {
     return this._user;
@@ -30,19 +32,25 @@ export class Context {
   }
 
   public set user(value: { apiKey: string; userId: string } | null) {
+    if (!this._user) {
+      this.ofParams.refresh();
+    }
     this._user = clone(value);
   }
 
   public set ofAuth(value: Auth | null) {
-    console.log(`User OF AUth changed`, value);
     this._ofAuth = clone(value);
   }
+
+  public ofParams: BrowserOFParamsHandler;
 
   constructor(baseUrl: string | URL) {
     this._baseUrl = new URL(baseUrl);
     this._user = null;
     this._ofAuth = null;
-    this.isReady = this._init();
+    this.ofParams = new BrowserOFParamsHandler(null);
+    this._isInitialized = this._init();
+    this.isReady = Promise.all([this._isInitialized, this.ofParams.isReady]);
   }
 
   protected async _init() {

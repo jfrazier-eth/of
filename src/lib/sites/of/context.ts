@@ -1,7 +1,7 @@
 import { clone } from "@/utils/clone";
 
 import { Context, ContextOptions } from "../common/context";
-import { getOFDynamicParams } from "./utils/of-dynamic-params";
+import { ParamsHandler } from "./params-handler";
 import { signReq } from "./utils/sign-req";
 
 export interface UserSessionParams {
@@ -22,13 +22,13 @@ export class SessionContext extends Context {
     return clone(this._userParams);
   }
 
-  constructor(sessionParams: UserSessionParams, options: ContextOptions) {
+  constructor(
+    sessionParams: UserSessionParams,
+    options: ContextOptions,
+    public ofParams: ParamsHandler
+  ) {
     super(options);
     this._userParams = clone(sessionParams);
-    // this._cookieJar.setCookie(
-    //   `sess=${sessionParams.sess}; path=/; domain=.onlyfans.com; secure; HttpOnly`,
-    //   this.options.baseUrl.toString()
-    // );
   }
 
   public async getHeaders(url: URL): Promise<Record<string, string>> {
@@ -42,14 +42,23 @@ export class SessionContext extends Context {
       Time: `${time}`,
       "X-Bc": this._userParams.xbc,
       "App-Token": appToken,
-      Cookie: `sess=${this._userParams.sess}`,
+      Cookie: `sess=${this._userParams.sess}; auth_id=${this._userParams.authId}`,
     };
   }
 
   protected async getDynamicHeaders(url: URL) {
     const time = new Date().getTime();
-    const dynamicParams = await getOFDynamicParams(this);
-    const { sign } = await signReq(url, time, dynamicParams, this._userParams.authId);
+    const dynamicParams = await this.ofParams.getParams();
+
+    if (!dynamicParams) {
+      throw new Error("Dynamic params are not ready");
+    }
+
+    let userId = this._userParams.authId;
+    if (url.pathname === "/api2/v2/users/me") {
+      userId = "0";
+    }
+    const { sign } = await signReq(url, time, dynamicParams, userId);
 
     return {
       sign,

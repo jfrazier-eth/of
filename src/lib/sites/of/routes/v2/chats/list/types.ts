@@ -1,13 +1,13 @@
 import { ReceivedMessage } from "../user/messages/types";
 
-export interface GetUnreadMessagesOptions {
+export interface GetMessageListOptions {
   limit?: number;
   offset?: number;
   order?: "recent";
   filter?: "unread";
 }
 
-export interface UnreadMessage {
+export interface MessageListItem {
   canGoToProfile: boolean;
   canNotSendReason: string;
   canSendMessage: boolean;
@@ -21,11 +21,11 @@ export interface UnreadMessage {
     id: number;
     _view: string;
   };
-  lastMessage: ReceivedMessage;
+  lastMessage?: ReceivedMessage;
 }
 
-export interface GetUnreadMessagesResponseBody {
+export interface GetMessageListResponseBody {
   hasMore: boolean;
   nextOffset: number;
-  list: UnreadMessage[];
+  list: MessageListItem[];
 }

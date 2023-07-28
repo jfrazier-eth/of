@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { MigrationBuilder, ColumnDefinitions } from "node-pg-migrate";
+import { ColumnDefinitions, MigrationBuilder } from "node-pg-migrate";
 
 export const shorthands: ColumnDefinitions | undefined = undefined;
 export async function up(pgm: MigrationBuilder) {
@@ -23,29 +23,53 @@ export async function up(pgm: MigrationBuilder) {
       type: "timestamp",
       notNull: true,
     },
+    generative_messaging_script: {
+      type: "TEXT",
+      collation: 'pg_catalog."default"',
+      notNull: true,
+    },
+    generative_messaging_emojis: {
+      type: "TEXT",
+      collation: 'pg_catalog."default"',
+      notNull: true,
+    },
     auto_messaging_enabled: {
       type: "boolean",
       notNull: true,
     },
-    spending_threshold: {
+    auto_messaging_spending_threshold: {
       type: "numeric",
       notNull: true,
     },
-    sample_script: {
-      type: "TEXT",
+    primary_ppv_media_id: {
+      type: "char(16)",
+    },
+    primary_ppv_price: {
+      type: "numeric",
       notNull: true,
     },
-    welcome_message_enabled: {
+    secondary_ppv_media_id: {
+      type: "char(16)",
+    },
+    secondary_ppv_price: {
+      type: "numeric",
+      notNull: true,
+    },
+    welcome_enabled: {
       type: "boolean",
       notNull: true,
     },
-    welcome_message_id: {
-      type: "char(16)",
+    welcome_message: {
+      type: "TEXT",
+      collation: 'pg_catalog."default"',
       notNull: true,
     },
-    favorite_emojis: {
-      type: "TEXT",
+    welcome_price: {
+      type: "numeric",
       notNull: true,
+    },
+    welcome_media_id: {
+      type: "char(16)",
     },
   });
 }

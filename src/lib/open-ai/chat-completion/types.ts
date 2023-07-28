@@ -1,3 +1,4 @@
+import { Function } from "../functions";
 import { ChatMessage, Message } from "../messages";
 import { Model } from "../model";
 
@@ -5,6 +6,8 @@ import { Model } from "../model";
 export interface ChatCompletionRequest {
   model: Model;
   messages: Message[];
+
+  functions?: Function[];
 
   /**
    * defaults to 1

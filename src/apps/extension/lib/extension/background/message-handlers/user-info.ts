@@ -2,6 +2,7 @@ import { postLogin } from "@/extension/lib/api/login";
 import { getActiveAuth } from "@/extension/lib/auth";
 
 import { ActiveUserInfoMessage, UserInfoMessage } from "../../messages/index";
+import { Storage } from "../../storage";
 import { Handler } from "./types";
 
 export interface LoggedInUser {
@@ -28,34 +29,14 @@ interface StoredUserInfo {
 }
 
 const getCachedUser = async (uid: string) => {
-  const cachedUser = await new Promise<StoredUserInfo | null>((resolve, reject) => {
-    const key = `user-${uid}`;
-    chrome.storage.local.get(key, (result) => {
-      try {
-        const value = JSON.parse(result[key]) as StoredUserInfo;
-        resolve(value);
-      } catch (err) {
-        resolve(null);
-      }
-    });
-  });
-
+  const key = `user-${uid}`;
+  const cachedUser = await Storage.getObject<StoredUserInfo>(key);
   return cachedUser;
 };
 
 const getActiveUser = async () => {
-  const activeUser = await new Promise<StoredUserInfo | null>((resolve, reject) => {
-    const key = `user-active`;
-    chrome.storage.local.get(key, (result) => {
-      try {
-        const value = JSON.parse(result[key]) as StoredUserInfo;
-        resolve(value);
-      } catch (err) {
-        resolve(null);
-      }
-    });
-  });
-
+  const key = `user-active`;
+  const activeUser = await Storage.getObject<StoredUserInfo>(key);
   return activeUser;
 };
 
@@ -63,14 +44,9 @@ const setCachedUser = async (user: StoredUserInfo) => {
   const key = `user-${user.firebase.uid}`;
   const activeUser = `user-active`;
   console.log(`Setting active user`, user);
-  return new Promise<void>((resolve) => {
-    chrome.storage.local.set(
-      {
-        [key]: JSON.stringify(user),
-        [activeUser]: JSON.stringify(user),
-      },
-      resolve
-    );
+  return await Storage.set({
+    [key]: user,
+    [activeUser]: user,
   });
 };
 

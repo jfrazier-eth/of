@@ -8,6 +8,7 @@ const getHeaders = (userId: string, toUserId: string) => {
   const headers = {
     Host: "onlyfans.com",
     "User-Id": userId,
+    "Content-Type": "application/json",
     Origin: "https://onlyfans.com",
     Referer: `https://onlyfans.com/my/chats/chat/${toUserId}/`,
     Accept: "application/json, text/plain, */*",
@@ -18,7 +19,7 @@ const getHeaders = (userId: string, toUserId: string) => {
 export interface PostMessageBody {
   text: string;
   lockedText?: boolean;
-  mediaFiles?: unknown[];
+  mediaFiles?: number[];
   price?: number;
   previews?: unknown[];
   isCouplePeopleMedia?: boolean;
@@ -63,6 +64,9 @@ export const post = async (context: SessionContext, options: PostMessagesOptions
 
     throw new UnexpectedStatusCodeError(url, context, response.status);
   } catch (err) {
+    if (err instanceof UnexpectedStatusCodeError) {
+      throw err;
+    }
     throw RequestError.create(err, url, context);
   }
 };

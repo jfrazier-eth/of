@@ -1,10 +1,48 @@
 import { mergeOptions } from "./merge-options";
-import { RequestAdapter, Response, getDefaultClientOptions } from "./types";
+import {
+  Response as ClientResponse,
+  RequestAdapter,
+  ResponseType,
+  getDefaultClientOptions,
+} from "./types";
+
+const parseHeaders = (response: Response) => {
+  let headers: Record<string, string | string[]> = {};
+  response.headers.forEach((value, key) => {
+    if (key in headers) {
+      const existingHeader = headers[key];
+      if (typeof existingHeader === "string") {
+        headers[key] = [existingHeader, value];
+      } else if (Array.isArray(existingHeader)) {
+        existingHeader.push(value);
+      } else {
+        console.assert(
+          true,
+          `Unexpected state encountered. Existing header ${existingHeader} Type: ${typeof existingHeader}`
+        );
+      }
+    } else {
+      headers[key] = value;
+    }
+  });
+  return headers;
+};
+
+export const parseBody = async (response: Response, responseType: ResponseType) => {
+  switch (responseType) {
+    case "text": {
+      return response.body;
+    }
+    case "json": {
+      return await response.json();
+    }
+  }
+};
 
 export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
   const url = request.url.toString();
-
-  const options = mergeOptions(getDefaultClientOptions(), request);
+  const defaults = getDefaultClientOptions();
+  const options = mergeOptions(defaults, request);
 
   try {
     let reqHeaders = options.headers ?? {};
@@ -15,46 +53,18 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request) => {
       body: options.json ? JSON.stringify(options.json) : null,
     });
 
-    let body;
-    switch (options.responseType) {
-      case "text": {
-        body = response.body;
-        break;
-      }
-      case "json": {
-        body = await response.json();
-        break;
-      }
-    }
-
-    let headers: Record<string, string | string[]> = {};
-
-    response.headers.forEach((value, key) => {
-      if (key in headers) {
-        const existingHeader = headers[key];
-        if (typeof existingHeader === "string") {
-          headers[key] = [existingHeader, value];
-        } else if (Array.isArray(existingHeader)) {
-          existingHeader.push(value);
-        } else {
-          console.assert(
-            true,
-            `Unexpected state encountered. Existing header ${existingHeader} Type: ${typeof existingHeader}`
-          );
-        }
-      } else {
-        headers[key] = value;
-      }
-    });
-
-    const res: Response = {
+    const res: ClientResponse = {
       status: response.status,
-      body: body,
-      headers: headers,
+      body: parseBody(response, options.responseType),
+      headers: parseHeaders(response),
     };
 
+    if (options.throwHttpErrors && res.status > 299) {
+      throw new Error(`Unexpected status code ${response.status}`);
+    }
+
     return res;
-  } catch (err) {
-    throw err;
+  } catch (e) {
+    throw e;
   }
 };

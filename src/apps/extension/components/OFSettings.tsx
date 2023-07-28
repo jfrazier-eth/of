@@ -1,23 +1,38 @@
 import React, { useState } from "react";
 
-import { UserOFSettings } from "../lib/extension/messages/responses";
+import { ClientOFSettings } from "@/backend/routes/api/users/:userId/sites/:site/users/:siteUserId/settings/types";
+
+import { Button } from "./Button";
 import { Loader } from "./Loader";
-import MediaInput from "./inputs/MediaInput";
 import PriceInput from "./inputs/PriceInput";
 import Toggle from "./inputs/Toggle";
+import { Media } from "./media-grid/Media";
+import { MediaGrid } from "./media-grid/MediaGrid";
+
+type Section = "WELCOME" | "PPV1" | "PPV2";
 
 const OFSettings: React.FC<{
-  settings: UserOFSettings;
-  setSettings: (handler: (prevState: UserOFSettings) => UserOFSettings) => void;
+  settings: ClientOFSettings;
+  setSettings: (handler: (prevState: ClientOFSettings) => ClientOFSettings) => void;
   saveSettings: () => Promise<void>;
 }> = ({ settings, setSettings, saveSettings }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [mediaGridContext, setMediaGridContext] = useState<{ isOpen: boolean; section: Section }>({
+    isOpen: false,
+    section: "WELCOME",
+  });
 
   const toggleAutoMessages = () => {
     setSettings((prev) => {
       return {
         ...prev,
-        autoMessages: !prev.autoMessages,
+        settings: {
+          ...prev.settings,
+          autoMessaging: {
+            ...prev.settings.autoMessaging,
+            enabled: !prev.settings.autoMessaging.enabled,
+          },
+        },
       };
     });
   };
@@ -26,7 +41,13 @@ const OFSettings: React.FC<{
     setSettings((prev) => {
       return {
         ...prev,
-        welcomeMessageDefault: !prev.welcomeMessageDefault,
+        settings: {
+          ...prev.settings,
+          welcome: {
+            ...prev.settings.welcome,
+            enabled: !prev.settings.welcome.enabled,
+          },
+        },
       };
     });
   };
@@ -44,8 +65,65 @@ const OFSettings: React.FC<{
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex relative h-full flex-col divide-gray-200 bg-white shadow-xl w-[400px]"
+      className={
+        "flex relative h-full flex-col divide-gray-200 bg-white shadow-xl w-[400px] overflow-auto"
+      }
     >
+      <MediaGrid
+        title="Select media from your vault"
+        open={mediaGridContext.isOpen}
+        onClose={() => setMediaGridContext((prev) => ({ isOpen: false, section: prev.section }))}
+        onSelect={(item) => {
+          console.log(`Media selected ${item.id} Section ${mediaGridContext.section}}`);
+          switch (mediaGridContext.section) {
+            case "WELCOME": {
+              setSettings((prev) => ({
+                ...prev,
+                settings: {
+                  ...prev.settings,
+                  welcome: {
+                    ...prev.settings.welcome,
+                    media: item,
+                  },
+                },
+              }));
+              break;
+            }
+            case "PPV1": {
+              setSettings((prev) => ({
+                ...prev,
+                settings: {
+                  ...prev.settings,
+                  autoMessaging: {
+                    ...prev.settings.autoMessaging,
+                    primaryPPV: {
+                      ...prev.settings.autoMessaging.primaryPPV,
+                      media: item,
+                    },
+                  },
+                },
+              }));
+              break;
+            }
+            case "PPV2": {
+              setSettings((prev) => ({
+                ...prev,
+                settings: {
+                  ...prev.settings,
+                  autoMessaging: {
+                    ...prev.settings.autoMessaging,
+                    secondaryPPV: {
+                      ...prev.settings.autoMessaging.secondaryPPV,
+                      media: item,
+                    },
+                  },
+                },
+              }));
+              break;
+            }
+          }
+        }}
+      />
       <div className="h-0 flex-1">
         <div className="flex flex-col items-start justify-start h-screen w-full">
           <div className="bg-primary text-white w-full text-left p-4">
@@ -57,20 +135,29 @@ const OFSettings: React.FC<{
               <label className={labelClass}>
                 <span className="mr-2">Enable Automatic Messages</span>
               </label>
-              <Toggle enabled={settings.autoMessages} setEnabled={toggleAutoMessages} />
+              <Toggle
+                enabled={settings.settings.autoMessaging.enabled}
+                setEnabled={toggleAutoMessages}
+              />
             </div>
             <label htmlFor="price" className={labelClass}>
               Spending Threshold
             </label>
             <PriceInput
-              price={settings.spendingThreshold}
+              price={settings.settings.autoMessaging.spendingThreshold}
               setPrice={(newValueOrHandler) => {
-                setSettings((prevState) => ({
-                  ...prevState,
-                  spendingThreshold:
-                    typeof newValueOrHandler === "function"
-                      ? newValueOrHandler(prevState.spendingThreshold)
-                      : newValueOrHandler,
+                setSettings((prev) => ({
+                  ...prev,
+                  settings: {
+                    ...prev.settings,
+                    autoMessaging: {
+                      ...prev.settings.autoMessaging,
+                      spendingThreshold:
+                        typeof newValueOrHandler === "function"
+                          ? newValueOrHandler(prev.settings.autoMessaging.spendingThreshold)
+                          : newValueOrHandler,
+                    },
+                  },
                 }));
               }}
             />
@@ -78,19 +165,31 @@ const OFSettings: React.FC<{
               <span>Sample Scripts for Training</span>
             </label>
             <textarea
-              value={settings.scripts}
+              value={settings.settings.generativeMessaging.script}
               onChange={(e) =>
                 setSettings((prev) => {
                   if (e.target.value.length >= 700) {
                     alert("Script must be less than 700 characters.");
                     return {
                       ...prev,
-                      scripts: e.target.value.substring(0, 700),
+                      settings: {
+                        ...prev.settings,
+                        generativeMessaging: {
+                          ...prev.settings.generativeMessaging,
+                          script: e.target.value.substring(0, 700),
+                        },
+                      },
                     };
                   }
                   return {
                     ...prev,
-                    scripts: e.target.value,
+                    settings: {
+                      ...prev.settings,
+                      generativeMessaging: {
+                        ...prev.settings.generativeMessaging,
+                        script: e.target.value,
+                      },
+                    },
                   };
                 })
               }
@@ -99,31 +198,33 @@ const OFSettings: React.FC<{
               placeholder="Paste your sample scripts here. The AI will use these to influence it's messaging style. (Max 700 words)"
             ></textarea>
             <div className="mt-4">
-              <div className="flex">
-                <label className={labelClass}>
+              {/* <div className="flex"> */}
+              {/*  <label className={labelClass}>
                   <span className="mr-2">Welcome Message default</span>
                 </label>
                 <Toggle
-                  enabled={settings.welcomeMessageDefault}
+                  enabled={settings.settings.welcome.enabled}
                   setEnabled={toggleWelcomeMessageDefault}
                 />
               </div>
-              <label className={`flex flex-col ${labelClass}`}>
-                <span className="mr-2">Select an image</span>
-              </label>
-              <MediaInput />
               <label htmlFor="welcomePrice" className={labelClass}>
                 Set Price
               </label>
               <PriceInput
-                price={settings.welcomePrice}
+                price={settings.settings.welcome.price}
                 setPrice={(newValueOrHandler) => {
-                  setSettings((prevState) => ({
-                    ...prevState,
-                    welcomePrice:
-                      typeof newValueOrHandler === "function"
-                        ? newValueOrHandler(prevState.welcomePrice)
-                        : newValueOrHandler,
+                  setSettings((prev) => ({
+                    ...prev,
+                    settings: {
+                      ...prev.settings,
+                      welcome: {
+                        ...prev.settings.welcome,
+                        price:
+                          typeof newValueOrHandler === "function"
+                            ? newValueOrHandler(prev.settings.welcome.price)
+                            : newValueOrHandler,
+                      },
+                    },
                   }));
                 }}
               />
@@ -131,55 +232,112 @@ const OFSettings: React.FC<{
                 <span className="mr-2">Default Welcome Message</span>
               </label>
               <textarea
-                value={settings.welcomeMessage}
+                value={settings.settings.welcome.message}
                 onChange={(e) => {
                   setSettings((prev) => ({
                     ...prev,
-                    welcomeMessage: e.target.value,
+                    settings: {
+                      ...prev.settings,
+                      welcome: {
+                        ...prev.settings.welcome,
+                        message: e.target.value,
+                      },
+                    },
                   }));
                 }}
                 className={textAreaClass}
                 rows={4}
                 placeholder="Insert default welcome message to send to subscribers initially."
               ></textarea>
+              {settings.settings.welcome.media && (
+                <div className="flex flex-col mt-2 w-[50%]">
+                  <Media media={settings.settings.welcome.media} />
+                </div>
+              )}
+              <label className={`flex flex-col ${labelClass} mt-2`}>
+                <Button
+                  onClick={() => setMediaGridContext({ isOpen: true, section: "WELCOME" })}
+                  label="Select welcome message media"
+                />
+              </label> */}
+
               <label className={`flex flex-col ${labelClass}`}>
                 <span className="mr-2">PPV default 1</span>
               </label>
-              <MediaInput />
+
               <label htmlFor="price1" className={labelClass}>
                 Set Price
               </label>
               <PriceInput
-                price={settings.ppvPrice1}
+                price={settings.settings.autoMessaging.primaryPPV.price}
                 setPrice={(newValueOrHandler) => {
-                  setSettings((prevState) => ({
-                    ...prevState,
-                    ppvPrice1:
-                      typeof newValueOrHandler === "function"
-                        ? newValueOrHandler(prevState.ppvPrice1)
-                        : newValueOrHandler,
+                  setSettings((prev) => ({
+                    ...prev,
+                    settings: {
+                      ...prev.settings,
+                      autoMessaging: {
+                        ...prev.settings.autoMessaging,
+                        primaryPPV: {
+                          ...prev.settings.autoMessaging.primaryPPV,
+                          price:
+                            typeof newValueOrHandler === "function"
+                              ? newValueOrHandler(prev.settings.autoMessaging.primaryPPV.price)
+                              : newValueOrHandler,
+                        },
+                      },
+                    },
                   }));
                 }}
               />
+              {settings.settings.autoMessaging.primaryPPV.media && (
+                <div className="flex flex-col mt-2 w-[50%]">
+                  <Media media={settings.settings.autoMessaging.primaryPPV.media} />
+                </div>
+              )}
+              <label className={`flex flex-col ${labelClass} mt-2`}>
+                <Button
+                  onClick={() => setMediaGridContext({ isOpen: true, section: "PPV1" })}
+                  label="Select PPV1 media"
+                />
+              </label>
               <label className={`flex flex-col ${labelClass}`}>
                 <span className="mr-2">PPV default 2</span>
               </label>
-              <MediaInput />
               <label htmlFor="price2" className={labelClass}>
                 Set Price
               </label>
               <PriceInput
-                price={settings.ppvPrice2}
+                price={settings.settings.autoMessaging.secondaryPPV.price}
                 setPrice={(newValueOrHandler) => {
-                  setSettings((prevState) => ({
-                    ...prevState,
-                    ppvPrice2:
-                      typeof newValueOrHandler === "function"
-                        ? newValueOrHandler(prevState.ppvPrice2)
-                        : newValueOrHandler,
+                  setSettings((prev) => ({
+                    ...prev,
+                    settings: {
+                      ...prev.settings,
+                      autoMessaging: {
+                        ...prev.settings.autoMessaging,
+                        secondaryPPV: {
+                          ...prev.settings.autoMessaging.secondaryPPV,
+                          price:
+                            typeof newValueOrHandler === "function"
+                              ? newValueOrHandler(prev.settings.autoMessaging.secondaryPPV.price)
+                              : newValueOrHandler,
+                        },
+                      },
+                    },
                   }));
                 }}
               />
+              {settings.settings.autoMessaging.secondaryPPV.media && (
+                <div className="flex flex-col mt-2 w-[50%]">
+                  <Media media={settings.settings.autoMessaging.secondaryPPV.media} />
+                </div>
+              )}
+              <label className={`flex flex-col ${labelClass} mt-2`}>
+                <Button
+                  onClick={() => setMediaGridContext({ isOpen: true, section: "PPV2" })}
+                  label="Select PPV2 media"
+                />
+              </label>
               <div className="flex justify-end my-6">
                 <button
                   type="submit"

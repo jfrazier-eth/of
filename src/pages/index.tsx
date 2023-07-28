@@ -2,13 +2,13 @@ import * as React from "react";
 
 import Login from "@/extension/components/Login";
 import OFSettings from "@/extension/components/OFSettings";
+import { UserOFSettingsContext } from "@/extension/context/of/user-of-settings";
 import { UserInfoContext } from "@/extension/context/user-info-context";
-import { UserOFSettingsContext } from "@/extension/context/user-of-settings";
 
 const Main = ({ children }: { children: React.ReactNode }) => {
   return (
     <main
-      className={`flex h-full flex-col items-center justify-between bg-white min-w-[20rem] overflow-y-auto min-h-[40rem] w-fit text-black`}
+      className={`flex h-full flex-col items-center justify-between bg-white min-w-[20rem] min-h-[40rem] w-fit text-black`}
     >
       {children}
     </main>
@@ -33,7 +33,7 @@ export default function Page() {
     } else {
       return (
         <Main>
-          <Login />
+          <Login userInfo={userInfo} />
         </Main>
       );
     }

@@ -15,8 +15,8 @@
             },
         }
  */
-export interface Function<T = unknown> {
+export interface Function {
   name: string;
   description: string;
-  parameters: T;
+  parameters: unknown;
 }
