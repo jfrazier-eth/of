@@ -53,13 +53,13 @@ export const generateResponse = async (settings: OFSettings, data: GenerateChatR
 
     const responseMessage = choices[0].message;
 
-    let message: string;
-    try {
-      message = JSON.parse(responseMessage.content).content;
-    } catch (err) {
-      console.error(`Failed to parse response message: ${err}`);
-      message = responseMessage.content.split('content": "')[1];
-    }
+    let message = responseMessage.content;
+    // try {
+    //   message = JSON.parse(responseMessage.content).content;
+    // } catch (err) {
+    //   console.error(`Failed to parse response message: ${err}`);
+    //   message = responseMessage.content.split('content": "')[1];
+    // }
     if (!message) {
       return err(new Error("Failed to parse response message"));
     }
