@@ -30,8 +30,6 @@ export const generateResponse = async (settings: OFSettings, data: GenerateChatR
       },
       {
         model: "gpt-3.5-turbo",
-        temperature: 0.9,
-        max_tokens: 400,
       }
     );
 
