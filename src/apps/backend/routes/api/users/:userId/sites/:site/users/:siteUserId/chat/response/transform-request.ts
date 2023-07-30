@@ -65,12 +65,12 @@ export const transformRequest = (
   if (request.isPPV) {
     userObj2 = {
       role: "user",
-      content: `Excellent! Remember, the script I gave earlier is not related to this fan. I gave it so that you understand my style of conversation. Here is my conversation with the current fan:\n\`\`\`\n${chat}\n\`\`\`\nNow continue this conversation naturally and respond in a way that attempts to get the user to purchase the erotic pay per view media that will be attached to your message. You should continue the conversation naturally, DO NOT START IT AGAIN WITH A SALUTATION like 'Hey there!'. We are already in the middle of the conversation. Respond in json like this - { role: \"creator\", content: \"the actual response\"}. The name of the fan is ${request.chat.withUser.name}. Go ahead with a response now.\n`,
+      content: `Excellent! Remember, the script I gave earlier is not related to this fan. I gave it so that you understand my style of conversation. Here is my conversation with the current fan:\n\`\`\`\n${chat}\n\`\`\`\nNow continue this conversation naturally and respond in a way that attempts to get the user to purchase the erotic pay per view media that will be attached to your message. You should continue the conversation naturally, if you see salutation/greeting in the historical conversation, do MUST NOT greet the user again. We are already in the middle of the conversation. Respond in json like this - { role: \"creator\", content: \"the actual response\"}. The name of the fan is ${request.chat.withUser.name}. Go ahead with a response now.\n`,
     };
   } else {
     userObj2 = {
       role: "user",
-      content: `Excellent! Remember, the script I gave earlier is not related to this fan. I gave it so that you understand my style of conversation. Here is my conversation with the current fan:\n\`\`\`\n${chat}\n\`\`\`\nNow continue this conversation naturally, DO NOT START IT AGAIN WITH A SALUTATION like 'Hey there!'. We are already in the middle of the conversation. Respond in json like this - { role: \"creator\", content: \"the actual response\"}. The name of the fan is ${request.chat.withUser.name}. Go ahead with a response now.\n`,
+      content: `Excellent! Remember, the script I gave earlier is not related to this fan. I gave it so that you understand my style of conversation. Here is my conversation with the current fan:\n\`\`\`\n${chat}\n\`\`\`\nNow continue this conversation naturally, if you see salutation/greeting in the historical conversation, do MUST NOT greet the user again. We are already in the middle of the conversation. Respond in json like this - { role: \"creator\", content: \"the actual response\"}. The name of the fan is ${request.chat.withUser.name}. Go ahead with a response now.\n`,
     };
   }
 

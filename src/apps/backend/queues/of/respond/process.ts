@@ -36,6 +36,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
   const primaryPPV = job.data.settings.settings.autoMessaging.primaryPPV;
   const secondaryPPV = job.data.settings.settings.autoMessaging.secondaryPPV;
 
+  console.log(`Responding to user ${withUser.id} from user ${settings.siteUserId}`);
   const messagesResponse = await OF.Sdk.getMessages(session, withUser.id, {
     maxNumMessages: 10,
   });
@@ -50,6 +51,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
   let lastMessageId = typeof messages[0]?.id === "number" ? messages[0].id.toString() : null;
 
   if (job.data.chat.lastMessageId !== lastMessageId) {
+    console.log("Skipped. Most recent message is not the expected message.");
     return ok({
       sent: false,
       reason: "Skipped. Most recent message is not the expected message.",
@@ -133,11 +135,13 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     mostRecentMessageResponse.value === messages[0].id.toString();
   const mostRecentMessageWasSentByUser = messages[0].fromUser.id.toString() === settings.siteUserId;
   if (currentMesssageHasBeenProcessed) {
+    console.log("Skipped. Most recent message has already been processed.");
     return ok({
       sent: false,
       reason: "Skipped. Most recent message has already been processed.",
     }) as JobResult;
   } else if (mostRecentMessageWasSentByUser) {
+    console.log("Skipped. Most recent message was sent by user.");
     return ok({
       sent: false,
       reason: "Skipped. Most recent message was sent by user.",

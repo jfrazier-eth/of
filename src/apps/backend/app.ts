@@ -8,7 +8,11 @@ import { router as apiRouter } from "./routes/api";
 const startApp = () => {
   if (config.server.enabled) {
     const app: Express = express();
-    app.use(cors());
+    app.use(
+      cors({
+        origin: "*",
+      })
+    );
     app.use(express.json());
 
     app.use("/", parseHeaders, apiRouter);

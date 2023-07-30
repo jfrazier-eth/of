@@ -1,4 +1,4 @@
-import { Result, ResultAsync, err, ok } from "neverthrow";
+import { Result, err, ok } from "neverthrow";
 
 import { ApiError } from "@/sites/common/errors";
 import { SessionContext } from "@/sites/of/context";
@@ -33,7 +33,7 @@ export const get = async (
 
     const url = context.getUrl("/api2/v2/chats", searchParams);
 
-    const contextHeaders = ResultAsync.fromPromise(context.getHeaders(url), parseError);
+    const contextHeaders = await context.getHeaders(url);
     const reqHeaders = {
       ...getHeaders(context.userParams.authId),
       ...contextHeaders,

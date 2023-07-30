@@ -12,8 +12,9 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request, expecte
   const options = mergeOptions(defaults, request);
 
   let agent;
-  if (options.proxy) {
-    agent = new HttpsProxyAgent(options.proxy);
+  const proxy = options.proxy || process.env.HTTPS_PROXY;
+  if (proxy) {
+    agent = new HttpsProxyAgent(proxy);
   }
 
   try {
@@ -28,7 +29,7 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request, expecte
         https: agent,
       },
       https: {
-        rejectUnauthorized: !options.proxy?.includes("127.0.0.1"),
+        rejectUnauthorized: !proxy?.includes("127.0.0.1"),
       },
     });
 
@@ -44,6 +45,7 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request, expecte
 
     return parseClientError(options, response);
   } catch (err) {
+    console.error("Got request error", err);
     return parseClientError(options, err);
   }
 };

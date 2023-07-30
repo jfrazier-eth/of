@@ -24,7 +24,7 @@ export async function* getUserInfo(session: SessionContext, userIds: string[]) {
       }
       const data = response.value;
       for (const userId of chunk) {
-        if (!(userId in response) || !data[userId]) {
+        if (!(userId in data) || !data[userId]) {
           console.log(`User ${userId} not found`);
           return err(new Error(`User ${userId} not found`));
         }
