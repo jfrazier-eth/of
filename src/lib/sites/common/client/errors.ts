@@ -32,8 +32,9 @@ const formatHeaders = (
   isRequest: boolean,
   headers?: Record<string, string | string[] | undefined>
 ) => {
-  return `${isRequest ? "REQ" : "RES"} HEADERS: ${headers ? JSON.stringify(headers, null, 2) : "NONE"
-    }`;
+  return `${isRequest ? "REQ" : "RES"} HEADERS: ${
+    headers ? JSON.stringify(headers, null, 2) : "NONE"
+  }`;
 };
 
 export class RequestError extends Error {

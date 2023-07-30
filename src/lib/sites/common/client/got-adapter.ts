@@ -45,7 +45,7 @@ export const adapter: RequestAdapter<unknown, unknown> = async (request, expecte
 
     return parseClientError(options, response);
   } catch (err) {
-    console.error('Got request error', err);
+    console.error("Got request error", err);
     return parseClientError(options, err);
   }
 };
