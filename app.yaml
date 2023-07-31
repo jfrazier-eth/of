@@ -29,3 +29,5 @@ env_variables:
   DEPLOY_ENV: prod
 beta_settings:
   cloud_sql_instances: seductive-394121:us-east1:postgres
+vpc_access_connector:
+  name: projects/seductive-394121/locations/us-east1/connectors/default

@@ -31,6 +31,7 @@ export const generateResponse = async (settings: OFSettings, data: GenerateChatR
       json: chatRequestBody,
       headers: {
         'x-api-key': apiKey,
+        "Content-Type": "application/json",
       }
     });
 
