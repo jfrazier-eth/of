@@ -1,7 +1,7 @@
 {
   "name": "OnlyAgent",
   "description": "Supercharge your OnlyFans page & drive more PPV sales with the power of AI",
-  "version": "1.0",
+  "version": "0.0.1",
   "manifest_version": 2,
   "icons": {
     "16": "icon.png",
@@ -12,7 +12,6 @@
     "scripting",
     "storage",
     "webRequest",
-    "webRequestBlocking",
     "*://onlyfans.com/*"
   ],
   "background": {

@@ -4,73 +4,43 @@ import { config } from "@/backend/config";
 import { PostRequest, UserSiteAuthResponse } from "@/backend/controllers/types";
 import { getSettings } from "@/backend/lib/settings/of";
 import { OFSettings } from "@/backend/lib/settings/of/types";
-import * as OpenAI from "@/lib/open-ai";
 import { getClient } from "@/sites/common/client";
 import { parseError } from "@/utils/parse-error";
 
 import { transformRequest } from "./transform-request";
 import { GenerateChatRequestBody, GenerateChatResponseBody } from "./types";
+import { AIChatResponseBody } from "@/backend/routes/api/ai/chat/types";
 
 export const generateResponse = async (settings: OFSettings, data: GenerateChatRequestBody) => {
   try {
+    const chatRequestBody = transformRequest({
+      user: data.user,
+      chat: data.chat,
+      isPPV: data.isPPV,
+    }, {
+      customScript: settings.settings.generativeMessaging.script,
+      emojis: settings.settings.generativeMessaging.emojis,
+    })
     const client = getClient({
       responseType: "json",
     });
-
-    const apiKey = config.openAI.apiKey;
-    const chatCompletionRequest = transformRequest(
-      {
-        user: data.user,
-        chat: data.chat,
-        isPPV: data.isPPV,
-      },
-      {
-        customScript: settings.settings.generativeMessaging.script,
-        emojis: settings.settings.generativeMessaging.emojis,
-      },
-      {
-        model: "gpt-3.5-turbo",
+    const apiKey = config.server.apiKey;
+    const baseUrl = config.server.apiUrl;
+    const url = new URL('/api/ai/chat', baseUrl);
+    const response = await client.post<AIChatResponseBody>(url, {
+      json: chatRequestBody,
+      headers: {
+        'x-api-key': apiKey,
       }
-    );
-
-    const response = await OpenAI.ChatCompletion.generateCompletion(
-      client,
-      apiKey,
-      chatCompletionRequest
-    );
+    });
 
     if (response.isErr()) {
       return err(response.error);
     }
 
-    const { usage, choices } = response.value;
+    const { body } = response.value;
 
-    const pricing = OpenAI.MODEL_PRICING[chatCompletionRequest.model];
-    const inputCost = pricing.inputPricePer1KTokens * (usage.prompt_tokens / 1000);
-    const outputCost = pricing.outputPricePer1KTokens * (usage.completion_tokens / 1000);
-
-    const cost = inputCost + outputCost;
-
-    const responseMessage = choices[0].message;
-
-    let message = responseMessage.content;
-    // try {
-    //   message = JSON.parse(responseMessage.content).content;
-    // } catch (err) {
-    //   console.error(`Failed to parse response message: ${err}`);
-    //   message = responseMessage.content.split('content": "')[1];
-    // }
-    if (!message) {
-      return err(new Error("Failed to parse response message"));
-    }
-    return ok({
-      cost: {
-        input: inputCost,
-        output: outputCost,
-        total: cost,
-      },
-      message,
-    });
+    return ok(body);
   } catch (err) {
     return parseError(err);
   }

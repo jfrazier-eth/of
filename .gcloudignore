@@ -14,7 +14,6 @@
 .gitignore
 
 ci
-src
 .git
 .next
 ext-dist

@@ -1,30 +1,31 @@
 service: default
-runtime: nodejs
-env: flex
-entrypoint: pnpm start
+runtime: nodejs16
+env: standard
+instance_class: F1
+handlers:
+  - url: /.*
+    secure: always
+    redirect_http_response_code: 301
+    script: auto
 automatic_scaling:
-  min_num_instances: 1
-  max_num_instances: 1
-  cool_down_period_sec: 180
-  cpu_utilization:
-    target_utilization: 0.95
-resources:
-  cpu: 2
-  memory_gb: 8
-  disk_size_gb: 10
+  target_cpu_utilization: 0.75
+  min_instances: 1
+  max_instances: 5
+  min_pending_latency: 30ms
+  max_pending_latency: automatic
+  max_concurrent_requests: 80
 readiness_check:
   app_start_timeout_sec: 1800
 env_variables:
   API_ENABLED: 1
-  OF_POLL_SETTINGS_QUEUE: 1
-  OF_POLL_SETTINGS_CONCURRENCY: 1
+  OF_POLL_SETTINGS_QUEUE: 0
+  OF_POLL_SETTINGS_CONCURRENCY: 0
   OF_POLL_SETTINGS_SCHEDULE: '* * * * *'
-  OF_NEW_MESSAGE_QUEUE: 1
-  OF_NEW_MESSAGE_CONCURRENCY: 5
-  OF_RESPOND_QUEUE: 1
-  OF_RESPOND_CONCURRENCY: 5
+  OF_NEW_MESSAGE_QUEUE: 0
+  OF_NEW_MESSAGE_CONCURRENCY: 0
+  OF_RESPOND_QUEUE: 0
+  OF_RESPOND_CONCURRENCY: 0
+  API_URL: "https://api.onlyagent.app/"
   DEPLOY_ENV: prod
 beta_settings:
   cloud_sql_instances: seductive-394121:us-east1:postgres
-vpc_access_connector:
-  name: projects/seductive-394121/global/networks/default

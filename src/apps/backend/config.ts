@@ -25,13 +25,11 @@ export const config = {
   redis: {
     connectionUrl: getEnvVariable("REDIS_URL"),
   },
-  mongo: {
-    connectionUrl: getEnvVariable("MONGO_URL"),
-  },
   server: {
     enabled: Boolean(Number(getEnvVariable("API_ENABLED"))),
-    port: Number(getOptionalEnvVariable("PORT", "7777")),
+    port: Number(getOptionalEnvVariable("PORT", "8888")),
     apiKey: getEnvVariable("API_KEY"),
+    apiUrl: getEnvVariable("API_URL")
   },
   openAI: {
     apiKey: getEnvVariable("OPEN_AI_API_KEY"),

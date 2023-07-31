@@ -1,0 +1,31 @@
+service: queues
+runtime: nodejs
+env: flex
+entrypoint: pnpm start
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 1
+  cool_down_period_sec: 180
+  cpu_utilization:
+    target_utilization: 0.95
+resources:
+  cpu: 1
+  memory_gb: 4
+  disk_size_gb: 10
+readiness_check:
+  app_start_timeout_sec: 1800
+env_variables:
+  API_ENABLED: 0
+  OF_POLL_SETTINGS_QUEUE: 1
+  OF_POLL_SETTINGS_CONCURRENCY: 1
+  OF_POLL_SETTINGS_SCHEDULE: '* * * * *'
+  OF_NEW_MESSAGE_QUEUE: 1
+  OF_NEW_MESSAGE_CONCURRENCY: 5
+  OF_RESPOND_QUEUE: 1
+  OF_RESPOND_CONCURRENCY: 5
+  API_URL: "https://api.onlyagent.app/"
+  DEPLOY_ENV: prod
+beta_settings:
+  cloud_sql_instances: seductive-394121:us-east1:postgres
+vpc_access_connector:
+  name: projects/seductive-394121/global/networks/default
