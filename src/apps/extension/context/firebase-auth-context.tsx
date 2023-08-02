@@ -1,5 +1,10 @@
-import { Auth } from "firebase/auth";
+import firebase from 'firebase';
+
+const initializeApp = firebase.initializeApp;
+type Auth = firebase.auth.Auth;
+const getAuth = firebase.auth;
 import { ReactNode, createContext, useEffect, useState } from "react";
+import firebaseui from 'firebaseui';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD7u12-_sxcnbWO198olpP_rrHcagFUDGY",
@@ -27,17 +32,31 @@ const FirebaseAuthProvider = ({ children }: { children: ReactNode }) => {
   const [ui, setUi] = useState<any | null>(null);
   const [app, setApp] = useState<any | null>(null);
   const [auth, setAuth] = useState<Auth | null>(null);
+
+  // useEffect(() => {
+  //   const load = async () => {
+  //     firebaseUIAuth = (await import("firebaseui"));
+  //   };
+
+  //   if (window && !firebaseUIAuth) {
+  //     load();
+  //   }
+  // }, [firebaseUIAuth]);
+
   useEffect(() => {
-    if (!!window && !ui && !app && !auth && "firebaseui" in window && "firebase" in window) {
-      const windowFirebase = window.firebase as any;
-      const firebaseApp: any = windowFirebase.initializeApp(firebaseConfig);
-      const auth = windowFirebase.auth();
-      const ui = new (window.firebaseui as any).auth.AuthUI(auth);
+    if (!firebaseui) {
+      return;
+    }
+    if (!!window && !ui && !app && !auth) {
+      const firebaseApp = initializeApp(firebaseConfig);
+      const auth = getAuth(firebaseApp);
+
+      const ui = new firebaseui.auth.AuthUI(auth);
       setUi(ui);
       setApp(firebaseApp);
       setAuth(auth);
     }
-  }, [app, ui]);
+  }, [app, ui, firebaseui]);
 
   return (
     <FirebaseAuthContext.Provider

@@ -1,27 +1,25 @@
 {
+  "manifest_version": 3,
   "name": "OnlyAgent",
-  "description": "Supercharge your OnlyFans page & drive more PPV sales with the power of AI",
   "version": "0.0.1",
-  "manifest_version": 2,
-  "icons": {
-    "16": "icon.png",
-    "48": "icon.png"
-  },
+  "description": "Supercharge your OnlyFans page & drive more PPV sales with the power of AI",
   "permissions": [
-    "cookies",
-    "scripting",
     "storage",
-    "webRequest",
+    "cookies"
+  ],
+  "host_permissions": [
     "*://onlyfans.com/*"
   ],
-  "background": {
-    "scripts": [
-      "background.js"
-    ],
-    "persistent": true
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png"
+    }
   },
-  "browser_action": {
-    "default_popup": "index.html"
+  "background": {
+    "service_worker": "background.mjs",
+    "type": "module"
   },
   "content_scripts": [
     {
@@ -37,8 +35,24 @@
       ]
     }
   ],
-  "content_security_policy": "script-src 'self' https://www.gstatic.com/; object-src 'self'",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
   "web_accessible_resources": [
-    "generate.svg"
-  ]
+    {
+      "matches": [
+        // "*://onlyfans.com/*"
+        "https://*/*",
+        "http://*/*"
+      ],
+      "resources": [
+        "generate.svg",
+        "next/static/chunks/*"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png"
+  }
 }

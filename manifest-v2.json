@@ -1,0 +1,44 @@
+{
+  "name": "OnlyAgent",
+  "description": "Supercharge your OnlyFans page & drive more PPV sales with the power of AI",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png"
+  },
+  "permissions": [
+    "cookies",
+    "scripting",
+    "storage",
+    "webRequest",
+    "*://onlyfans.com/*"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_popup": "index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://onlyfans.com/*",
+        "https://onlyfans.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "inject.css"
+      ]
+    }
+  ],
+  "content_security_policy": "script-src 'self' https://www.gstatic.com/; object-src 'self'",
+  "web_accessible_resources": [
+    "generate.svg"
+  ]
+}

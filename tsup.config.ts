@@ -17,6 +17,7 @@ export default defineConfig((options) => {
         tsconfig: "./tsconfig.background.json",
         noExternal: noExternal,
         outDir: "ext-dist",
+        format: "esm"
       };
     }
     default: {

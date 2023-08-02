@@ -21,6 +21,10 @@ export const sendMessage = async <T extends Message>(msg: T) => {
     return await new Promise<Result<ResponsesByKind[T["kind"]], HandlerError>>(
       (resolve, reject) => {
         chrome.runtime.sendMessage(msg, (response) => {
+          if (!response) {
+            resolve(err(new Error(`BACKGROUND ERROR`)));
+            return;
+          }
           // we need to map these back to results or else they
           // won't have methods attached to them
           if (!response.isOk) {

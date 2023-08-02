@@ -1,6 +1,5 @@
-import { EmailAuthProvider } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
-
+import firebase from "firebase"
 import { Data } from "../context/data";
 import { FirebaseAuthContext } from "../context/firebase-auth-context";
 import { SITE_NAME, TARGET_SITE_NAME } from "../lib/constants";
@@ -15,9 +14,9 @@ const Login: React.FC<{ userInfo: Data<UserInfo> }> = ({ userInfo }) => {
       if (!userInfo.value.isLoggedIn) {
         setIsUIDisplayed(true);
         ui.start("#firebaseui-auth-container", {
-          signInOptions: [EmailAuthProvider.PROVIDER_ID],
+          signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
           callbacks: {
-            signInSuccessWithAuthResult: function (auth: any) {
+            signInSuccessWithAuthResult: function(auth: any) {
               setIsUIDisplayed(false);
               return false;
             },

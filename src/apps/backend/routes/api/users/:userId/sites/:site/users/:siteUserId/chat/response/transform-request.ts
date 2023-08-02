@@ -1,4 +1,5 @@
 import { AIChatRequestBody } from "@/backend/routes/api/ai/chat/types";
+
 import { GenerateChatRequestBody } from "./types";
 
 export const transformRequest = (
@@ -6,9 +7,8 @@ export const transformRequest = (
   settings: {
     customScript?: string;
     emojis?: string;
-  },
+  }
 ): AIChatRequestBody => {
-
   const { user, chat, isPPV } = request;
 
   const messages = chat.messages.map((message) => ({
@@ -31,6 +31,6 @@ export const transformRequest = (
     messages,
     customScript,
     emojis,
-    isPPV: isPPV
+    isPPV: isPPV,
   };
 };
