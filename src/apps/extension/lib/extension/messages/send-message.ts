@@ -1,4 +1,5 @@
 import { Result, err, ok } from "neverthrow";
+import { Context } from "../../api/context";
 
 import { MessageHandlers } from "../background/message-handlers";
 import { Handler, HandlerError } from "../background/message-handlers/types";
@@ -6,16 +7,16 @@ import { isBackground } from "../utils/is-background";
 import { Message } from "./index";
 import { MessagesByKind, ResponsesByKind } from "./mappings";
 
-export const sendMessage = async <T extends Message>(msg: T) => {
+
+export const sendMessage = async <T extends Message>(msg: T, context?: Context) => {
   if (!chrome.runtime) {
     throw new Error("No chrome runtime");
   }
 
   if (isBackground()) {
-    const { context } = await import("../background/context");
     type Msg = typeof msg;
     const handler = (MessageHandlers[msg.kind] as unknown) as Handler<Msg>;
-    const response = await handler((msg as unknown) as MessagesByKind[Msg["kind"]], context);
+    const response = await handler((msg as unknown) as MessagesByKind[Msg["kind"]], context ?? Context.getInstance());
     return response;
   } else {
     return await new Promise<Result<ResponsesByKind[T["kind"]], HandlerError>>(

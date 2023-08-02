@@ -1,9 +1,10 @@
 // import { saveAuth } from "../lib/auth/index";
 // import { Auth } from "../lib/auth/types";
-import { context } from "../lib/extension/background/context";
+
+import { Context } from "../lib/api/context";
 import { registerMessageHandler } from "../lib/extension/background/message-handlers/index";
 
-registerMessageHandler(context);
+registerMessageHandler(Context.getInstance());
 
 /**
  * attempt to update auth when a request is made
