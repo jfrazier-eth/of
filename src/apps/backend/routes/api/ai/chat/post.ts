@@ -1,11 +1,15 @@
+import { config } from "@/backend/config";
 import { InternalAuthResponse, PostRequest } from "@/backend/controllers/types";
-import { transformRequest } from "./transform-request";
-import { AIChatRequestBody } from "./types";
 import * as OpenAI from "@/lib/open-ai";
 import { getClient } from "@/sites/common/client";
-import { config } from "@/backend/config";
 
-export const post = async (req: PostRequest<AIChatRequestBody>, res: InternalAuthResponse<unknown>) => {
+import { transformRequest } from "./transform-request";
+import { AIChatRequestBody } from "./types";
+
+export const post = async (
+  req: PostRequest<AIChatRequestBody>,
+  res: InternalAuthResponse<unknown>
+) => {
   try {
     const { body } = req;
 
@@ -46,4 +50,4 @@ export const post = async (req: PostRequest<AIChatRequestBody>, res: InternalAut
     console.error(err);
     return res.sendStatus(500);
   }
-}
+};

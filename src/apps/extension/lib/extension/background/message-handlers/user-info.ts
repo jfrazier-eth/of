@@ -53,10 +53,7 @@ const setCachedUser = async (user: StoredUserInfo) => {
   });
 };
 
-export const handleActiveUserInfoMessage: Handler<ActiveUserInfoMessage> = async (
-  message,
-  context
-) => {
+export const getActiveUserInfo = async (): Promise<ReturnType<Handler<ActiveUserInfoMessage>>> => {
   try {
     const user = await getActiveUser();
     if (user?.api) {
@@ -83,6 +80,13 @@ export const handleActiveUserInfoMessage: Handler<ActiveUserInfoMessage> = async
   } catch (err) {
     return parseError(err);
   }
+}
+
+export const handleActiveUserInfoMessage: Handler<ActiveUserInfoMessage> = async (
+  message,
+  context
+) => {
+  return await getActiveUserInfo();
 };
 
 export const handleUserInfoMessage: Handler<UserInfoMessage> = async (message, context) => {

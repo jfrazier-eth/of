@@ -1,12 +1,9 @@
 import { clone } from "@/utils/clone";
 
 import { Auth } from "../auth/types";
-import { MessageHandlers } from "../extension/background/message-handlers";
-import { Handler } from "../extension/background/message-handlers/types";
-import { Message } from "../extension/messages";
-import { MessagesByKind, ResponsesByKind } from "../extension/messages/mappings";
-import { sendMessage } from "../extension/messages/send-message";
-import { isBackground } from "../extension/utils/is-background";
+import { API_BASE_URL } from "../constants";
+import { getActiveUserInfo } from "../extension/background/message-handlers/user-info";
+
 import { BrowserOFParamsHandler } from "./of-params-handler";
 
 export class Context {
@@ -15,6 +12,14 @@ export class Context {
   protected _user: { apiKey: string; userId: string } | null;
 
   protected _ofAuth: Auth | null;
+
+  protected static instance: Context;
+  static getInstance() {
+    if (!Context.instance) {
+      Context.instance = new Context(API_BASE_URL);
+    }
+    return Context.instance;
+  }
 
   public get baseUrl(): URL {
     return new URL(this._baseUrl.toString());
@@ -48,14 +53,14 @@ export class Context {
     this._baseUrl = new URL(baseUrl);
     this._user = null;
     this._ofAuth = null;
-    this.ofParams = new BrowserOFParamsHandler(null);
+    this.ofParams = new BrowserOFParamsHandler(this, null);
     this._isInitialized = this._init();
     this.isReady = Promise.all([this._isInitialized, this.ofParams.isReady]);
   }
 
   protected async _init() {
     try {
-      const response = await sendMessage({ kind: "ACTIVE_USER_INFO" });
+      const response = await getActiveUserInfo();
       if (response.isErr()) {
         throw response.error;
       }
@@ -92,23 +97,4 @@ export class Context {
     }
     return {};
   }
-
-  sendMessage = async <T extends Message>(msg: T) => {
-    if (!chrome.runtime) {
-      throw new Error("No chrome runtime");
-    }
-
-    if (isBackground()) {
-      type Msg = typeof msg;
-      const handler = (MessageHandlers[msg.kind] as unknown) as Handler<Msg>;
-      const response = await handler((msg as unknown) as MessagesByKind[Msg["kind"]], this);
-      return response;
-    } else {
-      return await new Promise<ResponsesByKind[T["kind"]]>((resolve, reject) => {
-        chrome.runtime.sendMessage(msg, (response) => {
-          resolve(response);
-        });
-      });
-    }
-  };
 }

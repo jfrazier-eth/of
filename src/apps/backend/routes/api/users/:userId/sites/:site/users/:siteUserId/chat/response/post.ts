@@ -4,35 +4,38 @@ import { config } from "@/backend/config";
 import { PostRequest, UserSiteAuthResponse } from "@/backend/controllers/types";
 import { getSettings } from "@/backend/lib/settings/of";
 import { OFSettings } from "@/backend/lib/settings/of/types";
+import { AIChatResponseBody } from "@/backend/routes/api/ai/chat/types";
 import { getClient } from "@/sites/common/client";
 import { parseError } from "@/utils/parse-error";
 
 import { transformRequest } from "./transform-request";
 import { GenerateChatRequestBody, GenerateChatResponseBody } from "./types";
-import { AIChatResponseBody } from "@/backend/routes/api/ai/chat/types";
 
 export const generateResponse = async (settings: OFSettings, data: GenerateChatRequestBody) => {
   try {
-    const chatRequestBody = transformRequest({
-      user: data.user,
-      chat: data.chat,
-      isPPV: data.isPPV,
-    }, {
-      customScript: settings.settings.generativeMessaging.script,
-      emojis: settings.settings.generativeMessaging.emojis,
-    })
+    const chatRequestBody = transformRequest(
+      {
+        user: data.user,
+        chat: data.chat,
+        isPPV: data.isPPV,
+      },
+      {
+        customScript: settings.settings.generativeMessaging.script,
+        emojis: settings.settings.generativeMessaging.emojis,
+      }
+    );
     const client = getClient({
       responseType: "json",
     });
     const apiKey = config.server.apiKey;
     const baseUrl = config.server.apiUrl;
-    const url = new URL('/api/ai/chat', baseUrl);
+    const url = new URL("/api/ai/chat", baseUrl);
     const response = await client.post<AIChatResponseBody>(url, {
       json: chatRequestBody,
       headers: {
-        'x-api-key': apiKey,
+        "x-api-key": apiKey,
         "Content-Type": "application/json",
-      }
+      },
     });
 
     if (response.isErr()) {

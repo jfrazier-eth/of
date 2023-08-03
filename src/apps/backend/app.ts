@@ -4,7 +4,7 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import { config } from "./config";
 import { parseHeaders } from "./controllers/parse-headers";
 import { router as apiRouter } from "./routes/api";
-import { router as privacyRouter } from "./routes/privacy"
+import { router as privacyRouter } from "./routes/privacy";
 
 const startApp = () => {
   if (config.server.enabled) {
@@ -15,7 +15,7 @@ const startApp = () => {
       })
     );
     app.use(express.json());
-    app.use('/', privacyRouter)
+    app.use("/", privacyRouter);
     app.use("/", parseHeaders, apiRouter);
 
     app.use((_req, res, _next) => {

@@ -10,7 +10,6 @@ const firebaseConfig = {
   appId: "1:49087855959:web:f54e70d6ed1b17aac09212",
 };
 
-// Initialize Firebase
 interface FirebaseAuthContextType {
   ui: any | null;
   app: any | null;

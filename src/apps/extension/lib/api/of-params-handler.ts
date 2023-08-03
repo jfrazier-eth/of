@@ -2,6 +2,7 @@ import { ClientOFDynamicParams } from "@/backend/routes/api/users/:userId/sites/
 import { ParamsHandler } from "@/sites/of/params-handler";
 
 import { sendMessage } from "../extension/messages";
+import { Context } from "./context";
 
 export class BrowserOFParamsHandler implements ParamsHandler {
   protected _revision: string | null;
@@ -33,7 +34,7 @@ export class BrowserOFParamsHandler implements ParamsHandler {
     }
   }
 
-  constructor(revision: string | null) {
+  constructor(protected _context: Context, revision: string | null) {
     this._revision = revision;
     this._dynamicParams = null;
     this.isReady = this._init();
@@ -42,7 +43,7 @@ export class BrowserOFParamsHandler implements ParamsHandler {
   protected async _init() {
     const response = await sendMessage({
       kind: "GET_OF_DYNAMIC_PARAMS",
-    });
+    }, this._context);
     if (response.isErr()) {
       console.error(response.error);
       return;
@@ -57,7 +58,7 @@ export class BrowserOFParamsHandler implements ParamsHandler {
       try {
         const response = await sendMessage({
           kind: "GET_OF_DYNAMIC_PARAMS",
-        });
+        }, this._context);
         if (response.isErr()) {
           throw response.error;
         }
