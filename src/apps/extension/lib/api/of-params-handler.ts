@@ -41,9 +41,12 @@ export class BrowserOFParamsHandler implements ParamsHandler {
   }
 
   protected async _init() {
-    const response = await sendMessage({
-      kind: "GET_OF_DYNAMIC_PARAMS",
-    }, this._context);
+    const response = await sendMessage(
+      {
+        kind: "GET_OF_DYNAMIC_PARAMS",
+      },
+      this._context
+    );
     if (response.isErr()) {
       console.error(response.error);
       return;
@@ -56,9 +59,12 @@ export class BrowserOFParamsHandler implements ParamsHandler {
     if (this._dynamicParams === null) {
       console.log(`Refreshing dynamic params`);
       try {
-        const response = await sendMessage({
-          kind: "GET_OF_DYNAMIC_PARAMS",
-        }, this._context);
+        const response = await sendMessage(
+          {
+            kind: "GET_OF_DYNAMIC_PARAMS",
+          },
+          this._context
+        );
         if (response.isErr()) {
           throw response.error;
         }

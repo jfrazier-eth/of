@@ -3,7 +3,6 @@ import { clone } from "@/utils/clone";
 import { Auth } from "../auth/types";
 import { API_BASE_URL } from "../constants";
 import { getActiveUserInfo } from "../extension/background/message-handlers/user-info";
-
 import { BrowserOFParamsHandler } from "./of-params-handler";
 
 export class Context {

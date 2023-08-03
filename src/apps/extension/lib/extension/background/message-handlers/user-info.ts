@@ -80,7 +80,7 @@ export const getActiveUserInfo = async (): Promise<ReturnType<Handler<ActiveUser
   } catch (err) {
     return parseError(err);
   }
-}
+};
 
 export const handleActiveUserInfoMessage: Handler<ActiveUserInfoMessage> = async (
   message,
