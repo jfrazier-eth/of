@@ -34,7 +34,6 @@ const queues = Object.fromEntries(
 );
 
 export const registerMessageHandler = (context: Context) => {
-  console.log("Registering message handler");
   onMessage(async (message, sender, sendResponse) => {
     const handler = MessageHandlers[message.kind] as Handler<typeof message>;
     await queues[message.kind].add(async () => {

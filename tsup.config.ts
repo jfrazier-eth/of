@@ -2,7 +2,7 @@ import { defineConfig } from "tsup";
 
 export default defineConfig((options) => {
   const build = process.env["BUILD"];
-  const noExternal = ['p-queue', 'neverthrow'];
+  const noExternal = ['p-queue', 'neverthrow', 'sha1'];
 
   switch (build) {
     case "content": {

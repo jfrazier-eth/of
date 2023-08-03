@@ -5,7 +5,8 @@
   "description": "Supercharge your OnlyFans page & drive more PPV sales with the power of AI",
   "permissions": [
     "storage",
-    "cookies"
+    "cookies",
+    "webRequest"
   ],
   "host_permissions": [
     "*://onlyfans.com/*"

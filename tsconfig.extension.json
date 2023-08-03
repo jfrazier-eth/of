@@ -13,6 +13,8 @@
     "./src/sites/common/client/got-adapter.ts",
     "src/creds/",
     "jest.config.ts",
-    "**.spec.ts"
+    "**.spec.ts",
+    "src/apps/extension/scripts",
+    "src/apps/extension/firebasejs"
   ]
 }
