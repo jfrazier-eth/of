@@ -42,13 +42,10 @@
   "web_accessible_resources": [
     {
       "matches": [
-        // "*://onlyfans.com/*"
-        "https://*/*",
-        "http://*/*"
+        "*://onlyfans.com/*"
       ],
       "resources": [
         "generate.svg",
-        "next/static/chunks/*"
       ]
     }
   ],
