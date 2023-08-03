@@ -35,6 +35,10 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
               }
             }
 
+            if (!xbc && !sess && !authId) {
+              return;
+            }
+
             const auth: Auth = {
               xbc,
               authId,
