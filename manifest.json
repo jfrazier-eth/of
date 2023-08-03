@@ -45,7 +45,7 @@
         "*://onlyfans.com/*"
       ],
       "resources": [
-        "generate.svg",
+        "generate.svg"
       ]
     }
   ],
