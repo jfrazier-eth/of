@@ -15,20 +15,26 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     const url = details.url;
     let xbc = '';
     let authId = '';
-    let sess = "";
+    let sess = '';
+    let userAgent = '';
+    let authUid: string | null = null;
     for (const requestHeader of requestHeaders) {
       if (requestHeader.name === "x-bc") {
         xbc = requestHeader.value ?? '';
       } else if (requestHeader.name === 'user-id') {
         authId = requestHeader.value ?? '';
+      } else if (requestHeader.name === 'user-agent') {
+        userAgent = requestHeader.value ?? '';
       }
     }
 
-    if (xbc && authId) {
+    if (xbc && authId && userAgent) {
       chrome.cookies.getAll({ url }, function(cookies) {
         for (const cookie of cookies) {
           if (cookie.name === 'sess') {
             sess = cookie.value;
+          } else if (cookie.name === 'auth_uid') {
+            authUid = cookie.value;
           }
         }
 
@@ -37,6 +43,8 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
             xbc,
             authId,
             sess,
+            userAgent,
+            authUid
           };
           context.isReady
             .then(() => {

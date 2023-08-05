@@ -6,6 +6,8 @@ export const transformPGOFLogin = (login: PGOFLogin): OFLogin => {
       xbc: login.xbc,
       sess: login.sess,
       authId: login.site_user_id,
+      authUid: login.auth_uid,
+      userAgent: login.user_agent,
     },
     siteUserId: login.site_user_id,
     userId: login.user_id,
@@ -22,5 +24,7 @@ export const transformOFLogin = (login: OFLogin): PGOFLogin => {
     user_id: login.userId,
     created_at: new Date(login.createdAt),
     updated_at: new Date(login.updatedAt),
+    auth_uid: login.params.authUid || null,
+    user_agent: login.params.userAgent,
   };
 };

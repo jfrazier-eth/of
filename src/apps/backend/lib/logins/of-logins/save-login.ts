@@ -1,12 +1,10 @@
 import { pg, pgp } from "@/backend/db/postgres";
+import { UserSessionParams } from "@/sites/of/context";
 
 import { transformOFLogin } from "./pg-transformer";
 import { OFLogin } from "./types";
 
-export type SaveLoginParams = {
-  xbc: string;
-  sess: string;
-  authId: string;
+export type SaveLoginParams = UserSessionParams & {
   userId: string;
   createdAt?: OFLogin["createdAt"];
 };
@@ -17,6 +15,8 @@ export const saveLogin = async (params: SaveLoginParams) => {
       xbc: params.xbc,
       sess: params.sess,
       authId: params.authId,
+      authUid: params.authId,
+      userAgent: params.userAgent
     },
     siteUserId: params.authId,
     userId: params.userId,

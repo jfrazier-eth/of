@@ -62,6 +62,7 @@ async function main() {
       xbc,
       sess,
       authUid: null,
+      userAgent: Browsers.brave.headers.userAgent,
     },
     {
       baseUrl: "https://onlyfans.com",

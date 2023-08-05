@@ -22,6 +22,7 @@ export const post: PostLogin<Site> = async (req, res) => {
           body.params &&
           body.params.xbc &&
           body.params.sess &&
+          body.params.userAgent &&
           body.params.authId
         ) {
           const sess = new OF.SessionContext(
@@ -29,7 +30,8 @@ export const post: PostLogin<Site> = async (req, res) => {
               xbc: body.params.xbc,
               sess: body.params.sess,
               authId: body.params.authId,
-              authUid: null,
+              authUid: body.params.authUid || null,
+              userAgent: body.params.userAgent,
             },
             {
               baseUrl: OF.OF_BASE_URL,
@@ -48,9 +50,7 @@ export const post: PostLogin<Site> = async (req, res) => {
               return res.sendStatus(401);
             }
             await OFLogins.saveLogin({
-              xbc: body.params.xbc,
-              sess: body.params.sess,
-              authId: body.params.authId,
+              ...sess.userParams,
               userId: res.locals.userId,
             });
             return res.sendStatus(200);

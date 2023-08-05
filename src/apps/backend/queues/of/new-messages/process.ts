@@ -47,7 +47,8 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
       xbc: login.params.xbc,
       authId: login.params.authId,
       sess: login.params.sess,
-      authUid: null,
+      authUid: login.params.authUid,
+      userAgent: login.params.userAgent
     },
     {
       baseUrl: OF_BASE_URL,

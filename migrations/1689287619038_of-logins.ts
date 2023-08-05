@@ -15,6 +15,15 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       collation: 'pg_catalog."default"',
       notNull: true,
     },
+    auth_uid: {
+      type: "TEXT",
+      collation: 'pg_catalog."default"',
+    },
+    user_agent: {
+      type: "TEXT",
+      collation: 'pg_catalog."default"',
+      notNull: true,
+    },
     site_user_id: {
       type: "TEXT",
       collation: 'pg_catalog."default"',
@@ -24,6 +33,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       type: "char(16)",
       notNull: true,
     },
+
     created_at: {
       type: "timestamp",
       notNull: true,

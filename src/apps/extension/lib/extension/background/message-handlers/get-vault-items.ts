@@ -24,7 +24,8 @@ export const handleGetVaultItemsMessage: Handler<GetVaultItemsMessage> = async (
         xbc: ofAuth.xbc,
         sess: ofAuth.sess,
         authId: ofAuth.authId,
-        authUid: null,
+        authUid: ofAuth.authUid,
+        userAgent: ofAuth.userAgent,
       },
       {
         baseUrl: OF_BASE_URL,

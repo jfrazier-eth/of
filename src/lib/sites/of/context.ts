@@ -9,6 +9,7 @@ export interface UserSessionParams {
   sess: string;
   authId: string;
   authUid: string | null;
+  userAgent: string;
 }
 
 export class SessionContext extends Context {
@@ -34,15 +35,15 @@ export class SessionContext extends Context {
   public async getHeaders(url: URL): Promise<Record<string, string>> {
     const { sign, time, appToken } = await this.getDynamicHeaders(url);
 
-    const browserHeaders = this.browser ? this.browser.headers : {};
-
+    // remove browser headers until we can support all browsers
+    // const browserHeaders = this.browser ? this.browser.headers : {};
     return {
-      ...browserHeaders,
       Sign: sign,
       Time: `${time}`,
       "X-Bc": this._userParams.xbc,
       "App-Token": appToken,
-      Cookie: `sess=${this._userParams.sess}; auth_id=${this._userParams.authId}`,
+      "User-Agent": this._userParams.userAgent,
+      Cookie: `sess=${this._userParams.sess}; auth_id=${this._userParams.authId}${this._userParams.authUid !== null ? `; auth_uid=${this._userParams.authUid}` : ""}`,
     };
   }
 
