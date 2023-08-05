@@ -57,5 +57,7 @@ export async function up(pgm: MigrationBuilder) {
 }
 
 export async function down(pgm: MigrationBuilder) {
-  pgm.dropTable("of_ppvs");
+  pgm.dropType("media_t");
+  pgm.dropTable("user_media");
+
 }

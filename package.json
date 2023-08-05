@@ -11,8 +11,8 @@
   },
   "type": "commonjs",
   "scripts": {
-    "deploy:server": "pnpm run build && gcloud app deploy app.yaml --project=seductive-394121",
-    "deploy:queues": "pnpm run build && gcloud app deploy app.queues.yaml --project=seductive-394121",
+    "deploy:server": "gcloud app deploy app.yaml --project=seductive-394121",
+    "deploy:queues": "gcloud app deploy app.queues.yaml --project=seductive-394121",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
     "build": "pnpm clean && tsc -p ./tsconfig.backend.json",
     "clean": "rimraf ./dist",

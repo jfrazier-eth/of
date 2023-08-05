@@ -7,4 +7,6 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
   pgm.createType("site_t", ["of"]);
 }
 
-export async function down(pgm: MigrationBuilder): Promise<void> {}
+export async function down(pgm: MigrationBuilder): Promise<void> {
+  pgm.dropType("site_t");
+}

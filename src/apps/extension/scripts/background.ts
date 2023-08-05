@@ -16,15 +16,13 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     let xbc = '';
     let authId = '';
     let sess = '';
-    let userAgent = '';
+    let userAgent = navigator.userAgent;
     let authUid: string | null = null;
     for (const requestHeader of requestHeaders) {
       if (requestHeader.name === "x-bc") {
         xbc = requestHeader.value ?? '';
       } else if (requestHeader.name === 'user-id') {
         authId = requestHeader.value ?? '';
-      } else if (requestHeader.name === 'user-agent') {
-        userAgent = requestHeader.value ?? '';
       }
     }
 
@@ -38,7 +36,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
           }
         }
 
-        if (xbc && sess && authId) {
+        if (xbc && sess && authId && userAgent) {
           const auth: Auth = {
             xbc,
             authId,
