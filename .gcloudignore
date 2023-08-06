@@ -22,6 +22,8 @@ tsconfig.tsbuildinfo
 docker-compose.yaml
 jest.config.ts
 .prettierrc
+only-agent
+only-agent.zip
 
 # Node.js dependencies:
 node_modules/

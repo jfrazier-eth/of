@@ -135,4 +135,5 @@ package-lock.json
 creds/
 ext-dist
 only-agent.zip
+only-agent
 .DS_Store
