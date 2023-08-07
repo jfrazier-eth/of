@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "OnlyAgent",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Supercharge your OnlyFans page & drive more PPV sales with the power of AI",
   "permissions": [
     "storage",
