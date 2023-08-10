@@ -1,9 +1,24 @@
 import { config as loadEnv } from "dotenv";
 import { ServiceAccount } from "firebase-admin";
+import { readFileSync } from 'fs';
+import { join } from "path";
 
-import prodServiceAccount from "../../creds/firebase-prod.json";
+
+let serviceAccount: ServiceAccount;
+
+const loadServiceAccount = (path: string) => {
+  console.log(`Loading service account from ${path}`);
+  const data = readFileSync(path, 'utf-8');
+  try {
+    return JSON.parse(data as string) as ServiceAccount;
+  } catch (e) {
+    throw new Error(`Failed to load service account`)
+  }
+}
+
 
 if (process.env.DEPLOY_ENV === "prod") {
+  serviceAccount = loadServiceAccount("/etc/secrets/firebase-prod.json");
   loadEnv({ path: ".env.production", override: true });
 
   switch (process.env.OF_APP) {
@@ -15,6 +30,9 @@ if (process.env.DEPLOY_ENV === "prod") {
       break;
   }
   console.log(`Loaded prod env`);
+} else {
+  const path = join(__dirname, "../../creds/firebase-prod.json");
+  serviceAccount = loadServiceAccount(path);
 }
 
 const getEnvVariable = (key: string) => {
@@ -47,7 +65,7 @@ export const config = {
     connectionUrl: getEnvVariable("DATABASE_URL"),
   },
   firebase: {
-    serviceAccount: prodServiceAccount as ServiceAccount,
+    serviceAccount: serviceAccount,
   },
   ofApi: {
     apiKey: getEnvVariable("OF_API_API_KEY"),
