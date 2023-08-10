@@ -16,7 +16,7 @@ export const saveLogin = async (params: SaveLoginParams) => {
       sess: params.sess,
       authId: params.authId,
       authUid: params.authUid,
-      userAgent: params.userAgent
+      userAgent: params.userAgent,
     },
     siteUserId: params.authId,
     userId: params.userId,

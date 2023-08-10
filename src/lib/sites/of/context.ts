@@ -43,7 +43,9 @@ export class SessionContext extends Context {
       "X-Bc": this._userParams.xbc,
       "App-Token": appToken,
       "User-Agent": this._userParams.userAgent,
-      Cookie: `sess=${this._userParams.sess}; auth_id=${this._userParams.authId}${this._userParams.authUid !== null ? `; auth_uid=${this._userParams.authUid}` : ""}`,
+      Cookie: `sess=${this._userParams.sess}; auth_id=${this._userParams.authId}${
+        this._userParams.authUid !== null ? `; auth_uid=${this._userParams.authUid}` : ""
+      }`,
     };
   }
 

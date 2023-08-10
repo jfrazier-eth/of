@@ -6,11 +6,11 @@ import prodServiceAccount from "../../creds/firebase-prod.json";
 if (process.env.DEPLOY_ENV === "prod") {
   loadEnv({ path: ".env.production", override: true });
 
-  switch(process.env.OF_APP) {
-    case 'QUEUES':
+  switch (process.env.OF_APP) {
+    case "QUEUES":
       loadEnv({ path: ".env.queues", override: true });
       break;
-    case 'SERVER':
+    case "SERVER":
       loadEnv({ path: ".env.server", override: true });
       break;
   }

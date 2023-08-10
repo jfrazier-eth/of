@@ -10,28 +10,28 @@ registerMessageHandler(context);
  * attempt to update auth when a request is made
  */
 chrome.webRequest.onBeforeSendHeaders.addListener(
-  function(details) {
+  function (details) {
     const requestHeaders = details.requestHeaders ?? [];
     const url = details.url;
-    let xbc = '';
-    let authId = '';
-    let sess = '';
+    let xbc = "";
+    let authId = "";
+    let sess = "";
     let userAgent = navigator.userAgent;
     let authUid: string | null = null;
     for (const requestHeader of requestHeaders) {
       if (requestHeader.name === "x-bc") {
-        xbc = requestHeader.value ?? '';
-      } else if (requestHeader.name === 'user-id') {
-        authId = requestHeader.value ?? '';
+        xbc = requestHeader.value ?? "";
+      } else if (requestHeader.name === "user-id") {
+        authId = requestHeader.value ?? "";
       }
     }
 
     if (xbc && authId && userAgent) {
-      chrome.cookies.getAll({ url }, function(cookies) {
+      chrome.cookies.getAll({ url }, function (cookies) {
         for (const cookie of cookies) {
-          if (cookie.name === 'sess') {
+          if (cookie.name === "sess") {
             sess = cookie.value;
-          } else if (cookie.name === 'auth_uid') {
+          } else if (cookie.name === "auth_uid") {
             authUid = cookie.value;
           }
         }
@@ -42,7 +42,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
             authId,
             sess,
             userAgent,
-            authUid
+            authUid,
           };
           context.isReady
             .then(() => {
