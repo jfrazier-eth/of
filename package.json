@@ -22,6 +22,8 @@
     "test": "node node_modules/jest/bin/jest.js",
     "migrate": "ts-node --project tsconfig.migrations.json node_modules/node-pg-migrate/bin/node-pg-migrate",
     "start:script": "pnpm build && node -r dotenv/config -r module-alias/register ./dist/index.js",
+    "admin:build": "pnpm admin:clean && BUILD=admin tsup ./src/apps/admin/index.tsx && cp ./src/apps/admin/index.html ./admin-dist/index.html",
+    "admin:clean": "rimraf ./admin-dist",
     "ext:dev": "next dev",
     "ext:start": "next start",
     "ext:clean": "rimraf ./ext-dist && rimraf ./only-agent.zip",

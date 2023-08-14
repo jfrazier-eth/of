@@ -1,21 +1,19 @@
 import { config as loadEnv } from "dotenv";
 import { ServiceAccount } from "firebase-admin";
-import { readFileSync } from 'fs';
+import { readFileSync } from "fs";
 import { join } from "path";
-
 
 let serviceAccount: ServiceAccount;
 
 const loadServiceAccount = (path: string) => {
   console.log(`Loading service account from ${path}`);
-  const data = readFileSync(path, 'utf-8');
+  const data = readFileSync(path, "utf-8");
   try {
     return JSON.parse(data as string) as ServiceAccount;
   } catch (e) {
-    throw new Error(`Failed to load service account`)
+    throw new Error(`Failed to load service account`);
   }
-}
-
+};
 
 if (process.env.DEPLOY_ENV === "prod") {
   serviceAccount = loadServiceAccount("/etc/secrets/firebase-prod.json");
@@ -49,6 +47,9 @@ const getOptionalEnvVariable = (key: string, defaultValue: string) => {
 };
 
 export const config = {
+  admin: {
+    password: getEnvVariable("ADMIN_PASSWORD"),
+  },
   redis: {
     connectionUrl: getEnvVariable("REDIS_URL"),
   },
