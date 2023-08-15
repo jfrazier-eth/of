@@ -3,6 +3,7 @@ import { Request as ExpressRequest, Response as ExpressResponse } from "express"
 import { Site } from "../lib/accounts/types";
 import { LoginParamsBySite } from "../lib/logins/get-login";
 import { InternalAuthLocals } from "./internal-api-auth";
+import { AdminAuthLocals } from "./parse-admin-headers";
 import { AuthLocals } from "./user-auth";
 
 export type GetRequest<ReqQuery = {}> = ExpressRequest<unknown, unknown, unknown, ReqQuery>;
@@ -15,6 +16,11 @@ export type PostRequest<ReqBody = {}, ReqQuery = {}> = ExpressRequest<
 
 export type InternalAuthResponse<ResBody> = ExpressResponse<ResBody, InternalAuthLocals>;
 
+export type AdminAuthResponse<ResBody> = ExpressResponse<ResBody, AdminAuthLocals>;
+export type AdminAuthResponseWithPromptId<ResBody> = ExpressResponse<
+  ResBody,
+  AdminAuthLocals & { promptId: string }
+>;
 export type UserAuthResponse<ResBody> = ExpressResponse<ResBody, AuthLocals>;
 
 export type SiteParamLocals<S> = {

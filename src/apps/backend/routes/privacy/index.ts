@@ -9,7 +9,6 @@ router.get("/privacy", async (req: Request, res: Response) => {
   if (!privacy) {
     try {
       const privacyFile = join(process.cwd(), "static/privacy.html");
-      console.log(`Reading ${privacyFile}`);
       privacy = await readFile(privacyFile, "utf8");
     } catch (err) {
       console.error(err);

@@ -20,6 +20,14 @@ export default defineConfig((options) => {
         format: "esm"
       };
     }
+    case "admin": {
+      return {
+        tsconfig: "./tsconfig.admin.json",
+        noExternal: [...noExternal, 'react-dom', 'react', 'nanoid'],
+        outDir: "public/admin",
+        platform: "browser",
+      }
+    }
     default: {
       throw new Error(`Unknown build: ${build}`);
     }

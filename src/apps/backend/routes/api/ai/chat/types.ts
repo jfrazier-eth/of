@@ -1,4 +1,8 @@
+import { PromptSettings } from "@/backend/lib/prompts/prompt-settings";
+
 export interface AIChatRequestBody {
+  promptId?: string;
+  settings?: Partial<PromptSettings>;
   user: {
     id: string;
     name: string;
