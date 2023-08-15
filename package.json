@@ -14,7 +14,7 @@
     "deploy:server": "gcloud app deploy app.yaml --project=seductive-394121",
     "deploy:queues": "gcloud app deploy app.queues.yaml --project=seductive-394121",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
-    "build": "pnpm clean && tsc -p ./tsconfig.backend.json",
+    "build": "pnpm clean && tsc -p ./tsconfig.backend.json && pnpm admin:build",
     "clean": "rimraf ./dist",
     "dev": "pnpm build && pnpm migrate up && node -r dotenv/config -r module-alias/register ./dist/apps/backend/index.js",
     "start:server": "cross-env OF_APP=SERVER node -r dotenv/config -r module-alias/register ./dist/apps/backend/index.js",
