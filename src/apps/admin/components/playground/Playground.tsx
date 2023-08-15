@@ -43,20 +43,6 @@ export const Playground = () => {
       maxWidth: "700px"
     }}>
       <h1>Playground</h1>
-      <label style={{ paddingRight: '4px' }}>Emojis</label>
-      <input type="text" value={emojis} onChange={(e) => setEmojis(e.target.value)}></input>
-
-      <div style={{
-        display: "flex",
-        flexDirection: "column",
-      }}>
-        <label>Custom Script</label>
-        <textarea
-          value={customScript}
-          onChange={(e) => setCustomScript(e.target.value)}
-        ></textarea>
-      </div>
-
       {messages.value.map((msg, index) => {
         return (
           <div key={index.toString()} style={{

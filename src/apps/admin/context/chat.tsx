@@ -10,15 +10,8 @@ import { API_BASE_URL } from "@/extension/lib/constants";
 import { parseError } from "@/utils/parse-error";
 
 import { AdminContext } from "./admin";
+import { useUserConfig } from "./user-config";
 
-const loadCachedData = (key: string): string | null => {
-  const cachedValue = localStorage.getItem(key);
-  return cachedValue || null;
-};
-
-const cacheData = (key: string, value: string) => {
-  localStorage.setItem(key, value);
-};
 
 interface GenerateResponseOptions {
   promptId: string;
@@ -71,6 +64,7 @@ const generateResponse = async (adminPassword: string, options: GenerateResponse
 
 export const useChat = ({ prompt, settings }: { prompt?: FullPrompt; settings?: PromptSettings }) => {
   const { admin } = useContext(AdminContext);
+  const { emojis, customScript, setEmojis, setCustomScript } = useUserConfig();
   const [promptMessages, setPromptMessages] = useState<
     Data<{ content: string; role: PromptMessage["role"] }[]>
   >({ isReady: false });
@@ -78,8 +72,7 @@ export const useChat = ({ prompt, settings }: { prompt?: FullPrompt; settings?: 
     isReady: true,
     value: []
   });
-  const [emojis, setEmojis] = useState("");
-  const [customScript, setCustomScript] = useState("");
+
   const [initialLoadComplete, setInitialLoadCompelte] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -115,22 +108,6 @@ export const useChat = ({ prompt, settings }: { prompt?: FullPrompt; settings?: 
 
     setMessages({ isReady: true, value: [...prompt, ...chat.value] });
   }, [chat, promptMessages, setMessages]);
-
-  useEffect(() => {
-    const emojis = loadCachedData("emojis") || "";
-    const customScript = loadCachedData("customScript") || "";
-    setEmojis(emojis);
-    setCustomScript(customScript);
-    setInitialLoadCompelte(true);
-  }, [setEmojis, setCustomScript, loadCachedData]);
-
-  useEffect(() => {
-    if (!initialLoadComplete) {
-      return;
-    }
-    cacheData("emojis", emojis);
-    cacheData("customScript", customScript);
-  }, [emojis, cacheData, customScript, initialLoadComplete]);
 
   useEffect(() => {
     if (!prompt || !initialLoadComplete) {
