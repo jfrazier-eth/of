@@ -7,9 +7,8 @@ import { uid } from "@/utils/uid";
 import { Message } from "./Message";
 import { Preview } from "./Preview";
 import PromptSettings from "./PromptSettings";
+import { useUserConfig } from "../../context/user-config";
 
-const emojis = "😈";
-const customScript = "Hello World!";
 
 export const Prompt = ({
   prompt,
@@ -25,6 +24,7 @@ export const Prompt = ({
   const [hasChanges, setHasChanges] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const { emojis, customScript } = useUserConfig();
 
   const save = () => {
     savePrompt(prompt);

@@ -970,7 +970,7 @@ var require_react_development = __commonJS({
                     }
                     return dispatcher.useContext(Context);
                 };
-                var useState8 = function useState8(initialState) {
+                var useState9 = function useState9(initialState) {
                     var dispatcher = resolveDispatcher();
                     return dispatcher.useState(initialState);
                 };
@@ -982,7 +982,7 @@ var require_react_development = __commonJS({
                     var dispatcher = resolveDispatcher();
                     return dispatcher.useRef(initialValue);
                 };
-                var useEffect5 = function useEffect5(create, deps) {
+                var useEffect6 = function useEffect6(create, deps) {
                     var dispatcher = resolveDispatcher();
                     return dispatcher.useEffect(create, deps);
                 };
@@ -2152,7 +2152,7 @@ var require_react_development = __commonJS({
                 exports2.useContext = useContext6;
                 exports2.useDebugValue = useDebugValue;
                 exports2.useDeferredValue = useDeferredValue;
-                exports2.useEffect = useEffect5;
+                exports2.useEffect = useEffect6;
                 exports2.useId = useId;
                 exports2.useImperativeHandle = useImperativeHandle;
                 exports2.useInsertionEffect = useInsertionEffect;
@@ -2160,7 +2160,7 @@ var require_react_development = __commonJS({
                 exports2.useMemo = useMemo;
                 exports2.useReducer = useReducer;
                 exports2.useRef = useRef;
-                exports2.useState = useState8;
+                exports2.useState = useState9;
                 exports2.useSyncExternalStore = useSyncExternalStore;
                 exports2.useTransition = useTransition;
                 exports2.version = ReactVersion;
@@ -24002,8 +24002,8 @@ init_react_import();
 var import_client = __toESM(require_client());
 // src/apps/admin/admin.tsx
 init_react_import();
-var import_react10 = __toESM(require_react());
 var import_react11 = __toESM(require_react());
+var import_react12 = __toESM(require_react());
 // src/apps/admin/components/playground/Playground.tsx
 init_react_import();
 // src/apps/admin/context/chat.tsx
@@ -24464,7 +24464,7 @@ var Err = /** @class */ function() {
 }();
 var fromThrowable = Result.fromThrowable;
 // src/apps/admin/context/chat.tsx
-var import_react4 = __toESM(require_react());
+var import_react5 = __toESM(require_react());
 // src/apps/backend/routes/api/ai/chat/transform-request-v2.ts
 init_react_import();
 var transformPrompt = function(prompt, options) {
@@ -24661,7 +24661,9 @@ var AdminContextProvider = function(param) {
         }
     }, children);
 };
-// src/apps/admin/context/chat.tsx
+// src/apps/admin/context/user-config.tsx
+init_react_import();
+var import_react4 = __toESM(require_react());
 var loadCachedData = function(key) {
     var cachedValue = localStorage.getItem(key);
     return cachedValue || null;
@@ -24669,6 +24671,41 @@ var loadCachedData = function(key) {
 var cacheData = function(key, value) {
     localStorage.setItem(key, value);
 };
+var useUserConfig = function() {
+    var _ref = _sliced_to_array((0, import_react4.useState)(""), 2), emojis = _ref[0], setEmojis = _ref[1];
+    var _ref1 = _sliced_to_array((0, import_react4.useState)(""), 2), customScript = _ref1[0], setCustomScript = _ref1[1];
+    var _ref2 = _sliced_to_array((0, import_react4.useState)(false), 2), initialLoadComplete = _ref2[0], setInitialLoadCompelte = _ref2[1];
+    (0, import_react4.useEffect)(function() {
+        var emojis2 = loadCachedData("emojis") || "\uD83D\uDE08\uD83C\uDF46";
+        var customScript2 = loadCachedData("customScript") || "This is a default custom script";
+        setEmojis(emojis2);
+        setCustomScript(customScript2);
+        setInitialLoadCompelte(true);
+    }, [
+        setEmojis,
+        setCustomScript,
+        loadCachedData
+    ]);
+    (0, import_react4.useEffect)(function() {
+        if (!initialLoadComplete) {
+            return;
+        }
+        cacheData("emojis", emojis);
+        cacheData("customScript", customScript);
+    }, [
+        emojis,
+        cacheData,
+        customScript,
+        initialLoadComplete
+    ]);
+    return {
+        emojis: emojis,
+        setEmojis: setEmojis,
+        customScript: customScript,
+        setCustomScript: setCustomScript
+    };
+};
+// src/apps/admin/context/chat.tsx
 var FAN = {
     name: "Kevin",
     id: "user2"
@@ -24749,22 +24786,21 @@ var generateResponse = function() {
 }();
 var useChat = function(param) {
     var prompt = param.prompt, settings = param.settings;
-    var admin = (0, import_react4.useContext)(AdminContext).admin;
-    var _ref = _sliced_to_array((0, import_react4.useState)({
+    var admin = (0, import_react5.useContext)(AdminContext).admin;
+    var _useUserConfig = useUserConfig(), emojis = _useUserConfig.emojis, customScript = _useUserConfig.customScript, setEmojis = _useUserConfig.setEmojis, setCustomScript = _useUserConfig.setCustomScript;
+    var _ref = _sliced_to_array((0, import_react5.useState)({
         isReady: false
     }), 2), promptMessages = _ref[0], setPromptMessages = _ref[1];
-    var _ref1 = _sliced_to_array((0, import_react4.useState)({
+    var _ref1 = _sliced_to_array((0, import_react5.useState)({
         isReady: true,
         value: []
     }), 2), chat = _ref1[0], setChat = _ref1[1];
-    var _ref2 = _sliced_to_array((0, import_react4.useState)(""), 2), emojis2 = _ref2[0], setEmojis = _ref2[1];
-    var _ref3 = _sliced_to_array((0, import_react4.useState)(""), 2), customScript2 = _ref3[0], setCustomScript = _ref3[1];
-    var _ref4 = _sliced_to_array((0, import_react4.useState)(false), 2), initialLoadComplete = _ref4[0], setInitialLoadCompelte = _ref4[1];
-    var _ref5 = _sliced_to_array((0, import_react4.useState)(false), 2), isGenerating = _ref5[0], setIsGenerating = _ref5[1];
-    var _ref6 = _sliced_to_array((0, import_react4.useState)({
+    var _ref2 = _sliced_to_array((0, import_react5.useState)(false), 2), initialLoadComplete = _ref2[0], setInitialLoadCompelte = _ref2[1];
+    var _ref3 = _sliced_to_array((0, import_react5.useState)(false), 2), isGenerating = _ref3[0], setIsGenerating = _ref3[1];
+    var _ref4 = _sliced_to_array((0, import_react5.useState)({
         isReady: false
-    }), 2), messages = _ref6[0], setMessages = _ref6[1];
-    (0, import_react4.useEffect)(function() {
+    }), 2), messages = _ref4[0], setMessages = _ref4[1];
+    (0, import_react5.useEffect)(function() {
         if (!chat.isReady || !promptMessages.isReady) {
             return;
         }
@@ -24800,36 +24836,13 @@ var useChat = function(param) {
         promptMessages,
         setMessages
     ]);
-    (0, import_react4.useEffect)(function() {
-        var emojis3 = loadCachedData("emojis") || "";
-        var customScript3 = loadCachedData("customScript") || "";
-        setEmojis(emojis3);
-        setCustomScript(customScript3);
-        setInitialLoadCompelte(true);
-    }, [
-        setEmojis,
-        setCustomScript,
-        loadCachedData
-    ]);
-    (0, import_react4.useEffect)(function() {
-        if (!initialLoadComplete) {
-            return;
-        }
-        cacheData("emojis", emojis2);
-        cacheData("customScript", customScript2);
-    }, [
-        emojis2,
-        cacheData,
-        customScript2,
-        initialLoadComplete
-    ]);
-    (0, import_react4.useEffect)(function() {
+    (0, import_react5.useEffect)(function() {
         if (!prompt || !initialLoadComplete) {
             return;
         }
         var _transformPrompt = transformPrompt(prompt, {
-            emojis: emojis2,
-            customScript: customScript2,
+            emojis: emojis,
+            customScript: customScript,
             messages: []
         }), promptMessages2 = _transformPrompt.messages;
         setPromptMessages({
@@ -24839,8 +24852,8 @@ var useChat = function(param) {
     }, [
         prompt,
         transformPrompt,
-        emojis2,
-        customScript2,
+        emojis,
+        customScript,
         initialLoadComplete
     ]);
     var respond = function() {
@@ -24869,8 +24882,8 @@ var useChat = function(param) {
                                     content: msg.content
                                 };
                             }),
-                            emojis: emojis2,
-                            customScript: customScript2
+                            emojis: emojis,
+                            customScript: customScript
                         };
                         setIsGenerating(true);
                         return [
@@ -24915,8 +24928,8 @@ var useChat = function(param) {
         });
     };
     return {
-        emojis: emojis2,
-        customScript: customScript2,
+        emojis: emojis,
+        customScript: customScript,
         setEmojis: setEmojis,
         setCustomScript: setCustomScript,
         messages: messages,
@@ -24929,8 +24942,8 @@ var useChat = function(param) {
 };
 // src/apps/admin/context/prompts.tsx
 init_react_import();
-var import_react5 = __toESM(require_react());
-var PromptContext = (0, import_react5.createContext)({
+var import_react6 = __toESM(require_react());
+var PromptContext = (0, import_react6.createContext)({
     prompts: {
         isReady: false
     },
@@ -25055,12 +25068,12 @@ var postPrompt = function() {
 }();
 var PromptContextProvider = function(param) {
     var children = param.children;
-    var _ref = _sliced_to_array((0, import_react5.useState)({
+    var _ref = _sliced_to_array((0, import_react6.useState)({
         isReady: false
     }), 2), prompts = _ref[0], setPrompts = _ref[1];
-    var _ref1 = _sliced_to_array((0, import_react5.useState)(false), 2), isSaving = _ref1[0], setIsSaving = _ref1[1];
-    var admin = (0, import_react5.useContext)(AdminContext).admin;
-    (0, import_react5.useEffect)(function() {
+    var _ref1 = _sliced_to_array((0, import_react6.useState)(false), 2), isSaving = _ref1[0], setIsSaving = _ref1[1];
+    var admin = (0, import_react6.useContext)(AdminContext).admin;
+    (0, import_react6.useEffect)(function() {
         var isMounted = true;
         if (!prompts.isReady && admin.isReady) {
             var isLoggedIn = admin.value.isLoggedIn;
@@ -25183,11 +25196,11 @@ var PromptContextProvider = function(param) {
     }, children);
 };
 var useActivePrompt = function() {
-    var prompts = (0, import_react5.useContext)(PromptContext).prompts;
-    var _ref = _sliced_to_array((0, import_react5.useState)({
+    var prompts = (0, import_react6.useContext)(PromptContext).prompts;
+    var _ref = _sliced_to_array((0, import_react6.useState)({
         isReady: false
     }), 2), activePrompt = _ref[0], setActivePrompt = _ref[1];
-    (0, import_react5.useEffect)(function() {
+    (0, import_react6.useEffect)(function() {
         if (!prompts.isReady) {
             return;
         }
@@ -25210,7 +25223,7 @@ var useActivePrompt = function() {
 };
 // src/apps/admin/context/settings.tsx
 init_react_import();
-var import_react6 = __toESM(require_react());
+var import_react7 = __toESM(require_react());
 var getSettings = function() {
     var _ref = _async_to_generator(function(adminPassword, promptId) {
         var url, response, body, e;
@@ -25327,13 +25340,13 @@ var postSettings = function() {
     };
 }();
 var usePromptSettings = function(props) {
-    var admin = (0, import_react6.useContext)(AdminContext).admin;
-    var _ref = _sliced_to_array((0, import_react6.useState)({
+    var admin = (0, import_react7.useContext)(AdminContext).admin;
+    var _ref = _sliced_to_array((0, import_react7.useState)({
         isReady: false
     }), 2), settings = _ref[0], setSettings = _ref[1];
-    var _ref1 = _sliced_to_array((0, import_react6.useState)(false), 2), isSaving = _ref1[0], setIsSaving = _ref1[1];
-    var _ref2 = _sliced_to_array((0, import_react6.useState)(true), 2), isSaved = _ref2[0], setIsSaved = _ref2[1];
-    (0, import_react6.useEffect)(function() {
+    var _ref1 = _sliced_to_array((0, import_react7.useState)(false), 2), isSaving = _ref1[0], setIsSaving = _ref1[1];
+    var _ref2 = _sliced_to_array((0, import_react7.useState)(true), 2), isSaved = _ref2[0], setIsSaved = _ref2[1];
+    (0, import_react7.useEffect)(function() {
         var isMounted = true;
         if (props.promptId && admin.isReady && admin.value.isLoggedIn) {
             getSettings(admin.value.password, props.promptId).then(function(res) {
@@ -25416,10 +25429,10 @@ var usePromptSettings = function(props) {
 };
 // src/apps/admin/components/playground/NewMessage.tsx
 init_react_import();
-var import_react7 = __toESM(require_react());
+var import_react8 = __toESM(require_react());
 var NewMessage = function(props) {
-    var _ref = _sliced_to_array((0, import_react7.useState)(props.CREATOR), 2), from = _ref[0], setFrom = _ref[1];
-    var _ref1 = _sliced_to_array((0, import_react7.useState)(""), 2), content = _ref1[0], setContent = _ref1[1];
+    var _ref = _sliced_to_array((0, import_react8.useState)(props.CREATOR), 2), from = _ref[0], setFrom = _ref[1];
+    var _ref1 = _sliced_to_array((0, import_react8.useState)(""), 2), content = _ref1[0], setContent = _ref1[1];
     return /* @__PURE__ */ import_react.default.createElement("div", {
         style: {
             display: "flex",
@@ -25484,7 +25497,7 @@ var Playground = function() {
     var _useChat = useChat({
         prompt: extractedPrompt,
         settings: extractedSettings
-    }), messages = _useChat.messages, emojis2 = _useChat.emojis, customScript2 = _useChat.customScript, setEmojis = _useChat.setEmojis, setCustomScript = _useChat.setCustomScript, isGenerating = _useChat.isGenerating, respond = _useChat.respond, addMessage = _useChat.addMessage, FAN2 = _useChat.FAN, CREATOR2 = _useChat.CREATOR;
+    }), messages = _useChat.messages, emojis = _useChat.emojis, customScript = _useChat.customScript, setEmojis = _useChat.setEmojis, setCustomScript = _useChat.setCustomScript, isGenerating = _useChat.isGenerating, respond = _useChat.respond, addMessage = _useChat.addMessage, FAN2 = _useChat.FAN, CREATOR2 = _useChat.CREATOR;
     if (!prompt.isReady || !settings.isReady || !messages.isReady) {
         return /* @__PURE__ */ import_react.default.createElement("div", null, "Loading...");
     }
@@ -25493,27 +25506,7 @@ var Playground = function() {
             display: "relative",
             maxWidth: "700px"
         }
-    }, /* @__PURE__ */ import_react.default.createElement("h1", null, "Playground"), /* @__PURE__ */ import_react.default.createElement("label", {
-        style: {
-            paddingRight: "4px"
-        }
-    }, "Emojis"), /* @__PURE__ */ import_react.default.createElement("input", {
-        type: "text",
-        value: emojis2,
-        onChange: function(e) {
-            return setEmojis(e.target.value);
-        }
-    }), /* @__PURE__ */ import_react.default.createElement("div", {
-        style: {
-            display: "flex",
-            flexDirection: "column"
-        }
-    }, /* @__PURE__ */ import_react.default.createElement("label", null, "Custom Script"), /* @__PURE__ */ import_react.default.createElement("textarea", {
-        value: customScript2,
-        onChange: function(e) {
-            return setCustomScript(e.target.value);
-        }
-    })), messages.value.map(function(msg, index) {
+    }, /* @__PURE__ */ import_react.default.createElement("h1", null, "Playground"), messages.value.map(function(msg, index) {
         return /* @__PURE__ */ import_react.default.createElement("div", {
             key: index.toString(),
             style: {
@@ -25542,7 +25535,7 @@ var Playground = function() {
 };
 // src/apps/admin/prompts.tsx
 init_react_import();
-var import_react9 = __toESM(require_react());
+var import_react10 = __toESM(require_react());
 // src/lib/utils/uid.ts
 init_react_import();
 // node_modules/.pnpm/nanoid@3.3.6/node_modules/nanoid/index.browser.js
@@ -25581,7 +25574,7 @@ var uid = customAlphabet(alphabet, 16);
 init_react_import();
 // src/apps/admin/components/prompts/Prompt.tsx
 init_react_import();
-var import_react8 = __toESM(require_react());
+var import_react9 = __toESM(require_react());
 // src/apps/admin/components/prompts/Message.tsx
 init_react_import();
 var Message = function(param) {
@@ -25766,13 +25759,12 @@ var Settings = function(props) {
 };
 var PromptSettings_default = Settings;
 // src/apps/admin/components/prompts/Prompt.tsx
-var emojis = "\uD83D\uDE08";
-var customScript = "Hello World!";
 var Prompt = function(param) {
     var prompt = param.prompt, updatePrompt = param.updatePrompt, savePrompt = param.savePrompt, isSaving = param.isSaving;
-    var _ref = _sliced_to_array((0, import_react8.useState)(false), 2), hasChanges = _ref[0], setHasChanges = _ref[1];
-    var _ref1 = _sliced_to_array((0, import_react8.useState)(false), 2), showPreview = _ref1[0], setShowPreview = _ref1[1];
-    var _ref2 = _sliced_to_array((0, import_react8.useState)(false), 2), showSettings = _ref2[0], setShowSettings = _ref2[1];
+    var _ref = _sliced_to_array((0, import_react9.useState)(false), 2), hasChanges = _ref[0], setHasChanges = _ref[1];
+    var _ref1 = _sliced_to_array((0, import_react9.useState)(false), 2), showPreview = _ref1[0], setShowPreview = _ref1[1];
+    var _ref2 = _sliced_to_array((0, import_react9.useState)(false), 2), showSettings = _ref2[0], setShowSettings = _ref2[1];
+    var _useUserConfig = useUserConfig(), emojis = _useUserConfig.emojis, customScript = _useUserConfig.customScript;
     var save = function() {
         savePrompt(prompt);
         setHasChanges(false);
@@ -25921,7 +25913,7 @@ var PromptsList = function(param) {
 };
 // src/apps/admin/prompts.tsx
 var Prompts = function() {
-    var _ref = (0, import_react9.useContext)(PromptContext), prompts = _ref.prompts, savePrompt = _ref.savePrompt, updatePrompt = _ref.updatePrompt, isSaving = _ref.isSaving;
+    var _ref = (0, import_react10.useContext)(PromptContext), prompts = _ref.prompts, savePrompt = _ref.savePrompt, updatePrompt = _ref.updatePrompt, isSaving = _ref.isSaving;
     var createPrompt = function() {
         if (!prompts.isReady) {
             return;
@@ -25989,9 +25981,10 @@ var Page = function(props) {
     }
 };
 var Admin = function() {
-    var _ref = (0, import_react11.useContext)(AdminContext), admin = _ref.admin, isChecking = _ref.isChecking, login = _ref.login, logout = _ref.logout;
-    var _ref1 = _sliced_to_array((0, import_react10.useState)(""), 2), passwordValue = _ref1[0], setPasswordValue = _ref1[1];
-    var _ref2 = _sliced_to_array((0, import_react10.useState)("prompt"), 2), tab = _ref2[0], setTab = _ref2[1];
+    var _ref = (0, import_react12.useContext)(AdminContext), admin = _ref.admin, isChecking = _ref.isChecking, login = _ref.login, logout = _ref.logout;
+    var _ref1 = _sliced_to_array((0, import_react11.useState)(""), 2), passwordValue = _ref1[0], setPasswordValue = _ref1[1];
+    var _useUserConfig = useUserConfig(), emojis = _useUserConfig.emojis, setEmojis = _useUserConfig.setEmojis, customScript = _useUserConfig.customScript, setCustomScript = _useUserConfig.setCustomScript;
+    var _ref2 = _sliced_to_array((0, import_react11.useState)("prompt"), 2), tab = _ref2[0], setTab = _ref2[1];
     if (!admin.isReady) {
         return /* @__PURE__ */ import_react.default.createElement("div", null, "loading...");
     }
@@ -26003,7 +25996,32 @@ var Admin = function() {
         }, /* @__PURE__ */ import_react.default.createElement(NavBar, {
             tab: tab,
             setTab: setTab
-        }), /* @__PURE__ */ import_react.default.createElement(Page, {
+        }), /* @__PURE__ */ import_react.default.createElement("div", {
+            style: {
+                marginTop: "8px",
+                maxWidth: "700px"
+            }
+        }, /* @__PURE__ */ import_react.default.createElement("label", {
+            style: {
+                paddingRight: "4px"
+            }
+        }, "Emojis"), /* @__PURE__ */ import_react.default.createElement("input", {
+            type: "text",
+            value: emojis,
+            onChange: function(e) {
+                return setEmojis(e.target.value);
+            }
+        }), /* @__PURE__ */ import_react.default.createElement("div", {
+            style: {
+                display: "flex",
+                flexDirection: "column"
+            }
+        }, /* @__PURE__ */ import_react.default.createElement("label", null, "Custom Script"), /* @__PURE__ */ import_react.default.createElement("textarea", {
+            value: customScript,
+            onChange: function(e) {
+                return setCustomScript(e.target.value);
+            }
+        }))), /* @__PURE__ */ import_react.default.createElement(Page, {
             tab: tab
         }));
     }

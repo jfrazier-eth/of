@@ -3,6 +3,7 @@ import { useContext } from "react";
 
 import { Playground } from "./components/playground/Playground";
 import { AdminContext } from "./context/admin";
+import { useUserConfig } from "./context/user-config";
 import { Prompts } from "./prompts";
 
 type Tab = "prompt" | "playground";
@@ -46,6 +47,7 @@ export const Page = (props: { tab: Tab }) => {
 export const Admin = () => {
   const { admin, isChecking, login, logout } = useContext(AdminContext);
   const [passwordValue, setPasswordValue] = useState("");
+  const { emojis, setEmojis, customScript, setCustomScript } = useUserConfig();
 
   const [tab, setTab] = useState<Tab>("prompt");
 
@@ -57,6 +59,22 @@ export const Admin = () => {
     return (
       <div style={{ paddingBottom: "300px" }}>
         <NavBar tab={tab} setTab={setTab} />
+        <div style={{ marginTop: "8px", maxWidth: "700px" }}>
+
+          <label style={{ paddingRight: '4px' }}>Emojis</label>
+          <input type="text" value={emojis} onChange={(e) => setEmojis(e.target.value)}></input>
+
+          <div style={{
+            display: "flex",
+            flexDirection: "column",
+          }}>
+            <label>Custom Script</label>
+            <textarea
+              value={customScript}
+              onChange={(e) => setCustomScript(e.target.value)}
+            ></textarea>
+          </div>
+        </div>
         <Page tab={tab} />
       </div>
     );
