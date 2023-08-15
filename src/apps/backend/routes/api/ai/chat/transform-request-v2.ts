@@ -16,8 +16,6 @@ export const transformPrompt = (
     let message = item.message;
 
     message = message.replace("{emojis}", options.emojis || "");
-    const hasScript = message.includes("{customScript}");
-    console.log(`Has script: ${hasScript}`);
     message = message.replace("{customScript}", options.customScript || "");
 
     formattedMessages.push({

@@ -14,7 +14,7 @@ export const PromptsList = ({
   isSaving: boolean;
 }) => {
   return (
-    <div>
+    <div style={{ maxWidth: '700px' }}>
       {prompts
         .sort((a, b) => {
           return a.version - b.version;
@@ -24,9 +24,10 @@ export const PromptsList = ({
             <div
               key={prompt.id}
               style={{
-                padding: "1rem",
+                padding: "4px",
               }}
             >
+              <h3>Prompt: {prompt.id}</h3>
               <Prompt
                 prompt={prompt}
                 savePrompt={savePrompt}

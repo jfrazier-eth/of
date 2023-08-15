@@ -8,18 +8,20 @@ export const Message = ({
   onChange: (message: PromptMessage) => void;
 }) => {
   return (
-    <div>
+    <div style={{
+      margin: '8px'
+    }}>
       <div
-        style={{
-          padding: "1rem",
-        }}
       >
-        Role:
+        <label style={{
+          paddingRight: "4px",
+        }}>
+          Role:
+        </label>
         <select
           value={message.role}
           onChange={(e) => {
             const role = e.target.value as "system" | "user" | "assistant";
-            console.log(`Updating role ${role}`);
             onChange({
               ...message,
               role,
@@ -34,13 +36,18 @@ export const Message = ({
       <div
         style={{
           display: "flex",
-          flexDirection: "row",
-          alignItems: "left",
-          padding: "1rem",
+          flexDirection: "column",
         }}
       >
-        Text:
+        <label style={{
+          paddingRight: "4px",
+        }}>
+          Text:
+        </label>
         <textarea
+          style={{
+            minHeight: "100px",
+          }}
           value={message.message}
           onChange={(e) => {
             onChange({

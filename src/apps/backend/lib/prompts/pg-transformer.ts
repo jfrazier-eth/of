@@ -26,25 +26,25 @@ export const transformPGPromptMessage = (prompt: PGPromptMessage): PromptMessage
 
 export const transformFullPrompt = (
   prompt: FullPrompt
-): { prompt: PGPrompt; messages: PGPromptMessage[] } => {
+): { prompt: PGPrompt; messages: PGPromptMessage[]; isActive: boolean } => {
   return {
     prompt: {
       id: prompt.id,
       created_at: new Date(prompt.createdAt),
       updated_at: new Date(prompt.updatedAt),
-      is_active: prompt.isActive,
       version: prompt.version,
     },
     messages: prompt.messages.map(tranformPromptMessage),
+    isActive: prompt.isActive,
   };
 };
 
-export const tranformPGPrompt = (prompt: PGPrompt) => {
+export const tranformPGPrompt = (prompt: PGPrompt, isActive: boolean) => {
   return {
     id: prompt.id,
     createdAt: prompt.created_at.getTime(),
     updatedAt: prompt.updated_at.getTime(),
-    isActive: prompt.is_active,
+    isActive,
     version: prompt.version,
   };
 };

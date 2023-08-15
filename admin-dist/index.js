@@ -956,7 +956,7 @@ var require_react_development = __commonJS({
                     }
                     return dispatcher;
                 };
-                var useContext4 = function useContext4(Context) {
+                var useContext6 = function useContext6(Context) {
                     var dispatcher = resolveDispatcher();
                     {
                         if (Context._context !== void 0) {
@@ -970,7 +970,7 @@ var require_react_development = __commonJS({
                     }
                     return dispatcher.useContext(Context);
                 };
-                var useState5 = function useState5(initialState) {
+                var useState8 = function useState8(initialState) {
                     var dispatcher = resolveDispatcher();
                     return dispatcher.useState(initialState);
                 };
@@ -982,7 +982,7 @@ var require_react_development = __commonJS({
                     var dispatcher = resolveDispatcher();
                     return dispatcher.useRef(initialValue);
                 };
-                var useEffect3 = function useEffect3(create, deps) {
+                var useEffect5 = function useEffect5(create, deps) {
                     var dispatcher = resolveDispatcher();
                     return dispatcher.useEffect(create, deps);
                 };
@@ -2149,10 +2149,10 @@ var require_react_development = __commonJS({
                 exports2.startTransition = startTransition;
                 exports2.unstable_act = act;
                 exports2.useCallback = useCallback;
-                exports2.useContext = useContext4;
+                exports2.useContext = useContext6;
                 exports2.useDebugValue = useDebugValue;
                 exports2.useDeferredValue = useDeferredValue;
-                exports2.useEffect = useEffect3;
+                exports2.useEffect = useEffect5;
                 exports2.useId = useId;
                 exports2.useImperativeHandle = useImperativeHandle;
                 exports2.useInsertionEffect = useInsertionEffect;
@@ -2160,7 +2160,7 @@ var require_react_development = __commonJS({
                 exports2.useMemo = useMemo;
                 exports2.useReducer = useReducer;
                 exports2.useRef = useRef;
-                exports2.useState = useState5;
+                exports2.useState = useState8;
                 exports2.useSyncExternalStore = useSyncExternalStore;
                 exports2.useTransition = useTransition;
                 exports2.version = ReactVersion;
@@ -24002,9 +24002,11 @@ init_react_import();
 var import_client = __toESM(require_client());
 // src/apps/admin/admin.tsx
 init_react_import();
-var import_react7 = __toESM(require_react());
-var import_react8 = __toESM(require_react());
-// src/apps/admin/context/admin.tsx
+var import_react10 = __toESM(require_react());
+var import_react11 = __toESM(require_react());
+// src/apps/admin/components/playground/Playground.tsx
+init_react_import();
+// src/apps/admin/context/chat.tsx
 init_react_import();
 // node_modules/.pnpm/neverthrow@6.0.0/node_modules/neverthrow/dist/index.es.js
 init_react_import();
@@ -24461,9 +24463,48 @@ var Err = /** @class */ function() {
     return Err3;
 }();
 var fromThrowable = Result.fromThrowable;
-// src/apps/admin/context/admin.tsx
-var import_react2 = __toESM(require_react());
-var import_react3 = __toESM(require_react());
+// src/apps/admin/context/chat.tsx
+var import_react4 = __toESM(require_react());
+// src/apps/backend/routes/api/ai/chat/transform-request-v2.ts
+init_react_import();
+var transformPrompt = function(prompt, options) {
+    var _formattedMessages;
+    var promptMessages = prompt.messages.sort(function(a, b) {
+        return a.messageIndex - b.messageIndex;
+    });
+    var messages = _to_consumable_array(promptMessages).concat(_to_consumable_array(options.messages));
+    var formattedMessages = [];
+    var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
+    try {
+        for(var _iterator = promptMessages[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true){
+            var item = _step.value;
+            var message = item.message;
+            message = message.replace("{emojis}", options.emojis || "");
+            message = message.replace("{customScript}", options.customScript || "");
+            formattedMessages.push({
+                role: item.role,
+                content: message
+            });
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally{
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+                _iterator.return();
+            }
+        } finally{
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+    (_formattedMessages = formattedMessages).push.apply(_formattedMessages, _to_consumable_array(options.messages));
+    return {
+        messages: formattedMessages
+    };
+};
 // src/apps/extension/lib/constants.ts
 init_react_import();
 var API_BASE_URL = "http://127.0.0.1:8888/";
@@ -24479,6 +24520,9 @@ var parseError = function(error) {
     }
 };
 // src/apps/admin/context/admin.tsx
+init_react_import();
+var import_react2 = __toESM(require_react());
+var import_react3 = __toESM(require_react());
 var AdminContext = (0, import_react3.createContext)({
     admin: {
         isReady: false
@@ -24617,262 +24661,271 @@ var AdminContextProvider = function(param) {
         }
     }, children);
 };
-// src/apps/admin/prompts.tsx
-init_react_import();
-var import_react6 = __toESM(require_react());
-// src/lib/utils/uid.ts
-init_react_import();
-// node_modules/.pnpm/nanoid@3.3.6/node_modules/nanoid/index.browser.js
-init_react_import();
-// node_modules/.pnpm/nanoid@3.3.6/node_modules/nanoid/url-alphabet/index.js
-init_react_import();
-// node_modules/.pnpm/nanoid@3.3.6/node_modules/nanoid/index.browser.js
-var random = function(bytes) {
-    return crypto.getRandomValues(new Uint8Array(bytes));
+// src/apps/admin/context/chat.tsx
+var loadCachedData = function(key) {
+    var cachedValue = localStorage.getItem(key);
+    return cachedValue || null;
 };
-var customRandom = function(alphabet2, defaultSize, getRandom) {
-    var mask = (2 << Math.log(alphabet2.length - 1) / Math.LN2) - 1;
-    var step = -~(1.6 * mask * defaultSize / alphabet2.length);
-    return function() {
-        var size = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : defaultSize;
-        var id = "";
-        while(true){
-            var bytes = getRandom(step);
-            var j = step;
-            while(j--){
-                id += alphabet2[bytes[j] & mask] || "";
-                if (id.length === size) return id;
+var cacheData = function(key, value) {
+    localStorage.setItem(key, value);
+};
+var FAN = {
+    name: "Kevin",
+    id: "user2"
+};
+var CREATOR = {
+    name: "Nicole",
+    id: "user1"
+};
+var generateResponse = function() {
+    var _ref = _async_to_generator(function(adminPassword, options) {
+        var body, url, response, body2, e;
+        return _ts_generator(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    _state.trys.push([
+                        0,
+                        4,
+                        ,
+                        5
+                    ]);
+                    body = {
+                        promptId: options.promptId,
+                        user: CREATOR,
+                        withUser: FAN,
+                        messages: options.messages,
+                        emojis: options.emojis,
+                        customScript: options.customScript
+                    };
+                    url = new URL("/api/ai/chat", API_BASE_URL);
+                    return [
+                        4,
+                        fetch(url, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "x-api-key": adminPassword
+                            },
+                            body: JSON.stringify(body)
+                        })
+                    ];
+                case 1:
+                    response = _state.sent();
+                    if (!(response.status === 200)) return [
+                        3,
+                        3
+                    ];
+                    return [
+                        4,
+                        response.json()
+                    ];
+                case 2:
+                    body2 = _state.sent();
+                    return [
+                        2,
+                        ok(body2)
+                    ];
+                case 3:
+                    return [
+                        2,
+                        err(new Error("Failed to generate response, Status code ".concat(response.status)))
+                    ];
+                case 4:
+                    e = _state.sent();
+                    return [
+                        2,
+                        parseError(e)
+                    ];
+                case 5:
+                    return [
+                        2
+                    ];
             }
-        }
-    };
-};
-var customAlphabet = function(alphabet2) {
-    var size = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 21;
-    return customRandom(alphabet2, size, random);
-};
-// src/lib/utils/uid.ts
-var letters = "abcdefghijklmnopqrstuvwxyz";
-var alphabet = "".concat(letters).concat(letters.toUpperCase(), "0123456789");
-var uid = customAlphabet(alphabet, 16);
-// src/apps/admin/components/prompts/PromptList.tsx
-init_react_import();
-// src/apps/admin/components/prompts/Prompt.tsx
-init_react_import();
-var import_react4 = __toESM(require_react());
-// src/apps/backend/routes/api/ai/chat/transform-request-v2.ts
-init_react_import();
-var transformPrompt = function(prompt, options) {
-    var _formattedMessages;
-    var promptMessages = prompt.messages.sort(function(a, b) {
-        return a.messageIndex - b.messageIndex;
+        });
     });
-    var messages = _to_consumable_array(promptMessages).concat(_to_consumable_array(options.messages));
-    var formattedMessages = [];
-    var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
-    try {
-        for(var _iterator = promptMessages[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true){
-            var item = _step.value;
-            var message = item.message;
-            message = message.replace("{emojis}", options.emojis || "");
-            var hasScript = message.includes("{customScript}");
-            console.log("Has script: ".concat(hasScript));
-            message = message.replace("{customScript}", options.customScript || "");
-            formattedMessages.push({
-                role: item.role,
-                content: message
-            });
-        }
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally{
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return != null) {
-                _iterator.return();
-            }
-        } finally{
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
-        }
-    }
-    (_formattedMessages = formattedMessages).push.apply(_formattedMessages, _to_consumable_array(options.messages));
-    return {
-        messages: formattedMessages
+    return function generateResponse(adminPassword, options) {
+        return _ref.apply(this, arguments);
     };
-};
-// src/apps/admin/components/prompts/Message.tsx
-init_react_import();
-var Message = function(param) {
-    var message = param.message, onChange = param.onChange;
-    return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("div", {
-        style: {
-            padding: "1rem"
+}();
+var useChat = function(param) {
+    var prompt = param.prompt, settings = param.settings;
+    var admin = (0, import_react4.useContext)(AdminContext).admin;
+    var _ref = _sliced_to_array((0, import_react4.useState)({
+        isReady: false
+    }), 2), promptMessages = _ref[0], setPromptMessages = _ref[1];
+    var _ref1 = _sliced_to_array((0, import_react4.useState)({
+        isReady: true,
+        value: []
+    }), 2), chat = _ref1[0], setChat = _ref1[1];
+    var _ref2 = _sliced_to_array((0, import_react4.useState)(""), 2), emojis2 = _ref2[0], setEmojis = _ref2[1];
+    var _ref3 = _sliced_to_array((0, import_react4.useState)(""), 2), customScript2 = _ref3[0], setCustomScript = _ref3[1];
+    var _ref4 = _sliced_to_array((0, import_react4.useState)(false), 2), initialLoadComplete = _ref4[0], setInitialLoadCompelte = _ref4[1];
+    var _ref5 = _sliced_to_array((0, import_react4.useState)(false), 2), isGenerating = _ref5[0], setIsGenerating = _ref5[1];
+    var _ref6 = _sliced_to_array((0, import_react4.useState)({
+        isReady: false
+    }), 2), messages = _ref6[0], setMessages = _ref6[1];
+    (0, import_react4.useEffect)(function() {
+        if (!chat.isReady || !promptMessages.isReady) {
+            return;
         }
-    }, "Role:", /* @__PURE__ */ import_react.default.createElement("select", {
-        value: message.role,
-        onChange: function(e) {
-            var role = e.target.value;
-            console.log("Updating role ".concat(role));
-            onChange(_object_spread_props(_object_spread({}, message), {
-                role: role
-            }));
-        }
-    }, /* @__PURE__ */ import_react.default.createElement("option", {
-        value: "system"
-    }, "System"), /* @__PURE__ */ import_react.default.createElement("option", {
-        value: "user"
-    }, "User"), /* @__PURE__ */ import_react.default.createElement("option", {
-        value: "assistant"
-    }, "Assistant"))), /* @__PURE__ */ import_react.default.createElement("div", {
-        style: {
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "left",
-            padding: "1rem"
-        }
-    }, "Text:", /* @__PURE__ */ import_react.default.createElement("textarea", {
-        value: message.message,
-        onChange: function(e) {
-            onChange(_object_spread_props(_object_spread({}, message), {
-                message: e.target.value
-            }));
-        }
-    })));
-};
-// src/apps/admin/components/prompts/Preview.tsx
-init_react_import();
-var Preview = function(param) {
-    var messages = param.messages;
-    return /* @__PURE__ */ import_react.default.createElement("div", {
-        style: {
-            overflow: "auto"
-        }
-    }, messages.map(function(message, index) {
-        return /* @__PURE__ */ import_react.default.createElement("div", {
-            key: index
-        }, /* @__PURE__ */ import_react.default.createElement("p", {
-            style: {
-                color: "blue"
-            }
-        }, message.role, ":"), " ", /* @__PURE__ */ import_react.default.createElement("p", null, message.content));
-    }));
-};
-// src/apps/admin/components/prompts/Prompt.tsx
-var emojis = "\uD83D\uDE08";
-var customScript = "Hello World!";
-var Prompt = function(param) {
-    var prompt = param.prompt, updatePrompt = param.updatePrompt, savePrompt = param.savePrompt, isSaving = param.isSaving;
-    var _ref = _sliced_to_array((0, import_react4.useState)(false), 2), hasChanges = _ref[0], setHasChanges = _ref[1];
-    var _ref1 = _sliced_to_array((0, import_react4.useState)(false), 2), showPreview = _ref1[0], setShowPreview = _ref1[1];
-    var save = function() {
-        savePrompt(prompt);
-        setHasChanges(false);
-    };
-    var createMessage = function() {
-        var role = prompt.messages.length > 0 ? "user" : "system";
-        var message = {
-            id: uid(),
-            promptId: prompt.id,
-            role: role,
-            messageIndex: prompt.messages.length,
-            message: "",
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-        };
-        setHasChanges(true);
-        updatePrompt(_object_spread_props(_object_spread({}, prompt), {
-            messages: _to_consumable_array(prompt.messages).concat([
-                message
-            ])
-        }));
-    };
-    var onMessageChange = function(message) {
-        var messages = prompt.messages;
-        var index = messages.findIndex(function(item) {
-            return item.id === message.id;
-        });
-        if (index === -1) {
-            setHasChanges(true);
-            updatePrompt(_object_spread_props(_object_spread({}, prompt), {
-                messages: _to_consumable_array(messages).concat([
-                    message
-                ])
-            }));
-        } else {
-            messages[index] = message;
-            setHasChanges(true);
-            updatePrompt(_object_spread_props(_object_spread({}, prompt), {
-                messages: _to_consumable_array(messages)
-            }));
-        }
-    };
-    return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("div", null, "Active: ", prompt.isActive.toString(), " ", !prompt.isActive && /* @__PURE__ */ import_react.default.createElement("button", {
-        onClick: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            setHasChanges(true);
-            updatePrompt(_object_spread_props(_object_spread({}, prompt), {
-                isActive: true
-            }));
-        }
-    }, "Activate"), " ", hasChanges && /* @__PURE__ */ import_react.default.createElement("button", {
-        disabled: isSaving,
-        onClick: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            save();
-        }
-    }, "Save", " ")), /* @__PURE__ */ import_react.default.createElement("div", null, " ", "Messages:", prompt.messages.sort(function(a, b) {
-        return a.messageIndex - b.messageIndex;
-    }).map(function(item) {
-        return /* @__PURE__ */ import_react.default.createElement(Message, {
-            key: item.id,
-            message: item,
-            onChange: function(message) {
-                onMessageChange(message);
+        var prompt2 = promptMessages.value.map(function(item) {
+            switch(item.role){
+                case "system":
+                    return {
+                        content: item.content,
+                        user: "system"
+                    };
+                case "user":
+                    {
+                        return {
+                            content: item.content,
+                            user: FAN
+                        };
+                    }
+                case "assistant":
+                    {
+                        return {
+                            content: item.content,
+                            user: CREATOR
+                        };
+                    }
             }
         });
-    })), /* @__PURE__ */ import_react.default.createElement("button", {
-        onClick: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            createMessage();
+        setMessages({
+            isReady: true,
+            value: _to_consumable_array(prompt2).concat(_to_consumable_array(chat.value))
+        });
+    }, [
+        chat,
+        promptMessages,
+        setMessages
+    ]);
+    (0, import_react4.useEffect)(function() {
+        var emojis3 = loadCachedData("emojis") || "";
+        var customScript3 = loadCachedData("customScript") || "";
+        setEmojis(emojis3);
+        setCustomScript(customScript3);
+        setInitialLoadCompelte(true);
+    }, [
+        setEmojis,
+        setCustomScript,
+        loadCachedData
+    ]);
+    (0, import_react4.useEffect)(function() {
+        if (!initialLoadComplete) {
+            return;
         }
-    }, "Add Message"), /* @__PURE__ */ import_react.default.createElement("button", {
-        onClick: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            setShowPreview(function(prev) {
-                return !prev;
-            });
+        cacheData("emojis", emojis2);
+        cacheData("customScript", customScript2);
+    }, [
+        emojis2,
+        cacheData,
+        customScript2,
+        initialLoadComplete
+    ]);
+    (0, import_react4.useEffect)(function() {
+        if (!prompt || !initialLoadComplete) {
+            return;
         }
-    }, " ", "Toggle Preview", " "), showPreview && /* @__PURE__ */ import_react.default.createElement(Preview, {
-        messages: transformPrompt(prompt, {
-            emojis: emojis,
-            customScript: customScript,
+        var _transformPrompt = transformPrompt(prompt, {
+            emojis: emojis2,
+            customScript: customScript2,
             messages: []
-        }).messages
-    }));
-};
-// src/apps/admin/components/prompts/PromptList.tsx
-var PromptsList = function(param) {
-    var prompts = param.prompts, updatePrompt = param.updatePrompt, savePrompt = param.savePrompt, isSaving = param.isSaving;
-    return /* @__PURE__ */ import_react.default.createElement("div", null, prompts.sort(function(a, b) {
-        return a.version - b.version;
-    }).map(function(prompt) {
-        return /* @__PURE__ */ import_react.default.createElement("div", {
-            key: prompt.id,
-            style: {
-                padding: "1rem"
+        }), promptMessages2 = _transformPrompt.messages;
+        setPromptMessages({
+            isReady: true,
+            value: promptMessages2
+        });
+    }, [
+        prompt,
+        transformPrompt,
+        emojis2,
+        customScript2,
+        initialLoadComplete
+    ]);
+    var respond = function() {
+        var _ref = _async_to_generator(function() {
+            var options, response, message;
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (!admin.isReady || !admin.value.isLoggedIn) {
+                            console.warn("Admin not logged in");
+                            return [
+                                2
+                            ];
+                        }
+                        if (!prompt || !settings || !chat.isReady) {
+                            console.warn("Prompt or settings not ready");
+                            return [
+                                2
+                            ];
+                        }
+                        options = {
+                            promptId: prompt.id,
+                            messages: chat.value.map(function(msg) {
+                                return {
+                                    fromUserId: msg.user.id,
+                                    content: msg.content
+                                };
+                            }),
+                            emojis: emojis2,
+                            customScript: customScript2
+                        };
+                        setIsGenerating(true);
+                        return [
+                            4,
+                            generateResponse(admin.value.password, options)
+                        ];
+                    case 1:
+                        response = _state.sent();
+                        if (response.isErr()) {
+                            console.error(response.error);
+                            return [
+                                2
+                            ];
+                        }
+                        message = response.value.message;
+                        addMessage(CREATOR, message);
+                        setIsGenerating(false);
+                        return [
+                            2
+                        ];
+                }
+            });
+        });
+        return function respond() {
+            return _ref.apply(this, arguments);
+        };
+    }();
+    var addMessage = function(user, content) {
+        setChat(function(prev) {
+            if (!prev.isReady) {
+                return prev;
             }
-        }, /* @__PURE__ */ import_react.default.createElement(Prompt, {
-            prompt: prompt,
-            savePrompt: savePrompt,
-            updatePrompt: updatePrompt,
-            isSaving: isSaving
-        }));
-    }));
+            return {
+                isReady: true,
+                value: _to_consumable_array(prev.value).concat([
+                    {
+                        user: user,
+                        content: content
+                    }
+                ])
+            };
+        });
+    };
+    return {
+        emojis: emojis2,
+        customScript: customScript2,
+        setEmojis: setEmojis,
+        setCustomScript: setCustomScript,
+        messages: messages,
+        isGenerating: isGenerating,
+        addMessage: addMessage,
+        respond: respond,
+        FAN: FAN,
+        CREATOR: CREATOR
+    };
 };
 // src/apps/admin/context/prompts.tsx
 init_react_import();
@@ -25129,9 +25182,746 @@ var PromptContextProvider = function(param) {
         }
     }, children);
 };
+var useActivePrompt = function() {
+    var prompts = (0, import_react5.useContext)(PromptContext).prompts;
+    var _ref = _sliced_to_array((0, import_react5.useState)({
+        isReady: false
+    }), 2), activePrompt = _ref[0], setActivePrompt = _ref[1];
+    (0, import_react5.useEffect)(function() {
+        if (!prompts.isReady) {
+            return;
+        }
+        var activePrompt2 = prompts.value.find(function(item) {
+            return item.isActive;
+        });
+        if (activePrompt2) {
+            setActivePrompt({
+                isReady: true,
+                value: activePrompt2
+            });
+        }
+    }, [
+        prompts,
+        setActivePrompt
+    ]);
+    return {
+        prompt: activePrompt
+    };
+};
+// src/apps/admin/context/settings.tsx
+init_react_import();
+var import_react6 = __toESM(require_react());
+var getSettings = function() {
+    var _ref = _async_to_generator(function(adminPassword, promptId) {
+        var url, response, body, e;
+        return _ts_generator(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    _state.trys.push([
+                        0,
+                        4,
+                        ,
+                        5
+                    ]);
+                    url = new URL("/api/admin/prompts/".concat(promptId, "/settings"), API_BASE_URL);
+                    return [
+                        4,
+                        fetch(url, {
+                            method: "GET",
+                            headers: {
+                                "x-admin-api-key": adminPassword
+                            }
+                        })
+                    ];
+                case 1:
+                    response = _state.sent();
+                    if (!(response.status === 200)) return [
+                        3,
+                        3
+                    ];
+                    return [
+                        4,
+                        response.json()
+                    ];
+                case 2:
+                    body = _state.sent();
+                    return [
+                        2,
+                        ok(body)
+                    ];
+                case 3:
+                    return [
+                        2,
+                        err(new Error("Failed to get prompt settings. Status code: ".concat(response.status)))
+                    ];
+                case 4:
+                    e = _state.sent();
+                    return [
+                        2,
+                        parseError(e)
+                    ];
+                case 5:
+                    return [
+                        2
+                    ];
+            }
+        });
+    });
+    return function getSettings(adminPassword, promptId) {
+        return _ref.apply(this, arguments);
+    };
+}();
+var postSettings = function() {
+    var _ref = _async_to_generator(function(adminPassword, settings) {
+        var url, response, e;
+        return _ts_generator(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    _state.trys.push([
+                        0,
+                        2,
+                        ,
+                        3
+                    ]);
+                    url = new URL("/api/admin/prompts/".concat(settings.promptId, "/settings"), API_BASE_URL);
+                    return [
+                        4,
+                        fetch(url, {
+                            method: "POST",
+                            body: JSON.stringify({
+                                settings: settings
+                            }),
+                            headers: {
+                                "Content-Type": "application/json",
+                                "x-admin-api-key": adminPassword
+                            }
+                        })
+                    ];
+                case 1:
+                    response = _state.sent();
+                    if (response.status === 200) {
+                        return [
+                            2,
+                            ok(null)
+                        ];
+                    }
+                    return [
+                        2,
+                        err(new Error("Failed to post settings. Status code: ".concat(response.status)))
+                    ];
+                case 2:
+                    e = _state.sent();
+                    return [
+                        2,
+                        parseError(e)
+                    ];
+                case 3:
+                    return [
+                        2
+                    ];
+            }
+        });
+    });
+    return function postSettings(adminPassword, settings) {
+        return _ref.apply(this, arguments);
+    };
+}();
+var usePromptSettings = function(props) {
+    var admin = (0, import_react6.useContext)(AdminContext).admin;
+    var _ref = _sliced_to_array((0, import_react6.useState)({
+        isReady: false
+    }), 2), settings = _ref[0], setSettings = _ref[1];
+    var _ref1 = _sliced_to_array((0, import_react6.useState)(false), 2), isSaving = _ref1[0], setIsSaving = _ref1[1];
+    var _ref2 = _sliced_to_array((0, import_react6.useState)(true), 2), isSaved = _ref2[0], setIsSaved = _ref2[1];
+    (0, import_react6.useEffect)(function() {
+        var isMounted = true;
+        if (props.promptId && admin.isReady && admin.value.isLoggedIn) {
+            getSettings(admin.value.password, props.promptId).then(function(res) {
+                if (isMounted) {
+                    if (res.isErr()) {
+                        console.error(res.error);
+                        return;
+                    }
+                    setSettings({
+                        isReady: true,
+                        value: res.value.settings
+                    });
+                }
+            });
+        }
+        return function() {
+            isMounted = false;
+        };
+    }, [
+        props.promptId,
+        admin
+    ]);
+    var saveSettings = function() {
+        var _ref = _async_to_generator(function(settings2) {
+            var res;
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (!admin.isReady || !admin.value.isLoggedIn) {
+                            console.warn("Admin not logged in");
+                            return [
+                                2
+                            ];
+                        }
+                        setIsSaving(true);
+                        return [
+                            4,
+                            postSettings(admin.value.password, settings2)
+                        ];
+                    case 1:
+                        res = _state.sent();
+                        if (res.isErr()) {
+                            alert(res.error);
+                            setIsSaving(false);
+                            return [
+                                2
+                            ];
+                        }
+                        setIsSaved(true);
+                        alert("Saved settings!");
+                        setIsSaving(false);
+                        return [
+                            2
+                        ];
+                }
+            });
+        });
+        return function saveSettings(settings2) {
+            return _ref.apply(this, arguments);
+        };
+    }();
+    return {
+        settings: settings,
+        updateSettings: function(settings2) {
+            return setSettings(function(prev) {
+                if (!prev.isReady) {
+                    return prev;
+                }
+                setIsSaved(false);
+                return {
+                    isReady: true,
+                    value: _object_spread({}, prev.value, settings2)
+                };
+            });
+        },
+        saveSettings: saveSettings,
+        isSaving: isSaving,
+        isSaved: isSaved
+    };
+};
+// src/apps/admin/components/playground/NewMessage.tsx
+init_react_import();
+var import_react7 = __toESM(require_react());
+var NewMessage = function(props) {
+    var _ref = _sliced_to_array((0, import_react7.useState)(props.CREATOR), 2), from = _ref[0], setFrom = _ref[1];
+    var _ref1 = _sliced_to_array((0, import_react7.useState)(""), 2), content = _ref1[0], setContent = _ref1[1];
+    return /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            display: "flex",
+            flexDirection: "column"
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            display: "flex",
+            flexDirection: "row"
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("label", {
+        style: {
+            paddingRight: "4px"
+        }
+    }, "From "), /* @__PURE__ */ import_react.default.createElement("select", {
+        onChange: function(e) {
+            setFrom(e.target.value === props.CREATOR.id ? props.CREATOR : props.FAN);
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("option", {
+        value: props.CREATOR.id
+    }, props.CREATOR.name, " (creator)"), /* @__PURE__ */ import_react.default.createElement("option", {
+        value: props.FAN.id
+    }, props.FAN.name, " (fan)"))), /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            display: "flex",
+            flexDirection: "column"
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("label", null, "Content "), /* @__PURE__ */ import_react.default.createElement("textarea", {
+        value: content,
+        onChange: function(e) {
+            return setContent(e.target.value);
+        }
+    })), /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            marginTop: "4px"
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("button", {
+        onClick: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            props.saveMessage(from, content);
+            setContent("");
+        }
+    }, "Add Message")));
+};
+// src/apps/admin/components/playground/Playground.tsx
+function extractValue(item) {
+    if (item.isReady) {
+        return item.value;
+    }
+    return void 0;
+}
+var Playground = function() {
+    var _extractValue;
+    var prompt = useActivePrompt().prompt;
+    var promptId = (_extractValue = extractValue(prompt)) === null || _extractValue === void 0 ? void 0 : _extractValue.id;
+    var extractedPrompt = extractValue(prompt);
+    var settings = usePromptSettings({
+        promptId: promptId
+    }).settings;
+    var extractedSettings = extractValue(settings);
+    var _useChat = useChat({
+        prompt: extractedPrompt,
+        settings: extractedSettings
+    }), messages = _useChat.messages, emojis2 = _useChat.emojis, customScript2 = _useChat.customScript, setEmojis = _useChat.setEmojis, setCustomScript = _useChat.setCustomScript, isGenerating = _useChat.isGenerating, respond = _useChat.respond, addMessage = _useChat.addMessage, FAN2 = _useChat.FAN, CREATOR2 = _useChat.CREATOR;
+    if (!prompt.isReady || !settings.isReady || !messages.isReady) {
+        return /* @__PURE__ */ import_react.default.createElement("div", null, "Loading...");
+    }
+    return /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            display: "relative",
+            maxWidth: "700px"
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("h1", null, "Playground"), /* @__PURE__ */ import_react.default.createElement("label", {
+        style: {
+            paddingRight: "4px"
+        }
+    }, "Emojis"), /* @__PURE__ */ import_react.default.createElement("input", {
+        type: "text",
+        value: emojis2,
+        onChange: function(e) {
+            return setEmojis(e.target.value);
+        }
+    }), /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            display: "flex",
+            flexDirection: "column"
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("label", null, "Custom Script"), /* @__PURE__ */ import_react.default.createElement("textarea", {
+        value: customScript2,
+        onChange: function(e) {
+            return setCustomScript(e.target.value);
+        }
+    })), messages.value.map(function(msg, index) {
+        return /* @__PURE__ */ import_react.default.createElement("div", {
+            key: index.toString(),
+            style: {
+                padding: "1rem"
+            }
+        }, /* @__PURE__ */ import_react.default.createElement("p", {
+            style: {
+                color: "blue"
+            }
+        }, typeof msg.user === "string" ? msg.user : msg.user.name), " ", msg.content);
+    }), /* @__PURE__ */ import_react.default.createElement(NewMessage, {
+        CREATOR: CREATOR2,
+        FAN: FAN2,
+        saveMessage: addMessage
+    }), /* @__PURE__ */ import_react.default.createElement("button", {
+        style: {
+            marginTop: "4px"
+        },
+        disabled: isGenerating,
+        onClick: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            respond();
+        }
+    }, "Generate Response"));
+};
+// src/apps/admin/prompts.tsx
+init_react_import();
+var import_react9 = __toESM(require_react());
+// src/lib/utils/uid.ts
+init_react_import();
+// node_modules/.pnpm/nanoid@3.3.6/node_modules/nanoid/index.browser.js
+init_react_import();
+// node_modules/.pnpm/nanoid@3.3.6/node_modules/nanoid/url-alphabet/index.js
+init_react_import();
+// node_modules/.pnpm/nanoid@3.3.6/node_modules/nanoid/index.browser.js
+var random = function(bytes) {
+    return crypto.getRandomValues(new Uint8Array(bytes));
+};
+var customRandom = function(alphabet2, defaultSize, getRandom) {
+    var mask = (2 << Math.log(alphabet2.length - 1) / Math.LN2) - 1;
+    var step = -~(1.6 * mask * defaultSize / alphabet2.length);
+    return function() {
+        var size = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : defaultSize;
+        var id = "";
+        while(true){
+            var bytes = getRandom(step);
+            var j = step;
+            while(j--){
+                id += alphabet2[bytes[j] & mask] || "";
+                if (id.length === size) return id;
+            }
+        }
+    };
+};
+var customAlphabet = function(alphabet2) {
+    var size = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 21;
+    return customRandom(alphabet2, size, random);
+};
+// src/lib/utils/uid.ts
+var letters = "abcdefghijklmnopqrstuvwxyz";
+var alphabet = "".concat(letters).concat(letters.toUpperCase(), "0123456789");
+var uid = customAlphabet(alphabet, 16);
+// src/apps/admin/components/prompts/PromptList.tsx
+init_react_import();
+// src/apps/admin/components/prompts/Prompt.tsx
+init_react_import();
+var import_react8 = __toESM(require_react());
+// src/apps/admin/components/prompts/Message.tsx
+init_react_import();
+var Message = function(param) {
+    var message = param.message, onChange = param.onChange;
+    return /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            margin: "8px"
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("label", {
+        style: {
+            paddingRight: "4px"
+        }
+    }, "Role:"), /* @__PURE__ */ import_react.default.createElement("select", {
+        value: message.role,
+        onChange: function(e) {
+            var role = e.target.value;
+            onChange(_object_spread_props(_object_spread({}, message), {
+                role: role
+            }));
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("option", {
+        value: "system"
+    }, "System"), /* @__PURE__ */ import_react.default.createElement("option", {
+        value: "user"
+    }, "User"), /* @__PURE__ */ import_react.default.createElement("option", {
+        value: "assistant"
+    }, "Assistant"))), /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            display: "flex",
+            flexDirection: "column"
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("label", {
+        style: {
+            paddingRight: "4px"
+        }
+    }, "Text:"), /* @__PURE__ */ import_react.default.createElement("textarea", {
+        style: {
+            minHeight: "100px"
+        },
+        value: message.message,
+        onChange: function(e) {
+            onChange(_object_spread_props(_object_spread({}, message), {
+                message: e.target.value
+            }));
+        }
+    })));
+};
+// src/apps/admin/components/prompts/Preview.tsx
+init_react_import();
+var Preview = function(param) {
+    var messages = param.messages;
+    return /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            overflow: "auto"
+        }
+    }, messages.map(function(message, index) {
+        return /* @__PURE__ */ import_react.default.createElement("div", {
+            key: index
+        }, /* @__PURE__ */ import_react.default.createElement("p", {
+            style: {
+                color: "blue"
+            }
+        }, message.role, ":"), " ", /* @__PURE__ */ import_react.default.createElement("p", null, message.content));
+    }));
+};
+// src/apps/admin/components/prompts/PromptSettings.tsx
+init_react_import();
+var Settings = function(props) {
+    var _usePromptSettings = usePromptSettings({
+        promptId: props.promptId
+    }), settings = _usePromptSettings.settings, saveSettings = _usePromptSettings.saveSettings, updateSettings = _usePromptSettings.updateSettings, isSaving = _usePromptSettings.isSaving, isSaved = _usePromptSettings.isSaved;
+    if (!settings.isReady) {
+        return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("h3", null, "Prompt Settings"), /* @__PURE__ */ import_react.default.createElement("div", null, "Loading..."));
+    }
+    return /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            maxWidth: "700px"
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("h3", null, "Prompt Settings"), /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            display: "flex",
+            flexDirection: "column"
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("label", {
+        style: {
+            marginTop: "4px"
+        }
+    }, "Model"), /* @__PURE__ */ import_react.default.createElement("select", {
+        value: settings.value.model,
+        onChange: function(e) {
+            updateSettings({
+                model: e.target.value
+            });
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("option", {
+        value: "gpt-3.5-turbo"
+    }, "gpt-3.5-turbo"), /* @__PURE__ */ import_react.default.createElement("option", {
+        value: "gpt-3.5-turbo-16k"
+    }, "gpt-3.5-turbo-16k")), /* @__PURE__ */ import_react.default.createElement("label", {
+        style: {
+            marginTop: "4px"
+        }
+    }, "Temperature - What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic."), /* @__PURE__ */ import_react.default.createElement("input", {
+        type: "number",
+        value: settings.value.temperature,
+        onChange: function(e) {
+            var value = parseFloat(e.target.value);
+            if (value < 0 || value > 2) {
+                value = 1;
+            }
+            updateSettings({
+                temperature: value
+            });
+        }
+    }), /* @__PURE__ */ import_react.default.createElement("label", {
+        style: {
+            marginTop: "4px"
+        }
+    }, "Top P - An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered."), /* @__PURE__ */ import_react.default.createElement("input", {
+        type: "number",
+        value: settings.value.topP,
+        onChange: function(e) {
+            var value = parseFloat(e.target.value);
+            if (value < 0 || value > 1) {
+                value = 0.9;
+            }
+            updateSettings({
+                topP: value
+            });
+        }
+    }), /* @__PURE__ */ import_react.default.createElement("label", {
+        style: {
+            marginTop: "4px"
+        }
+    }, "Max Tokens - The maximum number of tokens to generate in the chat completion."), /* @__PURE__ */ import_react.default.createElement("input", {
+        type: "number",
+        value: settings.value.maxTokens,
+        onChange: function(e) {
+            var value = parseInt(e.target.value, 10);
+            updateSettings({
+                maxTokens: value
+            });
+        }
+    }), /* @__PURE__ */ import_react.default.createElement("label", {
+        style: {
+            marginTop: "4px"
+        }
+    }, "Presence Penalty - Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics."), /* @__PURE__ */ import_react.default.createElement("input", {
+        type: "number",
+        value: settings.value.presencePenalty,
+        onChange: function(e) {
+            var value = parseFloat(e.target.value);
+            if (value < -2 || value > 2) {
+                value = 0;
+            }
+            updateSettings({
+                presencePenalty: value
+            });
+        }
+    }), /* @__PURE__ */ import_react.default.createElement("label", {
+        style: {
+            marginTop: "4px"
+        }
+    }, "Frequency Penalty - Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim."), /* @__PURE__ */ import_react.default.createElement("input", {
+        type: "number",
+        value: settings.value.frequencyPenalty,
+        onChange: function(e) {
+            var value = parseFloat(e.target.value);
+            if (value < -2 || value > 2) {
+                value = 0;
+            }
+            updateSettings({
+                frequencyPenalty: value
+            });
+        }
+    })), /* @__PURE__ */ import_react.default.createElement("button", {
+        onClick: function() {
+            saveSettings(settings.value);
+        },
+        disabled: isSaving || isSaved
+    }, "Save Settings"));
+};
+var PromptSettings_default = Settings;
+// src/apps/admin/components/prompts/Prompt.tsx
+var emojis = "\uD83D\uDE08";
+var customScript = "Hello World!";
+var Prompt = function(param) {
+    var prompt = param.prompt, updatePrompt = param.updatePrompt, savePrompt = param.savePrompt, isSaving = param.isSaving;
+    var _ref = _sliced_to_array((0, import_react8.useState)(false), 2), hasChanges = _ref[0], setHasChanges = _ref[1];
+    var _ref1 = _sliced_to_array((0, import_react8.useState)(false), 2), showPreview = _ref1[0], setShowPreview = _ref1[1];
+    var _ref2 = _sliced_to_array((0, import_react8.useState)(false), 2), showSettings = _ref2[0], setShowSettings = _ref2[1];
+    var save = function() {
+        savePrompt(prompt);
+        setHasChanges(false);
+    };
+    var createMessage = function() {
+        var role = prompt.messages.length > 0 ? "user" : "system";
+        var message = {
+            id: uid(),
+            promptId: prompt.id,
+            role: role,
+            messageIndex: prompt.messages.length,
+            message: "",
+            createdAt: Date.now(),
+            updatedAt: Date.now()
+        };
+        setHasChanges(true);
+        updatePrompt(_object_spread_props(_object_spread({}, prompt), {
+            messages: _to_consumable_array(prompt.messages).concat([
+                message
+            ])
+        }));
+    };
+    var onMessageChange = function(message) {
+        var messages = prompt.messages;
+        var index = messages.findIndex(function(item) {
+            return item.id === message.id;
+        });
+        if (index === -1) {
+            setHasChanges(true);
+            updatePrompt(_object_spread_props(_object_spread({}, prompt), {
+                messages: _to_consumable_array(messages).concat([
+                    message
+                ])
+            }));
+        } else {
+            messages[index] = message;
+            setHasChanges(true);
+            updatePrompt(_object_spread_props(_object_spread({}, prompt), {
+                messages: _to_consumable_array(messages)
+            }));
+        }
+    };
+    return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center"
+        }
+    }, /* @__PURE__ */ import_react.default.createElement("p", {
+        style: {
+            color: prompt.isActive ? "green" : "red",
+            paddingRight: "4px"
+        }
+    }, prompt.isActive ? "Active" : "Disabled"), !prompt.isActive && /* @__PURE__ */ import_react.default.createElement("button", {
+        style: {
+            height: "22px"
+        },
+        onClick: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            setHasChanges(true);
+            updatePrompt(_object_spread_props(_object_spread({}, prompt), {
+                isActive: true
+            }));
+        }
+    }, "Activate")), /* @__PURE__ */ import_react.default.createElement("div", null, "Messages:", prompt.messages.sort(function(a, b) {
+        return a.messageIndex - b.messageIndex;
+    }).map(function(item) {
+        return /* @__PURE__ */ import_react.default.createElement(Message, {
+            key: item.id,
+            message: item,
+            onChange: function(message) {
+                onMessageChange(message);
+            }
+        });
+    })), showPreview && /* @__PURE__ */ import_react.default.createElement(Preview, {
+        messages: transformPrompt(prompt, {
+            emojis: emojis,
+            customScript: customScript,
+            messages: []
+        }).messages
+    }), showSettings && /* @__PURE__ */ import_react.default.createElement(PromptSettings_default, {
+        promptId: prompt.id
+    }), /* @__PURE__ */ import_react.default.createElement("button", {
+        style: {
+            marginRight: "4px"
+        },
+        onClick: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            createMessage();
+        }
+    }, "Add Message"), /* @__PURE__ */ import_react.default.createElement("button", {
+        style: {
+            marginRight: "4px"
+        },
+        onClick: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            setShowPreview(function(prev) {
+                return !prev;
+            });
+        }
+    }, "Toggle Preview"), /* @__PURE__ */ import_react.default.createElement("button", {
+        style: {
+            marginRight: "4px"
+        },
+        onClick: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            setShowSettings(function(prev) {
+                return !prev;
+            });
+        }
+    }, "Toggle Settings"), /* @__PURE__ */ import_react.default.createElement("button", {
+        disabled: isSaving || !hasChanges,
+        onClick: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            save();
+        }
+    }, "Save"));
+};
+// src/apps/admin/components/prompts/PromptList.tsx
+var PromptsList = function(param) {
+    var prompts = param.prompts, updatePrompt = param.updatePrompt, savePrompt = param.savePrompt, isSaving = param.isSaving;
+    return /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            maxWidth: "700px"
+        }
+    }, prompts.sort(function(a, b) {
+        return a.version - b.version;
+    }).map(function(prompt) {
+        return /* @__PURE__ */ import_react.default.createElement("div", {
+            key: prompt.id,
+            style: {
+                padding: "4px"
+            }
+        }, /* @__PURE__ */ import_react.default.createElement("h3", null, "Prompt: ", prompt.id), /* @__PURE__ */ import_react.default.createElement(Prompt, {
+            prompt: prompt,
+            savePrompt: savePrompt,
+            updatePrompt: updatePrompt,
+            isSaving: isSaving
+        }));
+    }));
+};
 // src/apps/admin/prompts.tsx
 var Prompts = function() {
-    var _ref = (0, import_react6.useContext)(PromptContext), prompts = _ref.prompts, savePrompt = _ref.savePrompt, updatePrompt = _ref.updatePrompt, isSaving = _ref.isSaving;
+    var _ref = (0, import_react9.useContext)(PromptContext), prompts = _ref.prompts, savePrompt = _ref.savePrompt, updatePrompt = _ref.updatePrompt, isSaving = _ref.isSaving;
     var createPrompt = function() {
         if (!prompts.isReady) {
             return;
@@ -25149,13 +25939,13 @@ var Prompts = function() {
         };
         updatePrompt(prompt);
     };
-    return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("h2", null, "Prompts"), /* @__PURE__ */ import_react.default.createElement("div", null, "Instructions:", /* @__PURE__ */ import_react.default.createElement("ol", null, /* @__PURE__ */ import_react.default.createElement("li", null, "Create a prompt."), /* @__PURE__ */ import_react.default.createElement("li", null, "Add messages to the prompt, and utilize ", /* @__PURE__ */ import_react.default.createElement("strong", null, "{emojis}"), " and", " ", /* @__PURE__ */ import_react.default.createElement("strong", null, "{customScript}"), " to inject the user's emoji and custom script settings into a message."), /* @__PURE__ */ import_react.default.createElement("li", null, "Preview the message to see what the message will look like when sent to the AI."), /* @__PURE__ */ import_react.default.createElement("li", null, "Save the prompt."), /* @__PURE__ */ import_react.default.createElement("li", null, "Activate the prompt to begin using it in production."))), /* @__PURE__ */ import_react.default.createElement("button", {
+    return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("h2", null, "Prompts"), /* @__PURE__ */ import_react.default.createElement("div", null, "Instructions:", /* @__PURE__ */ import_react.default.createElement("ol", null, /* @__PURE__ */ import_react.default.createElement("li", null, "Create a prompt.", " ", /* @__PURE__ */ import_react.default.createElement("button", {
         onClick: function(e) {
             e.preventDefault();
             e.stopPropagation();
             createPrompt();
         }
-    }, "New Prompt"), prompts.isReady ? /* @__PURE__ */ import_react.default.createElement(PromptsList, {
+    }, "New Prompt")), /* @__PURE__ */ import_react.default.createElement("li", null, "Add messages to the prompt, and utilize ", /* @__PURE__ */ import_react.default.createElement("strong", null, "{emojis}"), " and", " ", /* @__PURE__ */ import_react.default.createElement("strong", null, "{customScript}"), " to inject the user's emoji and custom script settings into a message."), /* @__PURE__ */ import_react.default.createElement("li", null, "Preview the message to see what the message will look like when sent to the AI."), /* @__PURE__ */ import_react.default.createElement("li", null, "Save the prompt."), /* @__PURE__ */ import_react.default.createElement("li", null, "Activate the prompt to begin using it in production."))), prompts.isReady ? /* @__PURE__ */ import_react.default.createElement(PromptsList, {
         isSaving: isSaving,
         savePrompt: savePrompt,
         prompts: prompts.value,
@@ -25177,35 +25967,40 @@ var NavBar = function(props) {
             flexDirection: "row"
         }
     }, /* @__PURE__ */ import_react.default.createElement("button", {
+        style: {
+            marginRight: "4px"
+        },
         disabled: props.tab === "prompt",
         onClick: handleClick("prompt")
-    }, "Prompt"), /* @__PURE__ */ import_react.default.createElement("button", {
-        disabled: props.tab === "settings",
-        onClick: handleClick("settings")
-    }, "settings"), /* @__PURE__ */ import_react.default.createElement("button", {
+    }, "Prompts"), /* @__PURE__ */ import_react.default.createElement("button", {
+        style: {
+            marginRight: "4px"
+        },
         disabled: props.tab === "playground",
         onClick: handleClick("playground")
-    }, "playground"));
+    }, "Playground"));
 };
 var Page = function(props) {
     switch(props.tab){
         case "prompt":
             return /* @__PURE__ */ import_react.default.createElement(Prompts, null);
-        case "settings":
-            return /* @__PURE__ */ import_react.default.createElement("div", null, "settings");
         case "playground":
-            return /* @__PURE__ */ import_react.default.createElement("div", null, "playground");
+            return /* @__PURE__ */ import_react.default.createElement(Playground, null);
     }
 };
 var Admin = function() {
-    var _ref = (0, import_react8.useContext)(AdminContext), admin = _ref.admin, isChecking = _ref.isChecking, login = _ref.login, logout = _ref.logout;
-    var _ref1 = _sliced_to_array((0, import_react7.useState)(""), 2), passwordValue = _ref1[0], setPasswordValue = _ref1[1];
-    var _ref2 = _sliced_to_array((0, import_react7.useState)("prompt"), 2), tab = _ref2[0], setTab = _ref2[1];
+    var _ref = (0, import_react11.useContext)(AdminContext), admin = _ref.admin, isChecking = _ref.isChecking, login = _ref.login, logout = _ref.logout;
+    var _ref1 = _sliced_to_array((0, import_react10.useState)(""), 2), passwordValue = _ref1[0], setPasswordValue = _ref1[1];
+    var _ref2 = _sliced_to_array((0, import_react10.useState)("prompt"), 2), tab = _ref2[0], setTab = _ref2[1];
     if (!admin.isReady) {
         return /* @__PURE__ */ import_react.default.createElement("div", null, "loading...");
     }
     if (admin.value.isLoggedIn) {
-        return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement(NavBar, {
+        return /* @__PURE__ */ import_react.default.createElement("div", {
+            style: {
+                paddingBottom: "300px"
+            }
+        }, /* @__PURE__ */ import_react.default.createElement(NavBar, {
             tab: tab,
             setTab: setTab
         }), /* @__PURE__ */ import_react.default.createElement(Page, {

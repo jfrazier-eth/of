@@ -6,6 +6,7 @@ import { uid } from "@/utils/uid";
 
 import { Message } from "./Message";
 import { Preview } from "./Preview";
+import PromptSettings from "./PromptSettings";
 
 const emojis = "😈";
 const customScript = "Hello World!";
@@ -23,6 +24,7 @@ export const Prompt = ({
 }) => {
   const [hasChanges, setHasChanges] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   const save = () => {
     savePrompt(prompt);
@@ -70,10 +72,20 @@ export const Prompt = ({
   };
   return (
     <div>
-      <div>
-        Active: {prompt.isActive.toString()}{" "}
+      <div style={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center"
+      }}>
+        <p style={{
+          color: prompt.isActive ? "green" : "red",
+          paddingRight: "4px"
+        }}>{prompt.isActive ? "Active" : "Disabled"}</p>
         {!prompt.isActive && (
           <button
+            style={{
+              height: '22px'
+            }}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -87,22 +99,9 @@ export const Prompt = ({
           >
             Activate
           </button>
-        )}{" "}
-        {hasChanges && (
-          <button
-            disabled={isSaving}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              save();
-            }}
-          >
-            Save{" "}
-          </button>
         )}
       </div>
       <div>
-        {" "}
         Messages:
         {prompt.messages
           .sort((a, b) => {
@@ -120,7 +119,17 @@ export const Prompt = ({
             );
           })}
       </div>
+      {showPreview && (
+        <Preview
+          messages={transformPrompt(prompt, { emojis, customScript, messages: [] }).messages}
+        />
+      )}
+
+      {showSettings && <PromptSettings promptId={prompt.id} />}
       <button
+        style={{
+          marginRight: "4px"
+        }}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -130,20 +139,40 @@ export const Prompt = ({
         Add Message
       </button>
       <button
+        style={{
+          marginRight: "4px"
+        }}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
           setShowPreview((prev) => !prev);
         }}
       >
-        {" "}
-        Toggle Preview{" "}
+        Toggle Preview
       </button>
-      {showPreview && (
-        <Preview
-          messages={transformPrompt(prompt, { emojis, customScript, messages: [] }).messages}
-        />
-      )}
+      <button
+        style={{
+          marginRight: "4px"
+        }}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setShowSettings((prev) => !prev);
+        }}
+      >
+        Toggle Settings
+      </button>
+
+      <button
+        disabled={isSaving || !hasChanges}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          save();
+        }}
+      >
+        Save
+      </button>
     </div>
   );
 };

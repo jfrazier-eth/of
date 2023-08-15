@@ -13,6 +13,10 @@ export const checkInternalApiAuth = (
   try {
     const apiKey = res.locals.apiKey;
 
+    if (apiKey === config.admin.password) {
+      return next();
+    }
+
     if (apiKey !== config.server.apiKey) {
       return res.sendStatus(401);
     }

@@ -34,7 +34,18 @@ export const Prompts = () => {
       <div>
         Instructions:
         <ol>
-          <li>Create a prompt.</li>
+          <li>
+            Create a prompt.{" "}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                createPrompt();
+              }}
+            >
+              New Prompt
+            </button>
+          </li>
           <li>
             Add messages to the prompt, and utilize <strong>{"{emojis}"}</strong> and{" "}
             <strong>{"{customScript}"}</strong> to inject the user's emoji and custom script
@@ -45,15 +56,7 @@ export const Prompts = () => {
           <li>Activate the prompt to begin using it in production.</li>
         </ol>
       </div>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          createPrompt();
-        }}
-      >
-        New Prompt
-      </button>
+
       {prompts.isReady ? (
         <PromptsList
           isSaving={isSaving}

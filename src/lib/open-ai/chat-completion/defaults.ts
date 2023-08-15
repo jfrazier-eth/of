@@ -1,7 +1,7 @@
-import { ChatCompletionRequest } from "./types";
+import { Model } from "../model";
 
-export const defaultChatCompletionRequestOptions: Omit<ChatCompletionRequest, "messages"> = {
-  model: "gpt-3.5-turbo",
+export const defaultChatCompletionRequestOptions = {
+  model: "gpt-3.5-turbo" as Model,
   temperature: 0.7,
   top_p: 1,
   n: 1,

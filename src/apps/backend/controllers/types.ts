@@ -17,7 +17,10 @@ export type PostRequest<ReqBody = {}, ReqQuery = {}> = ExpressRequest<
 export type InternalAuthResponse<ResBody> = ExpressResponse<ResBody, InternalAuthLocals>;
 
 export type AdminAuthResponse<ResBody> = ExpressResponse<ResBody, AdminAuthLocals>;
-
+export type AdminAuthResponseWithPromptId<ResBody> = ExpressResponse<
+  ResBody,
+  AdminAuthLocals & { promptId: string }
+>;
 export type UserAuthResponse<ResBody> = ExpressResponse<ResBody, AuthLocals>;
 
 export type SiteParamLocals<S> = {

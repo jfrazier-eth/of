@@ -6,8 +6,38 @@ import { pgp } from "@/backend/db/postgres/db";
 import { transformFullPrompt } from "./pg-transformer";
 import { FullPrompt } from "./types";
 
+export const setActivePrompt = async (promptId: string) => {
+  const activePrompt = {
+    id: 'active',
+    prompt_id: promptId,
+    updated_at: new Date(),
+    created_at: new Date(),
+  }
+
+  const columns = Object.keys(activePrompt);
+  const columnsSet = new pgp.helpers.ColumnSet(columns, { table: "active_prompt" });
+  const excludedColumns = columns.map((col) => `${col} = EXCLUDED.${col}`).join(", ");
+
+  const query = `${pgp.helpers.insert(activePrompt, columnsSet)} ON CONFLICT (id) DO UPDATE SET ${excludedColumns}`;
+
+  const result = await pgQuery(query);
+
+  if (result.isErr()) {
+    return err(result.error);
+  }
+
+  return ok(null);
+};
+
 export const savePrompt = async (prompt: FullPrompt) => {
-  const { prompt: pgPrompt, messages } = transformFullPrompt(prompt);
+  const { prompt: pgPrompt, messages, isActive } = transformFullPrompt(prompt);
+
+  if (isActive) {
+    const res = await setActivePrompt(pgPrompt.id);
+    if (res.isErr()) {
+      return err(res.error);
+    }
+  }
   if (messages.length === 0) {
     return err(new Error("Must have at least one message"));
   }

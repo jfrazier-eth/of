@@ -19,8 +19,8 @@ interface PromptContextValue {
 export const PromptContext = createContext<PromptContextValue>({
   prompts: { isReady: false },
   isSaving: false,
-  savePrompt: () => {},
-  updatePrompt: () => {},
+  savePrompt: () => { },
+  updatePrompt: () => { },
 });
 
 const getPrompts = async (adminPassword: string) => {
@@ -159,4 +159,23 @@ export const PromptContextProvider: FC<{ children: ReactNode }> = ({ children })
       {children}
     </PromptContext.Provider>
   );
+};
+
+export const useActivePrompt = () => {
+  const { prompts } = useContext(PromptContext);
+  const [activePrompt, setActivePrompt] = useState<Data<FullPrompt>>({ isReady: false });
+
+  useEffect(() => {
+    if (!prompts.isReady) {
+      return;
+    }
+    const activePrompt = prompts.value.find((item) => item.isActive);
+    if (activePrompt) {
+      setActivePrompt({ isReady: true, value: activePrompt });
+    }
+  }, [prompts, setActivePrompt]);
+
+  return {
+    prompt: activePrompt,
+  };
 };
