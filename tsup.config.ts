@@ -25,7 +25,7 @@ export default defineConfig((options) => {
         tsconfig: "./tsconfig.admin.json",
         noExternal: [...noExternal, 'react-dom', 'react', 'nanoid'],
         outDir: "admin-dist",
-        platform: "browser"
+        platform: "browser",
       }
     }
     default: {

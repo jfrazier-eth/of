@@ -22,7 +22,7 @@ export const transformPGPromptMessage = (prompt: PGPromptMessage): PromptMessage
     createdAt: prompt.created_at.getTime(),
     updatedAt: prompt.updated_at.getTime(),
   };
-}
+};
 
 export const transformFullPrompt = (
   prompt: FullPrompt
@@ -47,4 +47,4 @@ export const tranformPGPrompt = (prompt: PGPrompt) => {
     isActive: prompt.is_active,
     version: prompt.version,
   };
-}
+};

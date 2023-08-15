@@ -2,47 +2,45 @@ import { err, ok } from "neverthrow";
 
 import { pgQuery } from "@/backend/db/postgres";
 
-import { FullPrompt, PGPrompt, PGPromptMessage, Prompt, PromptMessage } from "./types";
 import { tranformPGPrompt, transformPGPromptMessage } from "./pg-transformer";
+import { FullPrompt, PGPrompt, PGPromptMessage, Prompt, PromptMessage } from "./types";
 
 interface QueryResponse {
-  'prompts_id': PGPrompt['id'],
-  'prompts_created_at': PGPrompt['created_at'],
-  'prompts_updated_at': PGPrompt['updated_at'],
-  'prompts_is_active': PGPrompt['is_active'],
-  'prompts_version': PGPrompt['version'],
-  'prompt_messages_id': PGPromptMessage['id'],
-  'prompt_messages_prompt_id': PGPromptMessage['prompt_id'],
-  'prompt_messages_role': PGPromptMessage['role'],
-  'prompt_messages_message_index': PGPromptMessage['message_index'],
-  'prompt_messages_message': PGPromptMessage['message'],
-  'prompt_messages_created_at': PGPromptMessage['created_at'],
-  'prompt_messages_updated_at': PGPromptMessage['updated_at'],
+  prompts_id: PGPrompt["id"];
+  prompts_created_at: PGPrompt["created_at"];
+  prompts_updated_at: PGPrompt["updated_at"];
+  prompts_is_active: PGPrompt["is_active"];
+  prompts_version: PGPrompt["version"];
+  prompt_messages_id: PGPromptMessage["id"];
+  prompt_messages_prompt_id: PGPromptMessage["prompt_id"];
+  prompt_messages_role: PGPromptMessage["role"];
+  prompt_messages_message_index: PGPromptMessage["message_index"];
+  prompt_messages_message: PGPromptMessage["message"];
+  prompt_messages_created_at: PGPromptMessage["created_at"];
+  prompt_messages_updated_at: PGPromptMessage["updated_at"];
 }
-
 
 const transform = (rows: QueryResponse[]): FullPrompt[] => {
   const extractPrompt = (res: QueryResponse): PGPrompt => {
     return {
-      id: res['prompts_id'],
-      created_at: res['prompts_created_at'],
-      updated_at: res['prompts_updated_at'],
-      is_active: res['prompts_is_active'],
-      version: res['prompts_version'],
-    }
+      id: res["prompts_id"],
+      created_at: res["prompts_created_at"],
+      updated_at: res["prompts_updated_at"],
+      is_active: res["prompts_is_active"],
+      version: res["prompts_version"],
+    };
   };
   const extractMessage = (res: QueryResponse): PGPromptMessage => {
     return {
-      id: res['prompt_messages_id'],
-      prompt_id: res['prompt_messages_prompt_id'],
-      role: res['prompt_messages_role'],
-      message_index: res['prompt_messages_message_index'],
-      message: res['prompt_messages_message'],
-      created_at: res['prompt_messages_created_at'],
-      updated_at: res['prompt_messages_updated_at'],
-    }
-  }
-
+      id: res["prompt_messages_id"],
+      prompt_id: res["prompt_messages_prompt_id"],
+      role: res["prompt_messages_role"],
+      message_index: res["prompt_messages_message_index"],
+      message: res["prompt_messages_message"],
+      created_at: res["prompt_messages_created_at"],
+      updated_at: res["prompt_messages_updated_at"],
+    };
+  };
 
   const messagesByPrompt = new Map<string, PromptMessage[]>();
   const prompts = new Map<string, Prompt>();
@@ -61,13 +59,12 @@ const transform = (rows: QueryResponse[]): FullPrompt[] => {
     const messages = messagesByPrompt.get(id) ?? [];
     fullPrompts.push({
       ...prompt,
-      messages
-    })
+      messages,
+    });
   }
 
   return fullPrompts;
-}
-
+};
 
 export const getPrompts = async () => {
   const query =

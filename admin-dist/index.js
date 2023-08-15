@@ -250,6 +250,11 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __esm = function(fn, res) {
+    return function __init() {
+        return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+    };
+};
 var __commonJS = function(cb, mod) {
     return function __require() {
         return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = {
@@ -302,6 +307,7 @@ var __toESM = function(mod, isNodeMode, target) {
 var require_react_development = __commonJS({
     "node_modules/.pnpm/react@18.2.0/node_modules/react/cjs/react.development.js": function(exports2, module2) {
         "use strict";
+        init_react_import();
         if (true) {
             (function() {
                 "use strict";
@@ -2169,6 +2175,7 @@ var require_react_development = __commonJS({
 var require_react = __commonJS({
     "node_modules/.pnpm/react@18.2.0/node_modules/react/index.js": function(exports2, module2) {
         "use strict";
+        init_react_import();
         if (false) {
             module2.exports = null;
         } else {
@@ -2176,10 +2183,19 @@ var require_react = __commonJS({
         }
     }
 });
+// react-import.js
+var import_react;
+var init_react_import = __esm({
+    "react-import.js": function() {
+        "use strict";
+        import_react = __toESM(require_react());
+    }
+});
 // node_modules/.pnpm/scheduler@0.23.0/node_modules/scheduler/cjs/scheduler.development.js
 var require_scheduler_development = __commonJS({
     "node_modules/.pnpm/scheduler@0.23.0/node_modules/scheduler/cjs/scheduler.development.js": function(exports2) {
         "use strict";
+        init_react_import();
         if (true) {
             (function() {
                 "use strict";
@@ -2626,6 +2642,7 @@ var require_scheduler_development = __commonJS({
 var require_scheduler = __commonJS({
     "node_modules/.pnpm/scheduler@0.23.0/node_modules/scheduler/index.js": function(exports2, module2) {
         "use strict";
+        init_react_import();
         if (false) {
             module2.exports = null;
         } else {
@@ -2637,6 +2654,7 @@ var require_scheduler = __commonJS({
 var require_react_dom_development = __commonJS({
     "node_modules/.pnpm/react-dom@18.2.0_react@18.2.0/node_modules/react-dom/cjs/react-dom.development.js": function(exports2) {
         "use strict";
+        init_react_import();
         if (true) {
             (function() {
                 "use strict";
@@ -3651,7 +3669,7 @@ var require_react_dom_development = __commonJS({
                     {
                         if (props.value == null) {
                             if (typeof props.children === "object" && props.children !== null) {
-                                React6.Children.forEach(props.children, function(child) {
+                                React2.Children.forEach(props.children, function(child) {
                                     if (child == null) {
                                         return;
                                     }
@@ -19008,9 +19026,9 @@ var require_react_dom_development = __commonJS({
                 if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
                     __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
                 }
-                var React6 = require_react();
+                var React2 = require_react();
                 var Scheduler = require_scheduler();
-                var ReactSharedInternals = React6.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+                var ReactSharedInternals = React2.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
                 var suppressWarning = false;
                 var FunctionComponent = 0;
                 var ClassComponent = 1;
@@ -22066,7 +22084,7 @@ var require_react_dom_development = __commonJS({
                     currentlyProcessingQueue = null;
                 }
                 var fakeInternalInstance = {};
-                var emptyRefsObject = new React6.Component().refs;
+                var emptyRefsObject = new React2.Component().refs;
                 var didWarnAboutStateAssignmentForComponent;
                 var didWarnAboutUninitializedState;
                 var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -23939,6 +23957,7 @@ var require_react_dom_development = __commonJS({
 var require_react_dom = __commonJS({
     "node_modules/.pnpm/react-dom@18.2.0_react@18.2.0/node_modules/react-dom/index.js": function(exports2, module2) {
         "use strict";
+        init_react_import();
         if (false) {
             checkDCE();
             module2.exports = null;
@@ -23951,6 +23970,7 @@ var require_react_dom = __commonJS({
 var require_client = __commonJS({
     "node_modules/.pnpm/react-dom@18.2.0_react@18.2.0/node_modules/react-dom/client.js": function(exports2) {
         "use strict";
+        init_react_import();
         var m = require_react_dom();
         if (false) {
             exports2.createRoot = m.createRoot;
@@ -23978,15 +23998,16 @@ var require_client = __commonJS({
     }
 });
 // src/apps/admin/index.tsx
-var import_react10 = __toESM(require_react());
+init_react_import();
+var import_client = __toESM(require_client());
 // src/apps/admin/admin.tsx
+init_react_import();
+var import_react7 = __toESM(require_react());
 var import_react8 = __toESM(require_react());
-var import_react9 = __toESM(require_react());
 // src/apps/admin/context/admin.tsx
-var import_react = __toESM(require_react());
-// src/apps/extension/lib/constants.ts
-var API_BASE_URL = "http://127.0.0.1:8888/";
+init_react_import();
 // node_modules/.pnpm/neverthrow@6.0.0/node_modules/neverthrow/dist/index.es.js
+init_react_import();
 function __awaiter(thisArg, _arguments, P, generator) {
     var adopt = function adopt(value) {
         return _instanceof(value, P) ? value : new P(function(resolve) {
@@ -24440,7 +24461,14 @@ var Err = /** @class */ function() {
     return Err3;
 }();
 var fromThrowable = Result.fromThrowable;
+// src/apps/admin/context/admin.tsx
+var import_react2 = __toESM(require_react());
+var import_react3 = __toESM(require_react());
+// src/apps/extension/lib/constants.ts
+init_react_import();
+var API_BASE_URL = "http://127.0.0.1:8888/";
 // src/lib/utils/parse-error.ts
+init_react_import();
 var parseError = function(error) {
     if (_instanceof(error, Error)) {
         return err(error);
@@ -24451,8 +24479,6 @@ var parseError = function(error) {
     }
 };
 // src/apps/admin/context/admin.tsx
-var import_react2 = __toESM(require_react());
-var import_react3 = __toESM(require_react());
 var AdminContext = (0, import_react3.createContext)({
     admin: {
         isReady: false
@@ -24591,6 +24617,15 @@ var AdminContextProvider = function(param) {
         }
     }, children);
 };
+// src/apps/admin/prompts.tsx
+init_react_import();
+var import_react6 = __toESM(require_react());
+// src/lib/utils/uid.ts
+init_react_import();
+// node_modules/.pnpm/nanoid@3.3.6/node_modules/nanoid/index.browser.js
+init_react_import();
+// node_modules/.pnpm/nanoid@3.3.6/node_modules/nanoid/url-alphabet/index.js
+init_react_import();
 // node_modules/.pnpm/nanoid@3.3.6/node_modules/nanoid/index.browser.js
 var random = function(bytes) {
     return crypto.getRandomValues(new Uint8Array(bytes));
@@ -24619,13 +24654,10 @@ var customAlphabet = function(alphabet2) {
 var letters = "abcdefghijklmnopqrstuvwxyz";
 var alphabet = "".concat(letters).concat(letters.toUpperCase(), "0123456789");
 var uid = customAlphabet(alphabet, 16);
-// src/apps/admin/prompts.tsx
-var import_react6 = __toESM(require_react());
-var import_react7 = __toESM(require_react());
 // src/apps/admin/context/prompts.tsx
+init_react_import();
 var import_react4 = __toESM(require_react());
-var import_react5 = __toESM(require_react());
-var PromptContext = (0, import_react5.createContext)({
+var PromptContext = (0, import_react4.createContext)({
     prompts: {
         isReady: false
     },
@@ -24750,12 +24782,12 @@ var postPrompt = function() {
 }();
 var PromptContextProvider = function(param) {
     var children = param.children;
-    var _ref = _sliced_to_array((0, import_react5.useState)({
+    var _ref = _sliced_to_array((0, import_react4.useState)({
         isReady: false
     }), 2), prompts = _ref[0], setPrompts = _ref[1];
-    var _ref1 = _sliced_to_array((0, import_react5.useState)(false), 2), isSaving = _ref1[0], setIsSaving = _ref1[1];
-    var admin = (0, import_react5.useContext)(AdminContext).admin;
-    (0, import_react5.useEffect)(function() {
+    var _ref1 = _sliced_to_array((0, import_react4.useState)(false), 2), isSaving = _ref1[0], setIsSaving = _ref1[1];
+    var admin = (0, import_react4.useContext)(AdminContext).admin;
+    (0, import_react4.useEffect)(function() {
         var isMounted = true;
         if (!prompts.isReady && admin.isReady) {
             var isLoggedIn = admin.value.isLoggedIn;
@@ -24868,7 +24900,7 @@ var PromptContextProvider = function(param) {
             });
         });
     };
-    return /* @__PURE__ */ import_react4.default.createElement(PromptContext.Provider, {
+    return /* @__PURE__ */ import_react.default.createElement(PromptContext.Provider, {
         value: {
             prompts: prompts,
             isSaving: isSaving,
@@ -24877,14 +24909,63 @@ var PromptContextProvider = function(param) {
         }
     }, children);
 };
-// src/apps/admin/prompts.tsx
+// src/apps/admin/components/prompts/PromptList.tsx
+init_react_import();
+// src/apps/admin/components/prompts/Prompt.tsx
+init_react_import();
+// src/apps/backend/routes/api/ai/chat/transform-request-v2.ts
+init_react_import();
+var transformPrompt = function(prompt, options) {
+    var _formattedMessages;
+    var promptMessages = prompt.messages.sort(function(a, b) {
+        return a.messageIndex - b.messageIndex;
+    });
+    var messages = _to_consumable_array(promptMessages).concat(_to_consumable_array(options.messages));
+    var formattedMessages = [];
+    var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
+    try {
+        for(var _iterator = promptMessages[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true){
+            var item = _step.value;
+            var message = item.message;
+            message = message.replace("{emojis}", options.emojis || "");
+            var hasScript = message.includes("{customScript}");
+            console.log("Has script: ".concat(hasScript));
+            message = message.replace("{customScript}", options.customScript || "");
+            formattedMessages.push({
+                role: item.role,
+                content: message
+            });
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally{
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+                _iterator.return();
+            }
+        } finally{
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+    (_formattedMessages = formattedMessages).push.apply(_formattedMessages, _to_consumable_array(options.messages));
+    return {
+        messages: formattedMessages
+    };
+};
+// src/apps/admin/components/prompts/Prompt.tsx
+var import_react5 = __toESM(require_react());
+// src/apps/admin/components/prompts/Message.tsx
+init_react_import();
 var Message = function(param) {
     var message = param.message, onChange = param.onChange;
-    return /* @__PURE__ */ import_react6.default.createElement("div", null, /* @__PURE__ */ import_react6.default.createElement("div", {
+    return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("div", {
         style: {
             padding: "1rem"
         }
-    }, "Role:", /* @__PURE__ */ import_react6.default.createElement("select", {
+    }, "Role:", /* @__PURE__ */ import_react.default.createElement("select", {
         value: message.role,
         onChange: function(e) {
             var role = e.target.value;
@@ -24893,20 +24974,20 @@ var Message = function(param) {
                 role: role
             }));
         }
-    }, /* @__PURE__ */ import_react6.default.createElement("option", {
+    }, /* @__PURE__ */ import_react.default.createElement("option", {
         value: "system"
-    }, "System"), /* @__PURE__ */ import_react6.default.createElement("option", {
+    }, "System"), /* @__PURE__ */ import_react.default.createElement("option", {
         value: "user"
-    }, "User"), /* @__PURE__ */ import_react6.default.createElement("option", {
+    }, "User"), /* @__PURE__ */ import_react.default.createElement("option", {
         value: "assistant"
-    }, "Assistant"))), /* @__PURE__ */ import_react6.default.createElement("div", {
+    }, "Assistant"))), /* @__PURE__ */ import_react.default.createElement("div", {
         style: {
             display: "flex",
             flexDirection: "row",
             alignItems: "left",
             padding: "1rem"
         }
-    }, "Text:", /* @__PURE__ */ import_react6.default.createElement("textarea", {
+    }, "Text:", /* @__PURE__ */ import_react.default.createElement("textarea", {
         value: message.message,
         onChange: function(e) {
             onChange(_object_spread_props(_object_spread({}, message), {
@@ -24915,9 +24996,31 @@ var Message = function(param) {
         }
     })));
 };
+// src/apps/admin/components/prompts/Preview.tsx
+init_react_import();
+var Preview = function(param) {
+    var messages = param.messages;
+    return /* @__PURE__ */ import_react.default.createElement("div", {
+        style: {
+            overflow: "auto"
+        }
+    }, messages.map(function(message, index) {
+        return /* @__PURE__ */ import_react.default.createElement("div", {
+            key: index
+        }, /* @__PURE__ */ import_react.default.createElement("p", {
+            style: {
+                color: "blue"
+            }
+        }, message.role, ":"), " ", /* @__PURE__ */ import_react.default.createElement("p", null, message.content));
+    }));
+};
+// src/apps/admin/components/prompts/Prompt.tsx
+var emojis = "\uD83D\uDE08";
+var customScript = "Hello World!";
 var Prompt = function(param) {
     var prompt = param.prompt, updatePrompt = param.updatePrompt, savePrompt = param.savePrompt, isSaving = param.isSaving;
-    var _ref = _sliced_to_array((0, import_react6.useState)(false), 2), hasChanges = _ref[0], setHasChanges = _ref[1];
+    var _ref = _sliced_to_array((0, import_react5.useState)(false), 2), hasChanges = _ref[0], setHasChanges = _ref[1];
+    var _ref1 = _sliced_to_array((0, import_react5.useState)(false), 2), showPreview = _ref1[0], setShowPreview = _ref1[1];
     var save = function() {
         savePrompt(prompt);
         setHasChanges(false);
@@ -24960,7 +25063,7 @@ var Prompt = function(param) {
             }));
         }
     };
-    return /* @__PURE__ */ import_react6.default.createElement("div", null, /* @__PURE__ */ import_react6.default.createElement("div", null, "Active: ", prompt.isActive.toString(), " ", !prompt.isActive && /* @__PURE__ */ import_react6.default.createElement("button", {
+    return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("div", null, "Active: ", prompt.isActive.toString(), " ", !prompt.isActive && /* @__PURE__ */ import_react.default.createElement("button", {
         onClick: function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -24969,41 +25072,57 @@ var Prompt = function(param) {
                 isActive: true
             }));
         }
-    }, "Activate"), " ", hasChanges && /* @__PURE__ */ import_react6.default.createElement("button", {
+    }, "Activate"), " ", hasChanges && /* @__PURE__ */ import_react.default.createElement("button", {
+        disabled: isSaving,
         onClick: function(e) {
             e.preventDefault();
             e.stopPropagation();
             save();
         }
-    }, "Save ")), /* @__PURE__ */ import_react6.default.createElement("div", null, " Messages:", prompt.messages.sort(function(a, b) {
+    }, "Save", " ")), /* @__PURE__ */ import_react.default.createElement("div", null, " ", "Messages:", prompt.messages.sort(function(a, b) {
         return a.messageIndex - b.messageIndex;
     }).map(function(item) {
-        return /* @__PURE__ */ import_react6.default.createElement(Message, {
+        return /* @__PURE__ */ import_react.default.createElement(Message, {
             key: item.id,
             message: item,
             onChange: function(message) {
                 onMessageChange(message);
             }
         });
-    })), /* @__PURE__ */ import_react6.default.createElement("button", {
+    })), /* @__PURE__ */ import_react.default.createElement("button", {
         onClick: function(e) {
             e.preventDefault();
             e.stopPropagation();
             createMessage();
         }
-    }, "Add Message"));
+    }, "Add Message"), /* @__PURE__ */ import_react.default.createElement("button", {
+        onClick: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            setShowPreview(function(prev) {
+                return !prev;
+            });
+        }
+    }, " Toggle Preview "), showPreview && /* @__PURE__ */ import_react.default.createElement(Preview, {
+        messages: transformPrompt(prompt, {
+            emojis: emojis,
+            customScript: customScript,
+            messages: []
+        }).messages
+    }));
 };
+// src/apps/admin/components/prompts/PromptList.tsx
 var PromptsList = function(param) {
     var prompts = param.prompts, updatePrompt = param.updatePrompt, savePrompt = param.savePrompt, isSaving = param.isSaving;
-    return /* @__PURE__ */ import_react6.default.createElement("div", null, prompts.sort(function(a, b) {
+    return /* @__PURE__ */ import_react.default.createElement("div", null, prompts.sort(function(a, b) {
         return a.version - b.version;
     }).map(function(prompt) {
-        return /* @__PURE__ */ import_react6.default.createElement("div", {
+        return /* @__PURE__ */ import_react.default.createElement("div", {
             key: prompt.id,
             style: {
                 padding: "1rem"
             }
-        }, /* @__PURE__ */ import_react6.default.createElement(Prompt, {
+        }, /* @__PURE__ */ import_react.default.createElement(Prompt, {
             prompt: prompt,
             savePrompt: savePrompt,
             updatePrompt: updatePrompt,
@@ -25011,8 +25130,9 @@ var PromptsList = function(param) {
         }));
     }));
 };
+// src/apps/admin/prompts.tsx
 var Prompts = function() {
-    var _ref = (0, import_react7.useContext)(PromptContext), prompts = _ref.prompts, savePrompt = _ref.savePrompt, updatePrompt = _ref.updatePrompt, isSaving = _ref.isSaving;
+    var _ref = (0, import_react6.useContext)(PromptContext), prompts = _ref.prompts, savePrompt = _ref.savePrompt, updatePrompt = _ref.updatePrompt, isSaving = _ref.isSaving;
     var createPrompt = function() {
         if (!prompts.isReady) {
             return;
@@ -25030,52 +25150,51 @@ var Prompts = function() {
         };
         updatePrompt(prompt);
     };
-    return /* @__PURE__ */ import_react6.default.createElement("div", null, /* @__PURE__ */ import_react6.default.createElement("div", null, "Prompts"), /* @__PURE__ */ import_react6.default.createElement("button", {
+    return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("h2", null, "Prompts"), /* @__PURE__ */ import_react.default.createElement("div", null, "Instructions:", /* @__PURE__ */ import_react.default.createElement("ol", null, /* @__PURE__ */ import_react.default.createElement("li", null, "Create a prompt."), /* @__PURE__ */ import_react.default.createElement("li", null, "Add messages to the prompt, and utilize ", /* @__PURE__ */ import_react.default.createElement("strong", null, "{emojis}"), " and ", /* @__PURE__ */ import_react.default.createElement("strong", null, "{customScript}"), " to inject the user's emoji and custom script settings into a message."), /* @__PURE__ */ import_react.default.createElement("li", null, "Preview the message to see what the message will look like when sent to the AI."), /* @__PURE__ */ import_react.default.createElement("li", null, "Save the prompt."), /* @__PURE__ */ import_react.default.createElement("li", null, "Activate the prompt to begin using it in production."))), /* @__PURE__ */ import_react.default.createElement("button", {
         onClick: function(e) {
             e.preventDefault();
             e.stopPropagation();
             createPrompt();
         }
-    }, "New"), prompts.isReady ? /* @__PURE__ */ import_react6.default.createElement(PromptsList, {
+    }, "New Prompt"), prompts.isReady ? /* @__PURE__ */ import_react.default.createElement(PromptsList, {
         isSaving: isSaving,
         savePrompt: savePrompt,
         prompts: prompts.value,
         updatePrompt: updatePrompt
-    }) : /* @__PURE__ */ import_react6.default.createElement("div", null, "Loading"));
+    }) : /* @__PURE__ */ import_react.default.createElement("div", null, "Loading"));
 };
 // src/apps/admin/admin.tsx
 var Admin = function() {
-    var _ref = (0, import_react9.useContext)(AdminContext), admin = _ref.admin, isChecking = _ref.isChecking, login = _ref.login, logout = _ref.logout;
-    var _ref1 = _sliced_to_array((0, import_react8.useState)(""), 2), passwordValue = _ref1[0], setPasswordValue = _ref1[1];
+    var _ref = (0, import_react8.useContext)(AdminContext), admin = _ref.admin, isChecking = _ref.isChecking, login = _ref.login, logout = _ref.logout;
+    var _ref1 = _sliced_to_array((0, import_react7.useState)(""), 2), passwordValue = _ref1[0], setPasswordValue = _ref1[1];
     if (!admin.isReady) {
-        return /* @__PURE__ */ import_react8.default.createElement("div", null, "loading...");
+        return /* @__PURE__ */ import_react.default.createElement("div", null, "loading...");
     }
     if (admin.value.isLoggedIn) {
-        return /* @__PURE__ */ import_react8.default.createElement("div", null, " ", /* @__PURE__ */ import_react8.default.createElement(Prompts, null), " ");
+        return /* @__PURE__ */ import_react.default.createElement("div", null, " ", /* @__PURE__ */ import_react.default.createElement(Prompts, null), " ");
     }
-    return /* @__PURE__ */ import_react8.default.createElement("div", null, /* @__PURE__ */ import_react8.default.createElement("div", null, " Please login "), /* @__PURE__ */ import_react8.default.createElement("input", {
+    return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("div", null, " Please login "), /* @__PURE__ */ import_react.default.createElement("input", {
         type: "text",
         placeholder: "password",
         onChange: function(e) {
             setPasswordValue(e.target.value);
         }
-    }), /* @__PURE__ */ import_react8.default.createElement("button", {
+    }), /* @__PURE__ */ import_react.default.createElement("button", {
         disabled: isChecking,
         onClick: function(e) {
             e.preventDefault();
             e.stopPropagation();
             login(passwordValue);
         }
-    }, " Login "));
+    }, " ", "Login", " "));
 };
 // src/apps/admin/index.tsx
-var import_client = __toESM(require_client());
 var Home = function() {
-    return /* @__PURE__ */ import_react10.default.createElement(AdminContextProvider, null, /* @__PURE__ */ import_react10.default.createElement(PromptContextProvider, null, /* @__PURE__ */ import_react10.default.createElement(Admin, null)));
+    return /* @__PURE__ */ import_react.default.createElement(AdminContextProvider, null, /* @__PURE__ */ import_react.default.createElement(PromptContextProvider, null, /* @__PURE__ */ import_react.default.createElement(Admin, null)));
 };
 var container = document.querySelector("#root");
 var root = (0, import_client.createRoot)(container);
-root.render(/* @__PURE__ */ import_react10.default.createElement(Home, null)); /*! Bundled license information:
+root.render(/* @__PURE__ */ import_react.default.createElement(Home, null)); /*! Bundled license information:
 
 react/cjs/react.development.js:
   (**

@@ -1,5 +1,4 @@
 import { err, ok } from "neverthrow";
-import React from "react";
 import { FC, ReactNode, createContext, useContext, useEffect, useState } from "react";
 
 import { FullPrompt } from "@/backend/lib/prompts/types";

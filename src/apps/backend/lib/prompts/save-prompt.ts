@@ -22,10 +22,16 @@ export const savePrompt = async (prompt: FullPrompt) => {
   });
 
   const promptExcludedColumns = promptColumns.map((col) => `${col} = EXCLUDED.${col}`).join(", ");
-  const promptInsert = `${pgp.helpers.insert(pgPrompt, promptColumnsSet)} ON CONFLICT (id) DO UPDATE SET ${promptExcludedColumns}`;
+  const promptInsert = `${pgp.helpers.insert(
+    pgPrompt,
+    promptColumnsSet
+  )} ON CONFLICT (id) DO UPDATE SET ${promptExcludedColumns}`;
 
   const messageExcludedColumns = messageColumns.map((col) => `${col} = EXCLUDED.${col}`).join(", ");
-  const messageInsert = `${pgp.helpers.insert(messages, messageColumnsSet)} ON CONFLICT (id) DO UPDATE SET ${messageExcludedColumns}`;
+  const messageInsert = `${pgp.helpers.insert(
+    messages,
+    messageColumnsSet
+  )} ON CONFLICT (id) DO UPDATE SET ${messageExcludedColumns}`;
 
   const query = `${promptInsert}; ${messageInsert}`;
   const result = await pgQuery<null>(query);
