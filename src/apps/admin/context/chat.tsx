@@ -72,8 +72,6 @@ export const useChat = ({ prompt, settings }: { prompt?: FullPrompt; settings?: 
     isReady: true,
     value: []
   });
-
-  const [initialLoadComplete, setInitialLoadCompelte] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const [messages, setMessages] = useState<
@@ -110,7 +108,7 @@ export const useChat = ({ prompt, settings }: { prompt?: FullPrompt; settings?: 
   }, [chat, promptMessages, setMessages]);
 
   useEffect(() => {
-    if (!prompt || !initialLoadComplete) {
+    if (!prompt) {
       return;
     }
     const { messages: promptMessages } = transformPrompt(prompt, {
@@ -119,7 +117,7 @@ export const useChat = ({ prompt, settings }: { prompt?: FullPrompt; settings?: 
       messages: [],
     });
     setPromptMessages({ isReady: true, value: promptMessages });
-  }, [prompt, transformPrompt, emojis, customScript, initialLoadComplete]);
+  }, [prompt, transformPrompt, emojis, customScript]);
 
   const respond = async () => {
     if (!admin.isReady || !admin.value.isLoggedIn) {
