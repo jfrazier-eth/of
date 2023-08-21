@@ -24507,7 +24507,7 @@ var transformPrompt = function(prompt, options) {
 };
 // src/apps/extension/lib/constants.ts
 init_react_import();
-var API_BASE_URL = "http://127.0.0.1:8888/";
+var API_BASE_URL = "https://api.onlyagent.app/";
 // src/lib/utils/parse-error.ts
 init_react_import();
 var parseError = function(error) {
@@ -24795,11 +24795,10 @@ var useChat = function(param) {
         isReady: true,
         value: []
     }), 2), chat = _ref1[0], setChat = _ref1[1];
-    var _ref2 = _sliced_to_array((0, import_react5.useState)(false), 2), initialLoadComplete = _ref2[0], setInitialLoadCompelte = _ref2[1];
-    var _ref3 = _sliced_to_array((0, import_react5.useState)(false), 2), isGenerating = _ref3[0], setIsGenerating = _ref3[1];
-    var _ref4 = _sliced_to_array((0, import_react5.useState)({
+    var _ref2 = _sliced_to_array((0, import_react5.useState)(false), 2), isGenerating = _ref2[0], setIsGenerating = _ref2[1];
+    var _ref3 = _sliced_to_array((0, import_react5.useState)({
         isReady: false
-    }), 2), messages = _ref4[0], setMessages = _ref4[1];
+    }), 2), messages = _ref3[0], setMessages = _ref3[1];
     (0, import_react5.useEffect)(function() {
         if (!chat.isReady || !promptMessages.isReady) {
             return;
@@ -24837,7 +24836,7 @@ var useChat = function(param) {
         setMessages
     ]);
     (0, import_react5.useEffect)(function() {
-        if (!prompt || !initialLoadComplete) {
+        if (!prompt) {
             return;
         }
         var _transformPrompt = transformPrompt(prompt, {
@@ -24853,8 +24852,7 @@ var useChat = function(param) {
         prompt,
         transformPrompt,
         emojis,
-        customScript,
-        initialLoadComplete
+        customScript
     ]);
     var respond = function() {
         var _ref = _async_to_generator(function() {

@@ -63,6 +63,9 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
   for await (const result of chats) {
     if (result.isErr()) {
       console.error(`Failed to get chat`, result.error);
+      if (result.error.attempts > 3) {
+        break;
+      }
       continue;
     }
 
