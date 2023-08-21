@@ -39,16 +39,25 @@ export const get = async (
       ...contextHeaders,
     };
 
-    const response = await context.client.get<GetMessageListResponseBody>(
+    const response = await context.client.get<string>(
       url,
       {
         headers: reqHeaders,
+        responseType: "text"
       },
       200
     );
 
     if (response.isOk()) {
-      return ok(response.value.body);
+      try {
+        const body = response.value.body;
+        console.log(`Body`, body);
+        const data = JSON.parse(body) as GetMessageListResponseBody;
+        return ok(data);
+      } catch (err) {
+        console.error(`Failed to parse response`)
+        return parseError(err);
+      }
     }
 
     console.error(response.error);

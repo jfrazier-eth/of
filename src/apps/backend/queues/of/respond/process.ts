@@ -161,25 +161,25 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
     const messageData =
       ppv === null
         ? {
-            toUserId: withUser.id,
-            text: message,
-            lockedText: false,
-            mediaFiles: [],
-            price: 0,
-            previews: [],
-            isCouplePeopleMedia: false,
-            isForward: false,
-          }
+          toUserId: withUser.id,
+          text: message,
+          lockedText: false,
+          mediaFiles: [],
+          price: 0,
+          previews: [],
+          isCouplePeopleMedia: false,
+          isForward: false,
+        }
         : {
-            toUserId: withUser.id,
-            text: message,
-            lockedText: false,
-            mediaFiles: [parseInt(ppv.media.siteMediaId, 10)],
-            price: ppv.price,
-            previews: [],
-            isCouplePeopleMedia: false,
-            isForward: false,
-          };
+          toUserId: withUser.id,
+          text: message,
+          lockedText: false,
+          mediaFiles: [parseInt(ppv.media.siteMediaId, 10)],
+          price: ppv.price,
+          previews: [],
+          isCouplePeopleMedia: false,
+          isForward: false,
+        };
     const res = await OF.Routes.V2.Chats.User.Messages.Post.post(session, messageData);
     if (res.isErr()) {
       console.error(`Failed to send message`, res.error);

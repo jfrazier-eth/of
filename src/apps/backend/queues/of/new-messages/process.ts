@@ -13,9 +13,15 @@ import { NotFoundError } from "@/utils/errors";
 
 import { OFRespondQueue } from "..";
 import { JobData, JobResult } from "./types";
+import { ONE_MIN } from "@/utils/constants";
 
 export const processJob: Processor<JobData, JobResult> = async (job) => {
   const { settings } = job.data;
+  if (job.timestamp < Date.now() - (2 * ONE_MIN)) {
+    console.log(`Job ${job.id} is too old, skipping`);
+    return ok({ numChatsTriggered: 0 });
+  }
+
   const loginResult = await getLogin({
     site: Site.OF,
     siteUserId: settings.siteUserId,
