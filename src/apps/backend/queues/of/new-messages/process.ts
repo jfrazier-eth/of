@@ -71,7 +71,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
   for await (const result of chats) {
     if (result.isErr()) {
       console.error(`Failed to get chat`, result.error.e);
-      if (result.error.e instanceof ResponseError && result.error.e.kind === ResponseErrorKind.Unauthorized) {
+      if ('kind' in result.error.e && result.error.e.kind === ResponseErrorKind.Unauthorized) {
         console.log(`Unauthorized! Deleting login for user ${login.userId} UserId ${login.userId} SiteUserId ${login.siteUserId}`);
         const saveLoginRes = await saveLogin({
           userId: login.userId,
