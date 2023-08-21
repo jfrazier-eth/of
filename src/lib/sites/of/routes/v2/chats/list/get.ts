@@ -51,8 +51,10 @@ export const get = async (
       return ok(response.value.body);
     }
 
+    console.error(response.error);
     return err(response.error);
   } catch (e) {
+    console.error(e);
     return parseError(e);
   }
 };
