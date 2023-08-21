@@ -1,5 +1,6 @@
-import { pg, pgp } from "@/backend/db/postgres";
+import { pg, pgp, pgQuery } from "@/backend/db/postgres";
 import { UserSessionParams } from "@/sites/of/context";
+import { err, ok } from "neverthrow";
 
 import { transformOFLogin } from "./pg-transformer";
 import { OFLogin } from "./types";
@@ -9,7 +10,19 @@ export type SaveLoginParams = UserSessionParams & {
   createdAt?: OFLogin["createdAt"];
 };
 
-export const saveLogin = async (params: SaveLoginParams) => {
+export const saveLogin = async (params: SaveLoginParams | { siteUserId: string, userId: string }) => {
+  if (!('xbc' in params)) {
+    const query = `DELETE FROM of_logins WHERE site_user_id = $1 AND user_id = $2`;
+    const values = [params.siteUserId, params.userId];
+    const result = await pgQuery<null>(query, values);
+
+    if (result.isErr()) {
+      return err(result.error);
+    }
+
+    return ok(null);
+  }
+
   const login: OFLogin = {
     params: {
       xbc: params.xbc,
@@ -33,10 +46,9 @@ export const saveLogin = async (params: SaveLoginParams) => {
   const insert = pgp.helpers.insert(pgLogin, columnSet);
   const excludedColumns = columns.map((col) => `${col} = EXCLUDED.${col}`).join(", ");
   const query = `${insert} ON CONFLICT ON CONSTRAINT of_logins_pkey DO UPDATE SET ${excludedColumns}`;
-  try {
-    await pg.query(query);
-  } catch (err) {
-    console.error(`Failed to save of login`, err);
-    throw err;
+  const res = await pgQuery(query);
+  if (res.isErr()) {
+    return err(res.error);
   }
+  return ok(null);
 };
