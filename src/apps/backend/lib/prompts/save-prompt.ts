@@ -8,17 +8,20 @@ import { FullPrompt } from "./types";
 
 export const setActivePrompt = async (promptId: string) => {
   const activePrompt = {
-    id: 'active',
+    id: "active",
     prompt_id: promptId,
     updated_at: new Date(),
     created_at: new Date(),
-  }
+  };
 
   const columns = Object.keys(activePrompt);
   const columnsSet = new pgp.helpers.ColumnSet(columns, { table: "active_prompt" });
   const excludedColumns = columns.map((col) => `${col} = EXCLUDED.${col}`).join(", ");
 
-  const query = `${pgp.helpers.insert(activePrompt, columnsSet)} ON CONFLICT (id) DO UPDATE SET ${excludedColumns}`;
+  const query = `${pgp.helpers.insert(
+    activePrompt,
+    columnsSet
+  )} ON CONFLICT (id) DO UPDATE SET ${excludedColumns}`;
 
   const result = await pgQuery(query);
 

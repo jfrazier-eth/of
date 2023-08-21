@@ -4,11 +4,10 @@ import { FullPrompt, PromptMessage } from "@/backend/lib/prompts/types";
 import { transformPrompt } from "@/backend/routes/api/ai/chat/transform-request-v2";
 import { uid } from "@/utils/uid";
 
+import { useUserConfig } from "../../context/user-config";
 import { Message } from "./Message";
 import { Preview } from "./Preview";
 import PromptSettings from "./PromptSettings";
-import { useUserConfig } from "../../context/user-config";
-
 
 export const Prompt = ({
   prompt,
@@ -72,19 +71,25 @@ export const Prompt = ({
   };
   return (
     <div>
-      <div style={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center"
-      }}>
-        <p style={{
-          color: prompt.isActive ? "green" : "red",
-          paddingRight: "4px"
-        }}>{prompt.isActive ? "Active" : "Disabled"}</p>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        <p
+          style={{
+            color: prompt.isActive ? "green" : "red",
+            paddingRight: "4px",
+          }}
+        >
+          {prompt.isActive ? "Active" : "Disabled"}
+        </p>
         {!prompt.isActive && (
           <button
             style={{
-              height: '22px'
+              height: "22px",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -128,7 +133,7 @@ export const Prompt = ({
       {showSettings && <PromptSettings promptId={prompt.id} />}
       <button
         style={{
-          marginRight: "4px"
+          marginRight: "4px",
         }}
         onClick={(e) => {
           e.preventDefault();
@@ -140,7 +145,7 @@ export const Prompt = ({
       </button>
       <button
         style={{
-          marginRight: "4px"
+          marginRight: "4px",
         }}
         onClick={(e) => {
           e.preventDefault();
@@ -152,7 +157,7 @@ export const Prompt = ({
       </button>
       <button
         style={{
-          marginRight: "4px"
+          marginRight: "4px",
         }}
         onClick={(e) => {
           e.preventDefault();

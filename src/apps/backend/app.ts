@@ -14,7 +14,7 @@ const startApp = () => {
         origin: "*",
       })
     );
-    app.use("/admin", express.static('public/admin'));
+    app.use("/admin", express.static("public/admin"));
     app.use(express.json());
     app.use("/", privacyRouter);
     app.use("/", parseHeaders, apiRouter);

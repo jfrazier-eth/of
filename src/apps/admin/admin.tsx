@@ -4,7 +4,6 @@ import { useContext } from "react";
 import { Playground } from "./components/playground/Playground";
 import { AdminContext } from "./context/admin";
 import { useUserConfig } from "./context/user-config";
-
 import { Prompts } from "./prompts";
 
 type Tab = "prompt" | "playground";
@@ -22,14 +21,22 @@ const NavBar = (props: { tab: Tab; setTab: (tab: Tab) => void }) => {
         flexDirection: "row",
       }}
     >
-      <button style={{
-        marginRight: "4px"
-      }} disabled={props.tab === "prompt"} onClick={handleClick("prompt")}>
+      <button
+        style={{
+          marginRight: "4px",
+        }}
+        disabled={props.tab === "prompt"}
+        onClick={handleClick("prompt")}
+      >
         Prompts
       </button>
-      <button style={{
-        marginRight: "4px"
-      }} disabled={props.tab === "playground"} onClick={handleClick("playground")}>
+      <button
+        style={{
+          marginRight: "4px",
+        }}
+        disabled={props.tab === "playground"}
+        onClick={handleClick("playground")}
+      >
         Playground
       </button>
     </div>
@@ -61,14 +68,15 @@ export const Admin = () => {
       <div style={{ paddingBottom: "300px" }}>
         <NavBar tab={tab} setTab={setTab} />
         <div style={{ marginTop: "8px", maxWidth: "700px" }}>
-
-          <label style={{ paddingRight: '4px' }}>Emojis</label>
+          <label style={{ paddingRight: "4px" }}>Emojis</label>
           <input type="text" value={emojis} onChange={(e) => setEmojis(e.target.value)}></input>
 
-          <div style={{
-            display: "flex",
-            flexDirection: "column",
-          }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
             <label>Custom Script</label>
             <textarea
               value={customScript}

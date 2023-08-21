@@ -19,8 +19,8 @@ interface PromptContextValue {
 export const PromptContext = createContext<PromptContextValue>({
   prompts: { isReady: false },
   isSaving: false,
-  savePrompt: () => { },
-  updatePrompt: () => { },
+  savePrompt: () => {},
+  updatePrompt: () => {},
 });
 
 const getPrompts = async (adminPassword: string) => {

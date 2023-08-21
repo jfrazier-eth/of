@@ -12,7 +12,6 @@ import { parseError } from "@/utils/parse-error";
 import { AdminContext } from "./admin";
 import { useUserConfig } from "./user-config";
 
-
 interface GenerateResponseOptions {
   promptId: string;
   messages: { fromUserId: string; content: string }[];
@@ -62,7 +61,13 @@ const generateResponse = async (adminPassword: string, options: GenerateResponse
   }
 };
 
-export const useChat = ({ prompt, settings }: { prompt?: FullPrompt; settings?: PromptSettings }) => {
+export const useChat = ({
+  prompt,
+  settings,
+}: {
+  prompt?: FullPrompt;
+  settings?: PromptSettings;
+}) => {
   const { admin } = useContext(AdminContext);
   const { emojis, customScript, setEmojis, setCustomScript } = useUserConfig();
   const [promptMessages, setPromptMessages] = useState<
@@ -70,7 +75,7 @@ export const useChat = ({ prompt, settings }: { prompt?: FullPrompt; settings?: 
   >({ isReady: false });
   const [chat, setChat] = useState<Data<{ content: string; user: typeof FAN | typeof CREATOR }[]>>({
     isReady: true,
-    value: []
+    value: [],
   });
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -135,7 +140,7 @@ export const useChat = ({ prompt, settings }: { prompt?: FullPrompt; settings?: 
         return {
           fromUserId: msg.user.id,
           content: msg.content,
-        }
+        };
       }),
       emojis,
       customScript,
@@ -181,6 +186,7 @@ export const useChat = ({ prompt, settings }: { prompt?: FullPrompt; settings?: 
     isGenerating,
     addMessage,
     respond,
-    FAN, CREATOR
+    FAN,
+    CREATOR,
   };
 };

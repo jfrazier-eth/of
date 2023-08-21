@@ -9,15 +9,15 @@ import { Browsers } from "@/sites/common";
 import { OF } from "@/sites/index";
 import { OF_BASE_URL } from "@/sites/of";
 import { SessionContext } from "@/sites/of/context";
+import { ONE_MIN } from "@/utils/constants";
 import { NotFoundError } from "@/utils/errors";
 
 import { OFRespondQueue } from "..";
 import { JobData, JobResult } from "./types";
-import { ONE_MIN } from "@/utils/constants";
 
 export const processJob: Processor<JobData, JobResult> = async (job) => {
   const { settings } = job.data;
-  if (job.timestamp < Date.now() - (2 * ONE_MIN)) {
+  if (job.timestamp < Date.now() - 2 * ONE_MIN) {
     console.log(`Job ${job.id} is too old, skipping`);
     return ok({ numChatsTriggered: 0 });
   }
@@ -68,7 +68,7 @@ export const processJob: Processor<JobData, JobResult> = async (job) => {
   const chatsToProcess = [];
   for await (const result of chats) {
     if (result.isErr()) {
-      console.error(`Failed to get chat`, result.error);
+      console.error(`Failed to get chat`, result.error.e);
       // break to prevent rate limits due to errors
       break;
     }

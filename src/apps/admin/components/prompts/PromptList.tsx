@@ -14,7 +14,7 @@ export const PromptsList = ({
   isSaving: boolean;
 }) => {
   return (
-    <div style={{ maxWidth: '700px' }}>
+    <div style={{ maxWidth: "700px" }}>
       {prompts
         .sort((a, b) => {
           return a.version - b.version;

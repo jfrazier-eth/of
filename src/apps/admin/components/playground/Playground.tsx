@@ -13,7 +13,6 @@ function extractValue<T>(item: Data<T>): T | undefined {
 }
 
 export const Playground = () => {
-
   const { prompt } = useActivePrompt();
   const promptId = extractValue(prompt)?.id;
   const extractedPrompt = extractValue(prompt);
@@ -30,7 +29,7 @@ export const Playground = () => {
     respond,
     addMessage,
     FAN,
-    CREATOR
+    CREATOR,
   } = useChat({ prompt: extractedPrompt, settings: extractedSettings });
 
   if (!prompt.isReady || !settings.isReady || !messages.isReady) {
@@ -38,16 +37,21 @@ export const Playground = () => {
   }
 
   return (
-    <div style={{
-      display: "relative",
-      maxWidth: "700px"
-    }}>
+    <div
+      style={{
+        display: "relative",
+        maxWidth: "700px",
+      }}
+    >
       <h1>Playground</h1>
       {messages.value.map((msg, index) => {
         return (
-          <div key={index.toString()} style={{
-            padding: "1rem"
-          }}>
+          <div
+            key={index.toString()}
+            style={{
+              padding: "1rem",
+            }}
+          >
             <p style={{ color: "blue" }}>
               {typeof msg.user === "string" ? msg.user : msg.user.name}
             </p>{" "}
@@ -58,7 +62,7 @@ export const Playground = () => {
       <NewMessage CREATOR={CREATOR} FAN={FAN} saveMessage={addMessage} />
       <button
         style={{
-          marginTop: "4px"
+          marginTop: "4px",
         }}
         disabled={isGenerating}
         onClick={(e) => {

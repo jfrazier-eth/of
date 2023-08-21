@@ -6,9 +6,7 @@ import { pgQuery } from "@/backend/db/postgres/query";
 import { transformPromptSettings } from "./pg-transformer";
 import { PromptSettings } from "./types";
 
-
 export const savePromptSettings = async (promptSettings: PromptSettings) => {
-
   const pgPromptSettings = transformPromptSettings(promptSettings);
 
   const columns = Object.keys(pgPromptSettings);
@@ -18,8 +16,7 @@ export const savePromptSettings = async (promptSettings: PromptSettings) => {
   const query = `${pgp.helpers.insert(
     pgPromptSettings,
     columnsSet
-  )
-    } ON CONFLICT(prompt_id) DO UPDATE SET ${excludedColumns} `;
+  )} ON CONFLICT(prompt_id) DO UPDATE SET ${excludedColumns} `;
 
   const result = await pgQuery(query);
 

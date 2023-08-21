@@ -8,14 +8,17 @@ export const Message = ({
   onChange: (message: PromptMessage) => void;
 }) => {
   return (
-    <div style={{
-      margin: '8px'
-    }}>
-      <div
-      >
-        <label style={{
-          paddingRight: "4px",
-        }}>
+    <div
+      style={{
+        margin: "8px",
+      }}
+    >
+      <div>
+        <label
+          style={{
+            paddingRight: "4px",
+          }}
+        >
           Role:
         </label>
         <select
@@ -39,9 +42,11 @@ export const Message = ({
           flexDirection: "column",
         }}
       >
-        <label style={{
-          paddingRight: "4px",
-        }}>
+        <label
+          style={{
+            paddingRight: "4px",
+          }}
+        >
           Text:
         </label>
         <textarea

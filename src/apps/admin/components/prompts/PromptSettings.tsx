@@ -16,9 +16,11 @@ const Settings = (props: { promptId: string }) => {
     );
   }
   return (
-    <div style={{
-      maxWidth: "700px",
-    }}>
+    <div
+      style={{
+        maxWidth: "700px",
+      }}
+    >
       <h3>Prompt Settings</h3>
       <div
         style={{
@@ -72,7 +74,9 @@ const Settings = (props: { promptId: string }) => {
           }}
         />
 
-        <label style={{ marginTop: "4px" }}>Max Tokens - The maximum number of tokens to generate in the chat completion.</label>
+        <label style={{ marginTop: "4px" }}>
+          Max Tokens - The maximum number of tokens to generate in the chat completion.
+        </label>
         <input
           type="number"
           value={settings.value.maxTokens}

@@ -33,7 +33,6 @@ export const post = async (
     }
     const promptSettings = promptSettingsResult.value;
 
-
     const options: Omit<OpenAI.ChatCompletion.ChatCompletionRequest, "messages"> = {
       model: promptSettings.model,
       temperature: promptSettings.temperature,
@@ -41,7 +40,7 @@ export const post = async (
       frequency_penalty: promptSettings.frequencyPenalty,
       presence_penalty: promptSettings.presencePenalty,
       max_tokens: promptSettings.maxTokens,
-    }
+    };
     const chatCompletionRequest = transformRequest(body, prompt, options);
 
     const client = getClient({

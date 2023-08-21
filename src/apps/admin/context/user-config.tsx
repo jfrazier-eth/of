@@ -35,5 +35,5 @@ export const useUserConfig = () => {
     setEmojis,
     customScript,
     setCustomScript,
-  }
-}
+  };
+};
