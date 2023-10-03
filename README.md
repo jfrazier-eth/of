@@ -10,4 +10,4 @@
   * Update prompts
   * Manage which prompt users are using
 
-![image](https://github.com/jfrazier-eth/of/assets/54604023/746a700e-6c3e-49eb-80fc-489f9c00389a)
+![image](https://github.com/jfrazier-eth/of/assets/54604023/178fa665-d8a3-46f4-8a72-deafbd330163)
